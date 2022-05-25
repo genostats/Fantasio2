@@ -1,0 +1,5 @@
+
+-- méthodes : ncol / affichage d'une sub bed matrix
+
+-- certaines fonctions supposent que les marqueurs sont dans l'ordre croissant sur le génome et que
+   les chr sont numériques et en ordre croissant. cf delta.dist. Inclure un check.
