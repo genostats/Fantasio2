@@ -1,0 +1,19 @@
+Package: Fantasio2
+Type: Package
+Title: FANTASIO DEUX
+Version: 0.1
+Date: 2022-05-24
+Encoding: UTF-8
+Maintainer: Hervé Perdry <herve.perdry@universite-paris-saclay.fr>
+Author: Isuru Haupe, Margot Derouin, Hervé Perdry, Anne-Louise Leutenegger, Steven Gazal, Amaury Vaysse
+Description: etc
+License: GPL-3
+LinkingTo: gaston, Rcpp, RcppParallel, RcppEigen
+Depends: R, methods, parallel, gaston
+Imports: zoo
+NeedsCompilation: yes
+LazyLoad: yes
+LazyData: yes
+Suggests: knitr, rmarkdown, HGDP.CEPH
+VignetteBuilder: knitr
+RoxygenNote: 7.1.2
