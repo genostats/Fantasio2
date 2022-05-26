@@ -8,6 +8,10 @@
 
 using namespace Rcpp;
 
+template<typename scalar_t>
+using VECTOR = Eigen::Matrix<scalar_t, Eigen::Dynamic, 1>;
+
+
 // pour 0 < f < 1
 template<typename scalar_t>
 class likelihoodGradient {
@@ -20,7 +24,7 @@ public:
   likelihoodGradient(std::vector<scalar_t> & logEmiss_, NumericVector deltaDist_) : logEmiss(logEmiss_), deltaDist(deltaDist_), scale(1) {}
   likelihoodGradient(std::vector<scalar_t> & logEmiss_, NumericVector deltaDist_, scalar_t scale_) : logEmiss(logEmiss_), deltaDist(deltaDist_), scale(scale_) {}
   
-  scalar_t operator()(const Eigen::VectorXd & x, Eigen::VectorXd & grad) {
+  scalar_t operator()(const VECTOR<scalar_t> & x, VECTOR<scalar_t> & grad) {
     scalar_t a = x[0];
     scalar_t f = x[1];
     if(f == 0)
@@ -33,7 +37,7 @@ public:
  
 private:
  
-  scalar_t ff(scalar_t a, scalar_t f, Eigen::VectorXd & grad) {
+  scalar_t ff(scalar_t a, scalar_t f, VECTOR<scalar_t> & grad) {
 SHOW(a)
 SHOW(f)
     scalar_t lt00, lt01, lt10, lt11; // log proba transition
@@ -128,7 +132,7 @@ SHOW(f)
   }
 
   // quand f == 0
-  scalar_t f0(scalar_t a, Eigen::VectorXd & grad) {
+  scalar_t f0(scalar_t a, VECTOR<scalar_t> & grad) {
     int N = deltaDist.size() + 1;
     // état initial
     scalar_t alpha0 = 0;
@@ -159,7 +163,7 @@ SHOW(f)
 
 
   // f == 1
-  scalar_t f1(scalar_t a, Eigen::VectorXd & grad) {
+  scalar_t f1(scalar_t a, VECTOR<scalar_t> & grad) {
     int N = deltaDist.size() + 1;
     // état initial
     scalar_t alpha1 = 0;

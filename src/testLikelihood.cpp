@@ -8,7 +8,8 @@
 using namespace Rcpp;
 
 //[[Rcpp::export]]
-NumericVector testLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, NumericVector deltaDist, double epsilon, int i, double a, double f) {
+NumericVector testLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, NumericVector deltaDist, 
+                             double epsilon, int i, double a, double f) {
   emiss<double> EM(p_A, p, map, epsilon);
   likelihoodGradient<double> LG( EM.getLogEmiss(i) , deltaDist);
   Eigen::VectorXd grad(2);
@@ -22,6 +23,10 @@ NumericVector testLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVector m
 
 //[[Rcpp::export]]
 NumericVector testOptimLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, NumericVector deltaDist, double epsilon, int i) {
+  std::vector<double> dDist;
+  for(double a : dDist) 
+    dDist.push_back(a);
+
   emiss<double> EM(p_A, p, map, epsilon);
   likelihoodGradient<double> LG( EM.getLogEmiss(i) , deltaDist, -1);
 
@@ -39,7 +44,6 @@ NumericVector testOptimLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVec
   double fx;
   int niter = solver.minimize(LG, x, fx, lb, ub);
 
-  NumericVector R(3);
-  R[0] = niter; R[1] = x[0]; R[2] = x[1];
+  NumericVector R = NumericVector::create( _["n.iter"] = niter, _["a"] = x[0], _["f"] = x[1], _["fx"] = fx);
   return R;
 }
