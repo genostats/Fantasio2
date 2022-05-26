@@ -17,12 +17,13 @@ template<typename scalar_t>
 class likelihoodGradient {
 private:
   std::vector<scalar_t> & logEmiss;
-  NumericVector deltaDist;
+  std::vector<scalar_t> & deltaDist;
+  // NumericVector deltaDist;
   scalar_t scale;
   
 public:
-  likelihoodGradient(std::vector<scalar_t> & logEmiss_, NumericVector deltaDist_) : logEmiss(logEmiss_), deltaDist(deltaDist_), scale(1) {}
-  likelihoodGradient(std::vector<scalar_t> & logEmiss_, NumericVector deltaDist_, scalar_t scale_) : logEmiss(logEmiss_), deltaDist(deltaDist_), scale(scale_) {}
+  likelihoodGradient(std::vector<scalar_t> & logEmiss_, std::vector<scalar_t> & deltaDist_) : logEmiss(logEmiss_), deltaDist(deltaDist_), scale(1) {}
+  likelihoodGradient(std::vector<scalar_t> & logEmiss_, std::vector<scalar_t> & deltaDist_, scalar_t scale_) : logEmiss(logEmiss_), deltaDist(deltaDist_), scale(scale_) {}
   
   scalar_t operator()(const VECTOR<scalar_t> & x, VECTOR<scalar_t> & grad) {
     scalar_t a = x[0];

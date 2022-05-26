@@ -10,8 +10,12 @@ using namespace Rcpp;
 //[[Rcpp::export]]
 NumericVector testLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, NumericVector deltaDist, 
                              double epsilon, int i, double a, double f) {
+  std::vector<double> dDist;
+  for(double a : deltaDist) 
+    dDist.push_back(a);
+
   emiss<double> EM(p_A, p, map, epsilon);
-  likelihoodGradient<double> LG( EM.getLogEmiss(i) , deltaDist);
+  likelihoodGradient<double> LG( EM.getLogEmiss(i) , dDist);
   Eigen::VectorXd grad(2);
   Eigen::VectorXd x(2);
   x << a, f;
@@ -24,11 +28,11 @@ NumericVector testLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVector m
 //[[Rcpp::export]]
 NumericVector testOptimLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, NumericVector deltaDist, double epsilon, int i) {
   std::vector<double> dDist;
-  for(double a : dDist) 
+  for(double a : deltaDist) 
     dDist.push_back(a);
 
   emiss<double> EM(p_A, p, map, epsilon);
-  likelihoodGradient<double> LG( EM.getLogEmiss(i) , deltaDist, -1);
+  likelihoodGradient<double> LG( EM.getLogEmiss(i) , dDist, -1);
 
   LBFGSpp::LBFGSBParam<double> param;
   LBFGSpp::LBFGSBSolver<double> solver(param);
