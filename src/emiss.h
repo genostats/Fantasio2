@@ -34,11 +34,10 @@ public:
     for(auto & le : LEMISS) {
       le.reserve(nbSnps);
     }
-    preCompute(0);
-
-    // une fois pour toute
+    // une fois pour toutes
     gg[3] = hh[3] = 0; // manquant -> proba 1
 
+    preCompute(0);
   }
 
   void preCompute(size_t from) {
