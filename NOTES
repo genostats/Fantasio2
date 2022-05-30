@@ -1,0 +1,28 @@
+
+-- init.sub.bed.matrix (définie dans sub.bed.matrix.r) 
+   est appelée à chaque fois qu'on fait un new("sub.bed.matrix", x)
+   Elle fait un tirage aléatoire pour faire "avancer le RNG d'un pas" et stocke la valeur
+   de .Random.seed dans l'objet créé (slot @random.seed)
+   Le slot @submap est = integer(0)
+
+-- set.submap : utilise @random.seed pour modifier l'état du RNG ; tire une submap,
+   met à jour le slot @submap. L'état du RNG est restauré à son état initial.
+
+-- unset.submap : remet le slot @submap à integer(0)
+
+
+exemple vite fait
+
+x <- as.bed.matrix(TTN.gen, TTN.fam, TTN.bim)
+sx <- new("sub.bed.matrix", x)
+str(sx@random.seed)
+str(sx@submap)
+
+sx <- set.submap(sx)
+str(sx@submap)
+
+sx <- unset.submap(sx)
+str(sx@submap)
+
+sx <- set.submap(sx)
+str(sx@submap)  # on retrouve la meme chose

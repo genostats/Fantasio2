@@ -38,7 +38,7 @@ NumericVector testOptimLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVec
   LBFGSpp::LBFGSBSolver<double> solver(param);
 
   Eigen::VectorXd lb(2); 
-  lb << 0, 0;
+  lb << 1e-2, 0;
 
   Eigen::VectorXd ub(2); 
   ub << std::numeric_limits<double>::infinity(), 1;

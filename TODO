@@ -3,3 +3,5 @@
 
 -- certaines fonctions supposent que les marqueurs sont dans l'ordre croissant sur le génome et que
    les chr sont numériques et en ordre croissant. cf delta.dist. Inclure un check.
+
+-- insérer un estimateur des moments pour le point de départ de l'optimisation ?
