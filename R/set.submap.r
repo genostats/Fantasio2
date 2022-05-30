@@ -1,6 +1,9 @@
 
 #' @export
-set.submap <- function(sx, n = 100) {
+set.submap <- function(sx, ...) {
+
+  restore.seed <- getArg("restore.seed", TRUE, ...)
+
   # storing current seed
   old.seed <- get(".Random.seed", envir = .GlobalEnv)
 
@@ -10,11 +13,13 @@ set.submap <- function(sx, n = 100) {
   assign(".Random.seed", sx@random.seed, envir = .GlobalEnv)
 
   # cette partie est à remplacer par quelque chose d'intelligent
+  n <- getArg("n", 100, ...)
   submap <- sort(sample.int(ncol(sx), n))
   sx@submap <- submap
    
   # restauring seed (meme commentaire)
-  assign(".Random.seed", old.seed, envir = .GlobalEnv)
+  if(restore.seed)
+    assign(".Random.seed", old.seed, envir = .GlobalEnv)
 
   sx
 }

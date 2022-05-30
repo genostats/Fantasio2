@@ -4,10 +4,11 @@ setClass("sub.bed.matrix", contains = "bed.matrix", slots = list(random.seed = "
 
 init.sub.bed.matrix <- function(.Object, ...) {
   .Object <- callNextMethod() 
-  # step RNG (to avoid using twice the same seed
-  runif(1)
   .Object@random.seed <- get(".Random.seed", envir = .GlobalEnv)
-  .Object
+  arg <- list(...) 
+  arg$restore.seed <- FALSE
+  arg$sx <- .Object
+  do.call(set.submap, arg)
 }
 
 setMethod("initialize", "sub.bed.matrix", init.sub.bed.matrix)

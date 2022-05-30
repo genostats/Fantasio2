@@ -1,12 +1,13 @@
 
 -- init.sub.bed.matrix (définie dans sub.bed.matrix.r) 
    est appelée à chaque fois qu'on fait un new("sub.bed.matrix", x)
-   Elle fait un tirage aléatoire pour faire "avancer le RNG d'un pas" et stocke la valeur
-   de .Random.seed dans l'objet créé (slot @random.seed)
-   Le slot @submap est = integer(0)
+   ELle stocke la valeur de .Random.seed dans l'objet créé (slot @random.seed)
+   Et appelle set.submap (avec restore.seed = FALSE) pour créer @submap
+   --> le RNG avance du nombre de pas nécessaire à ce que les sub.bed.matrix
+       aient des sous cartes indépendantes
 
 -- set.submap : utilise @random.seed pour modifier l'état du RNG ; tire une submap,
-   met à jour le slot @submap. L'état du RNG est restauré à son état initial.
+   met à jour le slot @submap. L'état du RNG est restauré à son état initial sauf si restore.seed = FALSE
 
 -- unset.submap : remet le slot @submap à integer(0)
 
@@ -14,15 +15,18 @@
 exemple vite fait
 
 x <- as.bed.matrix(TTN.gen, TTN.fam, TTN.bim)
-sx <- new("sub.bed.matrix", x)
-str(sx@random.seed)
-str(sx@submap)
+sx1 <- new("sub.bed.matrix", x)
+str(sx1@random.seed)
+str(sx1@submap)
 
-sx <- set.submap(sx)
-str(sx@submap)
+sx1 <- unset.submap(sx1)
+str(sx1@submap)
 
-sx <- unset.submap(sx)
-str(sx@submap)
+sx1 <- set.submap(sx1)
+str(sx1@submap)  # on retrouve la meme chose
 
-sx <- set.submap(sx)
-str(sx@submap)  # on retrouve la meme chose
+sx2 <- new("sub.bed.matrix", x)
+str(sx2@random.seed)
+str(sx2@submap)    # différent, ouf
+
+
