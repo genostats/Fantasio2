@@ -19,6 +19,11 @@ if(!exists('x.be')) {
   x.be <- select.inds(x, population == "Bedouin")
 }
 
+s <- segments.list.by.hotspots(x.be)
+sub <- rsubmap(s)
+
+#################################################################################################################################
+
 set.seed(1); sx <- new("sub.bed.matrix", x.be, submap = sort(sample.int(ncol(x.be), 1000)))
 
 A <- Fantasio2:::m4_logEmiss( sx@bed, sx@p, sx@submap, 1e-5 )
