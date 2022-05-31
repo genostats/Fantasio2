@@ -1,3 +1,5 @@
+#' @export
+
 rsubmap <- function(segmentsList){
   
   segmentSummary <- segments.list.summary(segmentsList)
