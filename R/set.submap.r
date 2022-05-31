@@ -13,8 +13,23 @@ set.submap <- function(sx, ...) {
   assign(".Random.seed", sx@random.seed, envir = .GlobalEnv)
 
   # cette partie est à remplacer par quelque chose d'intelligent
-  n <- getArg("n", 100, ...)
-  submap <- sort(sample.int(ncol(sx), n))
+  
+  segmentSummary <- segments.list.summary(segmentsList)
+  shift <- cumsum(segmentSummary$number_of_segments)
+  shift <- append(0, shift)
+  max <- shift[length(shift)]
+  
+  submap <- numeric(max)
+  
+  for(chr in seq_along(segmentsList))
+  {
+    chrMarker <- segmentsList[[chr]]
+    randomMarkerVector <- get.marker.chromosom(chrMarker)
+    submap[(shift[chr]+1):shift[chr+1]] <- randomMarkerVector
+  }
+  
+  #n <- getArg("n", 100, ...)
+  #submap <- sort(sample.int(ncol(sx), n))
   sx@submap <- submap
    
   # restauring seed (meme commentaire)
