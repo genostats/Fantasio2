@@ -20,11 +20,8 @@ if(!exists('x.be')) {
 }
 
 # -- définition d'une sub bed matrix
-stop()
-set.seed(1); sx <- new("sub.bed.matrix", x.be)
-
 s <- segments.list.by.hotspots(x.be)
-sub <- rsubmap(s)
+set.seed(1); sx <- sub.bed.matrix(x.be, s)
 
 # ------------------
 

@@ -1,8 +1,6 @@
 
 #' @export
-set.submap <- function(sx, segmentsList, ...) {
-
-  restore.seed <- getArg("restore.seed", TRUE, ...)
+set.submap <- function(sx, segment.list, restore.seed = TRUE) {
 
   # storing current seed
   old.seed <- get(".Random.seed", envir = .GlobalEnv)
@@ -12,26 +10,7 @@ set.submap <- function(sx, segmentsList, ...) {
   # the object seed
   assign(".Random.seed", sx@random.seed, envir = .GlobalEnv)
 
-  # cette partie est à remplacer par quelque chose d'intelligent
-  
-if(FALSE){  
-  segmentSummary <- segments.list.summary(segmentsList)
-  shift <- cumsum(segmentSummary$number_of_segments)
-  shift <- append(0, shift)
-  max <- shift[length(shift)]
-  
-  submap <- numeric(max)
-  
-  for(chr in seq_along(segmentsList))
-  {
-    chrMarker <- segmentsList[[chr]]
-    randomMarkerVector <- get.marker.chromosom(chrMarker)
-    submap[(shift[chr]+1):shift[chr+1]] <- randomMarkerVector
-  }
-}
-  n <- getArg("n", 1000, ...)
-  submap <- sort(sample.int(ncol(sx), n))
-  sx@submap <- submap
+  sx@submap <- rsubmap(segment.list)
    
   # restauring seed (meme commentaire)
   if(restore.seed)

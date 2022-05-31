@@ -2,10 +2,10 @@
 
 export(delta.dist)
 export(optimization.control)
-export(set.submap)
-export(unset.submap)
-export(rsubmap)
 export(segments.list.by.hotspots)
+export(set.submap)
+export(sub.bed.matrix)
+export(unset.submap)
 exportClasses(HostspotsSegments)
 exportClasses(sub.bed.matrix)
 importFrom(Rcpp,evalCpp)

@@ -30,13 +30,12 @@ segments.list.by.hotspots <- function(bedmatrix, intensity = 10 , hotspots = hot
   
   #Step 1 : list of all the genome's hotspot
   
-  if(verbose) cat("Gathering all hotspots for the genome : ")
+  if(verbose) cat("Listing hotspots of the genome: ")
   
   chr.ids <- as.character(intersect(unique(bedmatrix@snps$chr), unique(hotspots$Chromosome)))
   
   VI <- list()
-  for (i in chr.ids)
-  {
+  for (i in chr.ids) {
     if(verbose) cat(".")
     chr_hotspot <- hotspots[which(hotspots$Chromosome==i),]
     w <- which(chr_hotspot$IntensitycMMb > intensity)
@@ -44,21 +43,15 @@ segments.list.by.hotspots <- function(bedmatrix, intensity = 10 , hotspots = hot
                      c(chr_hotspot$Start[w],Inf) )
     VI[[i]] <- segment
   }
-  if(verbose) cat("\n")
+  if(verbose) {
+    cat("\n")
+    cat( sum(sapply(VI, length)), " hotspots on ", length(VI), " chromosomes\n")
+  }
   
   #Step 2 : list of all the marker's position
-  
-  if(verbose) cat("Gathering all the genome's markers : ")
-  
-  VII <- list()
-  for(j in chr.ids)
-  { 
-    if(verbose) cat(".")
-    v <- bedmatrix@snps$pos[bedmatrix@snps$chr==j] 
-    VII[[j]] <- v
-  }
-  if(verbose) cat("\n")
-  
+	
+  VII <- tapply( bedmatrix@snps$pos, bedmatrix@snps$chr, c )[chr.ids]
+ 
   #Step 3 : list of all the segment in the genome
   
   if(verbose) cat("Finding which markers are between two hotspots : ")
@@ -74,7 +67,7 @@ segments.list.by.hotspots <- function(bedmatrix, intensity = 10 , hotspots = hot
     for( j in seq_len(nrow(chr_segment)))
     {
       b <- which(mkr > chr_segment[j,1] & mkr < chr_segment[j,2]) #which markers are  between two hotspots
-      if (length(b)== 0) next
+      if (length(b) == 0) next
       if (length(b) == 1) {
         chr[[j]] <- b + shift[i]
       } else {

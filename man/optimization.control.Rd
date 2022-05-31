@@ -20,6 +20,9 @@ If no arguments are given, the list of current parameter
 values is returned. A description of the parameters can be seen at
 \url{https://lbfgspp.statr.me/doc/classLBFGSpp_1_1LBFGSBParam.html}.
 
+Additionally, the vectors of length 2 `lower` and `upper` 
+allow to fix the bounds for `a` and `f`.
+
 When some arguments are given, they are used to update 
 the current values (cf example).
 }
