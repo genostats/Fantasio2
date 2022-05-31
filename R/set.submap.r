@@ -1,6 +1,6 @@
 
 #' @export
-set.submap <- function(sx, ...) {
+set.submap <- function(sx, segmentsList, ...) {
 
   restore.seed <- getArg("restore.seed", TRUE, ...)
 
