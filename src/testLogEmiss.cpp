@@ -9,7 +9,5 @@ NumericVector testLogEmiss(XPtr<matrix4> p_A, NumericVector p, IntegerVector map
   emiss<double> EM(p_A, p, map, epsilon);
   std::vector<double> logEmiss( EM.getLogEmiss(i) );
   return wrap( logEmiss );
-  NumericVector R(5);
-  return R;
 }
   

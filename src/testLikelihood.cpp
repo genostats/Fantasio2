@@ -1,9 +1,11 @@
 #include <Rcpp.h>
+#include <RcppEigen.h>
 #include <iostream>
 #include "gaston/matrix4.h"
 #include "emiss.h"
 #include "likelihoodGradient.h"
 #include "LBFGSB.h"
+#include "getUserParam.h"
 
 using namespace Rcpp;
 
@@ -34,17 +36,14 @@ NumericVector testOptimLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVec
   emiss<double> EM(p_A, p, map, epsilon);
   likelihoodGradient<double> LG( EM.getLogEmiss(i) , dDist, -1);
 
-  LBFGSpp::LBFGSBParam<double> param;
+  LBFGSpp::LBFGSBParam<double> param = getUserParam<double>();
   LBFGSpp::LBFGSBSolver<double> solver(param);
 
-  Eigen::VectorXd lb(2); 
-  lb << 1e-2, 0;
+  VECTOR<double> lb = getLb<double>();
+  VECTOR<double> ub = getUb<double>();
 
-  Eigen::VectorXd ub(2); 
-  ub << std::numeric_limits<double>::infinity(), 1;
-
-  Eigen::VectorXd x(2);
-  x << 0.1, 0.1;
+  VECTOR<double> x(2);
+  x << 0.05, 0.05;
   double fx;
   int niter = solver.minimize(LG, x, fx, lb, ub);
 
