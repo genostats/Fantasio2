@@ -1,5 +1,5 @@
-#include <RcppEigen.h>
 #include <Rcpp.h>
+#include <RcppEigen.h>
 #include <iostream>
 #include <ctime>
 #include <math.h>
@@ -28,6 +28,8 @@ public:
   scalar_t operator()(const VECTOR<scalar_t> & x, VECTOR<scalar_t> & grad) {
     scalar_t a = x[0];
     scalar_t f = x[1];
+SHOW(a)
+SHOW(f)
     if(f == 0)
       return f0(a, grad);
     else if(f == 1)
@@ -39,8 +41,6 @@ public:
 private:
  
   scalar_t ff(scalar_t a, scalar_t f, VECTOR<scalar_t> & grad) {
-SHOW(a)
-SHOW(f)
     scalar_t lt00, lt01, lt10, lt11; // log proba transition
     scalar_t df_lt00, df_lt01, df_lt10, df_lt11;
     scalar_t da_lt00, da_lt01, da_lt10, da_lt11;

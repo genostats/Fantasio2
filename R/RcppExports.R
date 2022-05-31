@@ -13,6 +13,14 @@ m4_logEmiss <- function(p_A, p, map, epsilon) {
     .Call(`_Fantasio2_m4_logEmiss`, p_A, p, map, epsilon)
 }
 
+setUserParam <- function(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, lower, upper) {
+    invisible(.Call(`_Fantasio2_setUserParam`, m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, lower, upper))
+}
+
+getUserParam <- function() {
+    .Call(`_Fantasio2_getUserParam`)
+}
+
 testLikelihood <- function(p_A, p, map, deltaDist, epsilon, i, a, f) {
     .Call(`_Fantasio2_testLikelihood`, p_A, p, map, deltaDist, epsilon, i, a, f)
 }
