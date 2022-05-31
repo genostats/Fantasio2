@@ -14,6 +14,7 @@ set.submap <- function(sx, ...) {
 
   # cette partie est à remplacer par quelque chose d'intelligent
   
+if(FALSE){  
   segmentSummary <- segments.list.summary(segmentsList)
   shift <- cumsum(segmentSummary$number_of_segments)
   shift <- append(0, shift)
@@ -27,9 +28,9 @@ set.submap <- function(sx, ...) {
     randomMarkerVector <- get.marker.chromosom(chrMarker)
     submap[(shift[chr]+1):shift[chr+1]] <- randomMarkerVector
   }
-  
-  #n <- getArg("n", 100, ...)
-  #submap <- sort(sample.int(ncol(sx), n))
+}
+  n <- getArg("n", 1000, ...)
+  submap <- sort(sample.int(ncol(sx), n))
   sx@submap <- submap
    
   # restauring seed (meme commentaire)

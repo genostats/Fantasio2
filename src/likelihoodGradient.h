@@ -4,6 +4,8 @@
 #include <ctime>
 #include <math.h>
 #include "LSE.h"
+#include "getUserParam.h"
+
 #define SHOW(x) Rcpp::Rcout << #x << " = " << (x) << std::endl;
 
 using namespace Rcpp;
@@ -28,8 +30,18 @@ public:
   scalar_t operator()(const VECTOR<scalar_t> & x, VECTOR<scalar_t> & grad) {
     scalar_t a = x[0];
     scalar_t f = x[1];
+    VECTOR<scalar_t> lb = getLb<scalar_t>();
+    VECTOR<scalar_t> ub = getUb<scalar_t>();
 SHOW(a)
 SHOW(f)
+    if(a < lb[0]) a = lb[0];
+    if(f < lb[1]) f = lb[1];
+
+    if(a > ub[0]) a = ub[0];
+    if(f > ub[1]) f = ub[1];
+SHOW(a)
+SHOW(f)
+ 
     if(f == 0)
       return f0(a, grad);
     else if(f == 1)

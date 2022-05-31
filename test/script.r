@@ -19,7 +19,7 @@ if(!exists('x.be')) {
   x.be <- select.inds(x, population == "Bedouin")
 }
 
-set.seed(1); sx <- new("sub.bed.matrix", x.be, submap = sort(sample.int(ncol(x.be), 1000)))
+set.seed(1); sx <- new("sub.bed.matrix", x.be)
 
 A <- Fantasio2:::m4_logEmiss( sx@bed, sx@p, sx@submap, 1e-5 )
 
