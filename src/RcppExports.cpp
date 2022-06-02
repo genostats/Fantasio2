@@ -55,8 +55,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // setUserParam
-void setUserParam(int m, double epsilon, int past, double delta, int max_iterations, int max_submin, int max_linesearch, double min_step, double max_step, double ftol, double wolfe, Rcpp::NumericVector lower, Rcpp::NumericVector upper);
-RcppExport SEXP _Fantasio2_setUserParam(SEXP mSEXP, SEXP epsilonSEXP, SEXP pastSEXP, SEXP deltaSEXP, SEXP max_iterationsSEXP, SEXP max_subminSEXP, SEXP max_linesearchSEXP, SEXP min_stepSEXP, SEXP max_stepSEXP, SEXP ftolSEXP, SEXP wolfeSEXP, SEXP lowerSEXP, SEXP upperSEXP) {
+void setUserParam(int m, double epsilon, int past, double delta, int max_iterations, int max_submin, int max_linesearch, double min_step, double max_step, double ftol, double wolfe, Rcpp::NumericVector lower, Rcpp::NumericVector upper, bool debug_);
+RcppExport SEXP _Fantasio2_setUserParam(SEXP mSEXP, SEXP epsilonSEXP, SEXP pastSEXP, SEXP deltaSEXP, SEXP max_iterationsSEXP, SEXP max_subminSEXP, SEXP max_linesearchSEXP, SEXP min_stepSEXP, SEXP max_stepSEXP, SEXP ftolSEXP, SEXP wolfeSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP debug_SEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type m(mSEXP);
@@ -72,7 +72,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type wolfe(wolfeSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type lower(lowerSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type upper(upperSEXP);
-    setUserParam(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, lower, upper);
+    Rcpp::traits::input_parameter< bool >::type debug_(debug_SEXP);
+    setUserParam(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, lower, upper, debug_);
     return R_NilValue;
 END_RCPP
 }
@@ -104,6 +105,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// testLogEmiss
+NumericVector testLogEmiss(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, double epsilon, int i);
+RcppExport SEXP _Fantasio2_testLogEmiss(SEXP p_ASEXP, SEXP pSEXP, SEXP mapSEXP, SEXP epsilonSEXP, SEXP iSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<matrix4> >::type p_A(p_ASEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type map(mapSEXP);
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    rcpp_result_gen = Rcpp::wrap(testLogEmiss(p_A, p, map, epsilon, i));
+    return rcpp_result_gen;
+END_RCPP
+}
 // testOptimLikelihood
 NumericVector testOptimLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, NumericVector deltaDist, double epsilon, int i);
 RcppExport SEXP _Fantasio2_testOptimLikelihood(SEXP p_ASEXP, SEXP pSEXP, SEXP mapSEXP, SEXP deltaDistSEXP, SEXP epsilonSEXP, SEXP iSEXP) {
@@ -120,31 +136,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// testLogEmiss
-NumericVector testLogEmiss(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, double epsilon, int i);
-RcppExport SEXP _Fantasio2_testLogEmiss(SEXP p_ASEXP, SEXP pSEXP, SEXP mapSEXP, SEXP epsilonSEXP, SEXP iSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< XPtr<matrix4> >::type p_A(p_ASEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type map(mapSEXP);
-    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
-    Rcpp::traits::input_parameter< int >::type i(iSEXP);
-    rcpp_result_gen = Rcpp::wrap(testLogEmiss(p_A, p, map, epsilon, i));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_logLikelihood_gradient", (DL_FUNC) &_Fantasio2_logLikelihood_gradient, 4},
     {"_Fantasio2_logEmiss", (DL_FUNC) &_Fantasio2_logEmiss, 4},
     {"_Fantasio2_m4_logEmiss", (DL_FUNC) &_Fantasio2_m4_logEmiss, 4},
-    {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 13},
+    {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 14},
     {"_Fantasio2_getUserParam", (DL_FUNC) &_Fantasio2_getUserParam, 0},
     {"_Fantasio2_testLikelihood", (DL_FUNC) &_Fantasio2_testLikelihood, 8},
-    {"_Fantasio2_testOptimLikelihood", (DL_FUNC) &_Fantasio2_testOptimLikelihood, 6},
     {"_Fantasio2_testLogEmiss", (DL_FUNC) &_Fantasio2_testLogEmiss, 5},
+    {"_Fantasio2_testOptimLikelihood", (DL_FUNC) &_Fantasio2_testOptimLikelihood, 6},
     {NULL, NULL, 0}
 };
 

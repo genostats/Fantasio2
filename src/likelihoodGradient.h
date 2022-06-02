@@ -32,15 +32,16 @@ public:
     scalar_t f = x[1];
     VECTOR<scalar_t> lb = getLb<scalar_t>();
     VECTOR<scalar_t> ub = getUb<scalar_t>();
-SHOW(a)
-SHOW(f)
+    
+    if(debug()) {
+      std::cout << "a = " << a << ", f = " << f << "\n";
+    }
+
     if(a < lb[0]) a = lb[0];
     if(f < lb[1]) f = lb[1];
 
     if(a > ub[0]) a = ub[0];
     if(f > ub[1]) f = ub[1];
-SHOW(a)
-SHOW(f)
  
     if(f == 0)
       return f0(a, grad);

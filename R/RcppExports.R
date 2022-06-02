@@ -13,8 +13,8 @@ m4_logEmiss <- function(p_A, p, map, epsilon) {
     .Call(`_Fantasio2_m4_logEmiss`, p_A, p, map, epsilon)
 }
 
-setUserParam <- function(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, lower, upper) {
-    invisible(.Call(`_Fantasio2_setUserParam`, m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, lower, upper))
+setUserParam <- function(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, lower, upper, debug_) {
+    invisible(.Call(`_Fantasio2_setUserParam`, m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, lower, upper, debug_))
 }
 
 getUserParam <- function() {
@@ -25,11 +25,11 @@ testLikelihood <- function(p_A, p, map, deltaDist, epsilon, i, a, f) {
     .Call(`_Fantasio2_testLikelihood`, p_A, p, map, deltaDist, epsilon, i, a, f)
 }
 
-testOptimLikelihood <- function(p_A, p, map, deltaDist, epsilon, i) {
-    .Call(`_Fantasio2_testOptimLikelihood`, p_A, p, map, deltaDist, epsilon, i)
-}
-
 testLogEmiss <- function(p_A, p, map, epsilon, i) {
     .Call(`_Fantasio2_testLogEmiss`, p_A, p, map, epsilon, i)
+}
+
+testOptimLikelihood <- function(p_A, p, map, deltaDist, epsilon, i) {
+    .Call(`_Fantasio2_testOptimLikelihood`, p_A, p, map, deltaDist, epsilon, i)
 }
 

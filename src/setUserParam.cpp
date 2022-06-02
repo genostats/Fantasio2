@@ -11,13 +11,15 @@ static double ub_a = INFINITY;
 static double lb_f = 0;
 static double ub_f = 1;
 
+static bool _debug_ = false;
+
 // voir la description des paramètres 
 // https://lbfgspp.statr.me/doc/classLBFGSpp_1_1LBFGSBParam.html
 
 //[[Rcpp::export]]
 void setUserParam(int m, double epsilon, int past, double delta, int max_iterations, int max_submin, 
                   int max_linesearch, double min_step, double max_step, double ftol, double wolfe,
-                  Rcpp::NumericVector lower, Rcpp::NumericVector upper) {
+                  Rcpp::NumericVector lower, Rcpp::NumericVector upper, bool debug_) {
 
   userParametersDouble.m              = m;
   userParametersDouble.epsilon        = epsilon;
@@ -45,6 +47,8 @@ void setUserParam(int m, double epsilon, int past, double delta, int max_iterati
 
   lb_a = lower[0]; lb_f = lower[1];
   ub_a = upper[0]; ub_f = upper[1];
+ 
+  _debug_ = debug_;
 }
 
 template<>
@@ -85,6 +89,9 @@ VECTOR<double> getUb() {
   return ub;
 }
 
+bool debug() {
+  return _debug_;
+}
 
 //[[Rcpp::export]]
 Rcpp::List getUserParam() {
@@ -102,6 +109,7 @@ Rcpp::List getUserParam() {
   L["wolfe"] = userParametersDouble.wolfe;
   L["lower"] = Rcpp::NumericVector::create(Rcpp::_["lb.a"] = lb_a, Rcpp::_["lb.f"] = lb_f);
   L["upper"] = Rcpp::NumericVector::create(Rcpp::_["ub.a"] = ub_a, Rcpp::_["ub.f"] = ub_f);
+  L["debug"] = _debug_;
   return L;
 }
 

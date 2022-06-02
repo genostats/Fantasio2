@@ -17,4 +17,6 @@ VECTOR<scalar_t> getLb();
 template<typename scalar_t>
 VECTOR<scalar_t> getUb();
 
+bool debug();
+
 #endif
