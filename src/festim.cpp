@@ -29,11 +29,11 @@ List festim(XPtr<matrix4> p_A, NumericVector p_, IntegerVector map_, NumericVect
   std::vector<double> F(p_A->ncol);
   std::vector<double> FX(p_A->ncol);
 
- #pragma omp parallel num_threads(pars.n_threads)
- #pragma omp for 
-  for(int i0 = 0; i0 < p_A->ncol; i0 += 4) {
     emiss<double> EM(PA, p, map, epsilon);
     LBFGSpp::LBFGSBSolver<double> solver(param);
+#pragma omp parallel num_threads(pars.n_threads)
+#pragma omp for firstprivate(EM, solver)
+  for(int i0 = 0; i0 < p_A->ncol; i0 += 4) { 
     for(int i1 = 0; i1 < 4 & i0 + i1 < p_A->ncol; i1++) {
       int i = i0 + i1;   
       likelihoodGradient<double> LG( EM.getLogEmiss(i) , dDist, -1);
