@@ -17,28 +17,29 @@ if(!exists('x.be')) {
   x <- set.dist(x, HumanGeneticMap::genetic.map.b36) # vérifier le build ?
 
   x.be <- select.inds(x, population == "Bedouin")
+  x.be <- x.be[1:47,]
 }
 
 if(!exists("s")) {
   s <- segments.list.by.hotspots(x.be)
-  set.seed(1); sx <- sub.bed.matrix(x.be, s)
 }
 
+set.seed(4); sx <- sub.bed.matrix(x.be, s)
 
 test.log.emission <- function() {
   cat("test log emission\n")
   A <- Fantasio2:::m4_logEmiss( sx@bed, sx@p, sx@submap, 1e-5 )
-  for(k in 0:47) {
+  for(k in 0:(nrow(x.be)-1)) {
     B <- Fantasio2:::testLogEmiss( sx@bed, sx@p, sx@submap, 1e-5, k )
     if(!all( A[ k*2 + 1:2, ] == B)) stop(k)
   }
 }
 
 
-test.log.likelihood <- function() {
+test.log.likelihood <- function(a = 2) {
   cat("test log likelihood\n")
-  a <- 2
-  for(k in 0:47) {
+  A <- Fantasio2:::m4_logEmiss( sx@bed, sx@p, sx@submap, 1e-5 )
+  for(k in 0:(nrow(x.be)-1)) {
     R1 <- Fantasio2:::testLikelihood( sx@bed, sx@p, sx@submap, delta.dist(sx), 1e-5, k, a, 0.1)
     R2 <- Fantasio2:::logLikelihood_gradient( A[k*2 + 1:2, ],  delta.dist(sx), a, 0.1)
     if(!all(R1 == R2)) stop(k)
@@ -68,7 +69,7 @@ test.optimization <- function() {
   cat("optimizing with optim\n")
   A <- Fantasio2:::m4_logEmiss( sx@bed, sx@p, sx@submap, 1e-5 )
   R <- NULL
-  for(k in 0:47) {
+  for(k in 0:(nrow(x.be)-1)) {
     f <- function(x) -Fantasio2:::logLikelihood_gradient( A[k*2 + 1:2, ],  delta.dist(sx), x[1], x[2] )[1]
     grad <- function(x) -Fantasio2:::logLikelihood_gradient( A[k*2 + 1:2, ],  delta.dist(sx), x[1], x[2] )[-1]
   
@@ -79,16 +80,19 @@ test.optimization <- function() {
   names(R) <- c("a", "f", "fx")
   
   cat("optimizing with LFBGSpp\n")
-  S <- NULL
-  for(k in 0:47) {
-    o <- Fantasio2:::testOptimLikelihood( sx@bed, sx@p, sx@submap, delta.dist(sx), 1e-5, k)
-    S <- rbind(S, o)
-  }
-  S <- as.data.frame(S)
-  
+  # S <- NULL
+  # for(k in 0:(nrow(x.be)-1)) {
+  #   o <- Fantasio2:::testOptimLikelihood( sx@bed, sx@p, sx@submap, delta.dist(sx), 1e-5, k)
+  #   S <- rbind(S, o)
+  # }
+  # S <- as.data.frame(S)
+ 
+  S <- as.data.frame( Fantasio2:::festim(sx@bed, sx@p, sx@submap, delta.dist(sx), 1e-5) )
   par(mfrow=c(1,2))
   plot(R$a, S$a)
   plot(R$f, S$f)
   list(optim = R, fanta = S)
 } 
+
+# a = 0.337448, f = 0.0625532
 

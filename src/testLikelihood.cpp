@@ -8,13 +8,18 @@
 using namespace Rcpp;
 
 //[[Rcpp::export]]
-NumericVector testLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, NumericVector deltaDist, 
+NumericVector testLikelihood(XPtr<matrix4> p_A, NumericVector p_, IntegerVector map_, NumericVector deltaDist, 
                              double epsilon, int i, double a, double f) {
+
+  RVector<double> p(p_);
+  RVector<int> map(map_);
+  matrix4 * PA(p_A);
+
   std::vector<double> dDist;
   for(double a : deltaDist) 
     dDist.push_back(a);
 
-  emiss<double> EM(p_A, p, map, epsilon);
+  emiss<double> EM(PA, p, map, epsilon);
   likelihoodGradient<double> LG( EM.getLogEmiss(i) , dDist);
   Eigen::VectorXd grad(2);
   Eigen::VectorXd x(2);

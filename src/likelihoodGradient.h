@@ -30,10 +30,11 @@ public:
   scalar_t operator()(const VECTOR<scalar_t> & x, VECTOR<scalar_t> & grad) {
     scalar_t a = x[0];
     scalar_t f = x[1];
-    VECTOR<scalar_t> lb = getLb<scalar_t>();
-    VECTOR<scalar_t> ub = getUb<scalar_t>();
+    userParam<scalar_t> pars = getUserParam<scalar_t>();
+    VECTOR<scalar_t> lb = pars.lb;
+    VECTOR<scalar_t> ub = pars.ub;
     
-    if(debug()) {
+    if(pars.debug) {
       std::cout << "a = " << a << ", f = " << f << "\n";
     }
 

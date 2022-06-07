@@ -10,36 +10,42 @@
 using namespace Rcpp;
 
 //[[Rcpp::export]]
-NumericVector testOptimLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, NumericVector deltaDist, double epsilon, int i) {
+NumericVector testOptimLikelihood(XPtr<matrix4> p_A, NumericVector p_, IntegerVector map_, NumericVector deltaDist, double epsilon, int i) {
+  RVector<double> p(p_);
+  RVector<int> map(map_);
+  matrix4 * PA(p_A);
+
   std::vector<double> dDist;
   for(double a : deltaDist) 
     dDist.push_back(a);
 
-  emiss<double> EM(p_A, p, map, epsilon);
+  emiss<double> EM(PA, p, map, epsilon);
   likelihoodGradient<double> LG( EM.getLogEmiss(i) , dDist, -1);
 
-  LBFGSpp::LBFGSBParam<double> param = getUserParam<double>();
+  userParam<double> pars = getUserParam<double>();
+
+  LBFGSpp::LBFGSBParam<double> param = pars.BFGSparam;
   LBFGSpp::LBFGSBSolver<double> solver(param);
 
-  VECTOR<double> lb = getLb<double>();
-  VECTOR<double> ub = getUb<double>();
+  VECTOR<double> lb = pars.lb;
+  VECTOR<double> ub = pars.ub;
 
   VECTOR<double> x(2);
   x << 0.05, 0.05;
   double fx;
 
   int niter = 0;
-  int max_tries = 30;
   int count = 1;
   while(true) {
     try {
       niter += solver.minimize(LG, x, fx, lb, ub);
       break;
     } catch(std::runtime_error const & e) {
-      warning(e.what());
       niter++;
-      if(count++ > max_tries) 
+      if(count++ > pars.max_retries) {
+        warning(e.what());
         break;
+      }
     }
   }
 

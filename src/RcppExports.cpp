@@ -12,6 +12,21 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// festim
+List festim(XPtr<matrix4> p_A, NumericVector p_, IntegerVector map_, NumericVector deltaDist, double epsilon);
+RcppExport SEXP _Fantasio2_festim(SEXP p_ASEXP, SEXP p_SEXP, SEXP map_SEXP, SEXP deltaDistSEXP, SEXP epsilonSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<matrix4> >::type p_A(p_ASEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type p_(p_SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type map_(map_SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type deltaDist(deltaDistSEXP);
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    rcpp_result_gen = Rcpp::wrap(festim(p_A, p_, map_, deltaDist, epsilon));
+    return rcpp_result_gen;
+END_RCPP
+}
 // logLikelihood_gradient
 NumericVector logLikelihood_gradient(NumericMatrix logEmiss, NumericVector Dist, double a, double f);
 RcppExport SEXP _Fantasio2_logLikelihood_gradient(SEXP logEmissSEXP, SEXP DistSEXP, SEXP aSEXP, SEXP fSEXP) {
@@ -55,8 +70,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // setUserParam
-void setUserParam(int m, double epsilon, int past, double delta, int max_iterations, int max_submin, int max_linesearch, double min_step, double max_step, double ftol, double wolfe, Rcpp::NumericVector lower, Rcpp::NumericVector upper, bool debug_);
-RcppExport SEXP _Fantasio2_setUserParam(SEXP mSEXP, SEXP epsilonSEXP, SEXP pastSEXP, SEXP deltaSEXP, SEXP max_iterationsSEXP, SEXP max_subminSEXP, SEXP max_linesearchSEXP, SEXP min_stepSEXP, SEXP max_stepSEXP, SEXP ftolSEXP, SEXP wolfeSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP debug_SEXP) {
+void setUserParam(int m, double epsilon, int past, double delta, int max_iterations, int max_submin, int max_linesearch, double min_step, double max_step, double ftol, double wolfe, int max_retries, Rcpp::NumericVector lower, Rcpp::NumericVector upper, int n_threads, bool debug);
+RcppExport SEXP _Fantasio2_setUserParam(SEXP mSEXP, SEXP epsilonSEXP, SEXP pastSEXP, SEXP deltaSEXP, SEXP max_iterationsSEXP, SEXP max_subminSEXP, SEXP max_linesearchSEXP, SEXP min_stepSEXP, SEXP max_stepSEXP, SEXP ftolSEXP, SEXP wolfeSEXP, SEXP max_retriesSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP n_threadsSEXP, SEXP debugSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type m(mSEXP);
@@ -70,10 +85,12 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type max_step(max_stepSEXP);
     Rcpp::traits::input_parameter< double >::type ftol(ftolSEXP);
     Rcpp::traits::input_parameter< double >::type wolfe(wolfeSEXP);
+    Rcpp::traits::input_parameter< int >::type max_retries(max_retriesSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type lower(lowerSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type upper(upperSEXP);
-    Rcpp::traits::input_parameter< bool >::type debug_(debug_SEXP);
-    setUserParam(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, lower, upper, debug_);
+    Rcpp::traits::input_parameter< int >::type n_threads(n_threadsSEXP);
+    Rcpp::traits::input_parameter< bool >::type debug(debugSEXP);
+    setUserParam(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, debug);
     return R_NilValue;
 END_RCPP
 }
@@ -88,64 +105,77 @@ BEGIN_RCPP
 END_RCPP
 }
 // testLikelihood
-NumericVector testLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, NumericVector deltaDist, double epsilon, int i, double a, double f);
-RcppExport SEXP _Fantasio2_testLikelihood(SEXP p_ASEXP, SEXP pSEXP, SEXP mapSEXP, SEXP deltaDistSEXP, SEXP epsilonSEXP, SEXP iSEXP, SEXP aSEXP, SEXP fSEXP) {
+NumericVector testLikelihood(XPtr<matrix4> p_A, NumericVector p_, IntegerVector map_, NumericVector deltaDist, double epsilon, int i, double a, double f);
+RcppExport SEXP _Fantasio2_testLikelihood(SEXP p_ASEXP, SEXP p_SEXP, SEXP map_SEXP, SEXP deltaDistSEXP, SEXP epsilonSEXP, SEXP iSEXP, SEXP aSEXP, SEXP fSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< XPtr<matrix4> >::type p_A(p_ASEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type map(mapSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type p_(p_SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type map_(map_SEXP);
     Rcpp::traits::input_parameter< NumericVector >::type deltaDist(deltaDistSEXP);
     Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
     Rcpp::traits::input_parameter< int >::type i(iSEXP);
     Rcpp::traits::input_parameter< double >::type a(aSEXP);
     Rcpp::traits::input_parameter< double >::type f(fSEXP);
-    rcpp_result_gen = Rcpp::wrap(testLikelihood(p_A, p, map, deltaDist, epsilon, i, a, f));
+    rcpp_result_gen = Rcpp::wrap(testLikelihood(p_A, p_, map_, deltaDist, epsilon, i, a, f));
     return rcpp_result_gen;
 END_RCPP
 }
 // testLogEmiss
-NumericVector testLogEmiss(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, double epsilon, int i);
-RcppExport SEXP _Fantasio2_testLogEmiss(SEXP p_ASEXP, SEXP pSEXP, SEXP mapSEXP, SEXP epsilonSEXP, SEXP iSEXP) {
+NumericVector testLogEmiss(XPtr<matrix4> p_A, NumericVector p_, IntegerVector map_, double epsilon, int i);
+RcppExport SEXP _Fantasio2_testLogEmiss(SEXP p_ASEXP, SEXP p_SEXP, SEXP map_SEXP, SEXP epsilonSEXP, SEXP iSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< XPtr<matrix4> >::type p_A(p_ASEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type map(mapSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type p_(p_SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type map_(map_SEXP);
     Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
     Rcpp::traits::input_parameter< int >::type i(iSEXP);
-    rcpp_result_gen = Rcpp::wrap(testLogEmiss(p_A, p, map, epsilon, i));
+    rcpp_result_gen = Rcpp::wrap(testLogEmiss(p_A, p_, map_, epsilon, i));
     return rcpp_result_gen;
 END_RCPP
 }
 // testOptimLikelihood
-NumericVector testOptimLikelihood(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, NumericVector deltaDist, double epsilon, int i);
-RcppExport SEXP _Fantasio2_testOptimLikelihood(SEXP p_ASEXP, SEXP pSEXP, SEXP mapSEXP, SEXP deltaDistSEXP, SEXP epsilonSEXP, SEXP iSEXP) {
+NumericVector testOptimLikelihood(XPtr<matrix4> p_A, NumericVector p_, IntegerVector map_, NumericVector deltaDist, double epsilon, int i);
+RcppExport SEXP _Fantasio2_testOptimLikelihood(SEXP p_ASEXP, SEXP p_SEXP, SEXP map_SEXP, SEXP deltaDistSEXP, SEXP epsilonSEXP, SEXP iSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< XPtr<matrix4> >::type p_A(p_ASEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type map(mapSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type p_(p_SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type map_(map_SEXP);
     Rcpp::traits::input_parameter< NumericVector >::type deltaDist(deltaDistSEXP);
     Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
     Rcpp::traits::input_parameter< int >::type i(iSEXP);
-    rcpp_result_gen = Rcpp::wrap(testOptimLikelihood(p_A, p, map, deltaDist, epsilon, i));
+    rcpp_result_gen = Rcpp::wrap(testOptimLikelihood(p_A, p_, map_, deltaDist, epsilon, i));
     return rcpp_result_gen;
+END_RCPP
+}
+// testRVector
+void testRVector(NumericVector x, IntegerVector y);
+RcppExport SEXP _Fantasio2_testRVector(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type y(ySEXP);
+    testRVector(x, y);
+    return R_NilValue;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_Fantasio2_festim", (DL_FUNC) &_Fantasio2_festim, 5},
     {"_Fantasio2_logLikelihood_gradient", (DL_FUNC) &_Fantasio2_logLikelihood_gradient, 4},
     {"_Fantasio2_logEmiss", (DL_FUNC) &_Fantasio2_logEmiss, 4},
     {"_Fantasio2_m4_logEmiss", (DL_FUNC) &_Fantasio2_m4_logEmiss, 4},
-    {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 14},
+    {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 16},
     {"_Fantasio2_getUserParam", (DL_FUNC) &_Fantasio2_getUserParam, 0},
     {"_Fantasio2_testLikelihood", (DL_FUNC) &_Fantasio2_testLikelihood, 8},
     {"_Fantasio2_testLogEmiss", (DL_FUNC) &_Fantasio2_testLogEmiss, 5},
     {"_Fantasio2_testOptimLikelihood", (DL_FUNC) &_Fantasio2_testOptimLikelihood, 6},
+    {"_Fantasio2_testRVector", (DL_FUNC) &_Fantasio2_testRVector, 2},
     {NULL, NULL, 0}
 };
 

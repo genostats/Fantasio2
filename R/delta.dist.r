@@ -2,8 +2,12 @@
 
 #' @export 
 delta.dist <- function(sx) {
-  dist <- sx@snps$dist[ sx@submap ]
-  chr  <- sx@snps$chr[ sx@submap ]
+  delta.dist.0(sx, sx@submap)
+}
+
+delta.dist.0 <- function(bedmatrix, submap) {
+  dist <- bedmatrix@snps$dist[ submap ]
+  chr  <- bedmatrix@snps$chr[ submap ]
   delta <- diff(dist)
   # treat the change of chromosome 
   I <- cumsum(rle(chr)$length)

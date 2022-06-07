@@ -3,15 +3,17 @@
 #include "gaston/matrix4.h"
 #include <math.h>
 #include "LSE.h"
+#include "getUserParam.h"
+#include "RVector.h"
 
 #define SHOW(x) Rcpp::Rcout << #x << " = " << (x) << std::endl;
 
 template<typename scalar_t>
 class emiss {
 private:
-  XPtr<matrix4> bm;        // bed matrix
-  NumericVector p;        // vecteur de fréq de l'allele alt
-  IntegerVector submap;   // indice des SNPs à considérer
+  matrix4 * bm;        // bed matrix
+  RVector<double> p;        // vecteur de fréq de l'allele alt
+  RVector<int> submap;   // indice des SNPs à considérer
   double epsilon;         // proba d'erreur
 
   int nbInds;
@@ -26,18 +28,18 @@ private:
 
 public:
 
-  emiss(XPtr<matrix4> bm_, NumericVector p_, IntegerVector submap_, double epsilon_) :
+  // preComputedFrom est initialisé à une valeur trop grande 
+  // -> au premier appel de getLogEmiss il y aura appel de preCompute
+
+  emiss(matrix4 * bm_, RVector<double> p_, RVector<int> submap_, double epsilon_) :
       bm(bm_), p(p_), submap(submap_), epsilon(epsilon_), nbInds(bm->ncol), nbSnps(submap.size()),
-      nbTotalSnps(bm->nrow) {
-    nbPrecomp = 4;
+      nbTotalSnps(bm->nrow), nbPrecomp(4), preComputedFrom(bm->ncol + 1) {
     LEMISS.resize(nbPrecomp);
     for(auto & le : LEMISS) {
       le.reserve(nbSnps);
     }
     // une fois pour toutes
     gg[3] = hh[3] = 0; // manquant -> proba 1
-
-    preCompute(0);
   }
 
   void preCompute(size_t from) {
@@ -78,6 +80,10 @@ public:
       }
     }
     preComputedFrom = (from/4) * 4;
+
+    if(getUserParam<scalar_t>().debug) {
+      std::cout << "[log proba emiss precomputed from " << preComputedFrom << "]\n";
+    }
   }
 
   std::vector<scalar_t> & getLogEmiss(size_t i) {

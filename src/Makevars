@@ -1,2 +1,4 @@
 CXX_STD = CXX11 
 PKG_CPPFLAGS += -I ../inst/include/Fantasio2/ -I ../inst/include/LBFGSpp/
+PKG_CPPFLAGS += $(SHLIB_OPENMP_CFLAGS)
+PKG_LIBS += $(SHLIB_OPENMP_CFLAGS)
