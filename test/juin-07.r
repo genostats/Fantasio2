@@ -48,3 +48,4 @@ for(i in 1:n.submaps) {
 }
 cat("done\n")
 
+summary <- submaps.summary(x.be, A, F)
