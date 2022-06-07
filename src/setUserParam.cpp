@@ -12,7 +12,7 @@ static userParam<float>  userParamFloat;
 //[[Rcpp::export]]
 void setUserParam(int m, double epsilon, int past, double delta, int max_iterations, int max_submin, 
                   int max_linesearch, double min_step, double max_step, double ftol, double wolfe, int max_retries,
-                  Rcpp::NumericVector lower, Rcpp::NumericVector upper, int n_threads, bool debug) {
+                  Rcpp::NumericVector lower, Rcpp::NumericVector upper, int n_threads, int debug) {
 
   userParamDouble.set(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step,
                       ftol, wolfe, max_retries, lower, upper, n_threads, debug);

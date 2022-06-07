@@ -81,7 +81,7 @@ public:
     }
     preComputedFrom = (from/4) * 4;
 
-    if(getUserParam<scalar_t>().debug) {
+    if(getUserParam<scalar_t>().debug > 1) {
       std::cout << "[log proba emiss precomputed from " << preComputedFrom << "]\n";
     }
   }

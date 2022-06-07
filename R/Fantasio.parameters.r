@@ -13,8 +13,8 @@
 #' @details The parameter `max_retries` gives the number of times the algorithm can be
 #' re-run after a runtimer error. The vectors of length 2 `lower` and `upper` give the 
 #' lower and upper bounds for \eqn{a} and \eqn{f}.
-#' @details The parameter `n_threads` controls the number of threads; setting `debug` to `TRUE`
-#' will turn on the displaying of a lot of information.
+#' @details The parameter `n_threads` controls the number of threads; and `debug` to a positive value
+#' will turn on the displaying of various amounts of information.
 #' 
 #' @return A list, or `NULL`.
 #' @export
@@ -34,6 +34,10 @@ Fantasio.parameters <- function(...) {
     if( !(a %in% names(params)) ) 
       stop(a, " is not a valid parameter")
     params[[a]] <- update[[a]]
+  }
+  if(params$n_threads > 1 & !checkOpenMP()) {
+    params$n_treads <- 1
+    warning("Fantasio was not compiled with OpenMP, multithreading is impossible")
   }
   do.call(setUserParam, params)
 }

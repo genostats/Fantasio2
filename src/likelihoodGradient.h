@@ -34,7 +34,7 @@ public:
     VECTOR<scalar_t> lb = pars.lb;
     VECTOR<scalar_t> ub = pars.ub;
     
-    if(pars.debug) {
+    if(pars.debug > 1) {
       std::cout << "a = " << a << ", f = " << f << "\n";
     }
 
