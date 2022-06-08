@@ -6,6 +6,9 @@
 #include "LSE.h"
 #include "getUserParam.h"
 
+#ifndef __likelihoodGradient__
+#define __likelihoodGradient__
+
 #define SHOW(x) Rcpp::Rcout << #x << " = " << (x) << std::endl;
 
 using namespace Rcpp;
@@ -21,9 +24,9 @@ private:
   std::vector<scalar_t> & logEmiss;
   std::vector<scalar_t> & deltaDist;
   // NumericVector deltaDist;
+public:
   scalar_t scale;
   
-public:
   likelihoodGradient(std::vector<scalar_t> & logEmiss_, std::vector<scalar_t> & deltaDist_) : logEmiss(logEmiss_), deltaDist(deltaDist_), scale(1) {}
   likelihoodGradient(std::vector<scalar_t> & logEmiss_, std::vector<scalar_t> & deltaDist_, scalar_t scale_) : logEmiss(logEmiss_), deltaDist(deltaDist_), scale(scale_) {}
   
@@ -35,7 +38,7 @@ public:
     VECTOR<scalar_t> ub = pars.ub;
     
     if(pars.debug > 1) {
-      std::cout << "a = " << a << ", f = " << f << "\n";
+      std::cout << "a = " << a << ", f = " << f;
     }
 
     if(a < lb[0]) a = lb[0];
@@ -44,12 +47,19 @@ public:
     if(a > ub[0]) a = ub[0];
     if(f > ub[1]) f = ub[1];
  
-    if(f == 0)
-      return f0(a, grad);
+    double fx;
+    if(f == 0) 
+      fx = f0(a, grad);
     else if(f == 1)
-      return f1(a, grad);
+      fx = f1(a, grad);
     else
-      return ff(a, f, grad);
+      fx = ff(a, f, grad);
+
+    if(pars.debug > 1) {
+      std::cout << ", value = " << fx << ", gradient norm = " << grad.norm() << "\n";
+    }
+
+    return fx;
   }
  
 private:
@@ -208,3 +218,5 @@ private:
   }
 
 };
+
+#endif

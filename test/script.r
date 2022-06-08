@@ -1,4 +1,4 @@
-require(Fantasio2)
+require(gaston)
 
 if( !require("HGDP.CEPH") ) {
   install.packages("HGDP.CEPH", repos="https://genostats.github.io/R/")
@@ -19,6 +19,8 @@ if(!exists('x.be')) {
   x.be <- select.inds(x, population == "Bedouin")
   x.be <- x.be[1:47,]
 }
+
+require(Fantasio2)
 
 if(!exists("s")) {
   s <- segments.list.by.hotspots(x.be)

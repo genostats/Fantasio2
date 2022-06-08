@@ -5,8 +5,8 @@ checkOpenMP <- function() {
     .Call(`_Fantasio2_checkOpenMP`)
 }
 
-festim <- function(p_A, p_, map_, deltaDist, epsilon) {
-    .Call(`_Fantasio2_festim`, p_A, p_, map_, deltaDist, epsilon)
+festim <- function(p_A, p, map, deltaDist, epsilon) {
+    .Call(`_Fantasio2_festim`, p_A, p, map, deltaDist, epsilon)
 }
 
 logLikelihood_gradient <- function(logEmiss, Dist, a, f) {
@@ -21,8 +21,8 @@ m4_logEmiss <- function(p_A, p, map, epsilon) {
     .Call(`_Fantasio2_m4_logEmiss`, p_A, p, map, epsilon)
 }
 
-setUserParam <- function(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, debug) {
-    invisible(.Call(`_Fantasio2_setUserParam`, m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, debug))
+setUserParam <- function(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, use_float, debug) {
+    invisible(.Call(`_Fantasio2_setUserParam`, m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, use_float, debug))
 }
 
 getUserParam <- function() {

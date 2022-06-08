@@ -6,6 +6,9 @@
 #include "getUserParam.h"
 #include "RVector.h"
 
+#ifndef __emiss__
+#define __emiss__
+
 #define SHOW(x) Rcpp::Rcout << #x << " = " << (x) << std::endl;
 
 template<typename scalar_t>
@@ -94,3 +97,5 @@ public:
   }
   
 };
+
+#endif
