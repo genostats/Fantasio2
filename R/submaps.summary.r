@@ -31,7 +31,7 @@ submaps.summary <- function (bedmatrix, a, f, p.lrt, a.threshold = 1) {
   a[w.a] <- NA
   p.lrt[w.a] <- NA
   l <- (p.lrt < 0.05)
-  pLRT_median <- apply(p, 1, median, na.rm=TRUE)
+  pLRT_median <- apply(p.lrt, 1, median, na.rm=TRUE)
   
   nValidSubmap <- numeric(nrow(l))
   for (i in seq_len(nrow(l)))
