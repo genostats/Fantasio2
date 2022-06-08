@@ -8,6 +8,10 @@
 #include <Eigen/Core>
 #include "LBFGSpp/Param.h"
 
+#ifndef SHOW
+#define SHOW(x) std::cout << #x << " = " << (x) << std::endl;
+#endif
+
 namespace LBFGSpp {
 
 ///
@@ -215,8 +219,9 @@ public:
                            Scalar& step, Scalar& fx, Vector& grad, Scalar& dg, Vector& x)
     {
         using std::abs;
-        // std::cout << "========================= Entering line search =========================\n\n";
-
+#ifdef DEBUG_LS
+std::cout << "========================= Entering line search =========================\n\n";
+#endif
         // Check the value of step
         if (step <= Scalar(0))
             throw std::invalid_argument("'step' must be positive");
@@ -228,7 +233,9 @@ public:
         // Projection of gradient on the search direction
         const Scalar dg_init = dg;
 
-        // std::cout << "fx_init = " << fx_init << ", dg_init = " << dg_init << std::endl << std::endl;
+#ifdef DEBUG_LS
+std::cout << "fx_init = " << fx_init << ", dg_init = " << dg_init << std::endl << std::endl;
+#endif
 
         // Make sure d points to a descent direction
         if (dg_init >= Scalar(0))
@@ -247,16 +254,34 @@ public:
 
         // Function value and gradient at the current step size
         x.noalias() = xp + step * drt;
+
+#ifdef DEBUG_LS
+std::cout << "MOVED " << (xp - x).norm() << "\n";
+#endif
+
+        // rv 2022 06 08
+        if( (xp - x).norm() == 0 ) throw std::runtime_error("the line search step became smaller than the minimum value allowed");
+
         fx = f(x, grad);
         dg = grad.dot(drt);
 
-        // std::cout << "max_step = " << step_max << ", step = " << step << ", fx = " << fx << ", dg = " << dg << std::endl;
+#ifdef DEBUG_LS
+         std::cout << "max_step = " << step_max << ", step = " << step << ", fx = " << fx << ", dg = " << dg << std::endl;
+
+SHOW(fx_init + step * test_decr)
+SHOW(fx <= fx_init + step * test_decr)
+SHOW(abs(dg))
+SHOW(test_curv)
+SHOW(abs(dg) <= test_curv)
+#endif
 
         // Convergence test
         if (fx <= fx_init + step * test_decr && abs(dg) <= test_curv)
         {
-            // std::cout << "** Criteria met\n\n";
-            // std::cout << "========================= Leaving line search =========================\n\n";
+#ifdef DEBUG_LS
+             std::cout << "** Criteria met\n\n";
+             std::cout << "========================= Leaving line search =========================\n\n";
+#endif
             return;
         }
 
@@ -282,7 +307,9 @@ public:
                 fI_hi = ft;
                 gI_hi = gt;
 
-                // std::cout << "Case 1: new step = " << new_step << std::endl;
+#ifdef DEBUG_LS
+                 std::cout << "Case 1: new step = " << new_step << std::endl;
+#endif
             }
             else if (gt * (I_lo - step) > Scalar(0))
             {
@@ -307,7 +334,9 @@ public:
                 fI_lo = ft;
                 gI_lo = gt;
 
-                // std::cout << "Case 2: new step = " << new_step << std::endl;
+#ifdef DEBUG_LS
+                 std::cout << "Case 2: new step = " << new_step << std::endl;
+#endif
             }
             else
             {
@@ -322,7 +351,9 @@ public:
                 fI_lo = ft;
                 gI_lo = gt;
 
-                // std::cout << "Case 3: new step = " << new_step << std::endl;
+#ifdef DEBUG_LS
+                 std::cout << "Case 3: new step = " << new_step << std::endl;
+#endif
             }
 
             // Case 1 and 3 are interpolations, whereas Case 2 is extrapolation
@@ -336,8 +367,10 @@ public:
             // In case step, new_step, and step_max are equal, directly return the computed x and fx
             if (step == step_max && new_step >= step_max)
             {
-                // std::cout << "** Maximum step size reached\n\n";
-                // std::cout << "========================= Leaving line search =========================\n\n";
+#ifdef DEBUG_LS
+                 std::cout << "** Maximum step size reached\n\n";
+                 std::cout << "========================= Leaving line search =========================\n\n";
+#endif
                 return;
             }
             // Otherwise, recompute x and fx based on new_step
@@ -351,16 +384,33 @@ public:
 
             // Update parameter, function value, and gradient
             x.noalias() = xp + step * drt;
+#ifdef DEBUG_LS
+std::cout << "MOVED " << (xp - x).norm() << "\n";
+#endif
+            // rv 2022 06 08
+            if( (xp - x).norm() == 0 ) throw std::runtime_error("the line search step became smaller than the minimum value allowed");
+
             fx = f(x, grad);
             dg = grad.dot(drt);
 
-            // std::cout << "step = " << step << ", fx = " << fx << ", dg = " << dg << std::endl;
+#ifdef DEBUG_LS
+             std::cout << "step = " << step << ", fx = " << fx << ", dg = " << dg << std::endl;
+
+SHOW(fx_init + step * test_decr)
+SHOW(fx <= fx_init + step * test_decr)
+SHOW(abs(dg))
+SHOW(test_curv)
+SHOW(abs(dg) <= test_curv)
+#endif
+
 
             // Convergence test
             if (fx <= fx_init + step * test_decr && abs(dg) <= test_curv)
             {
-                // std::cout << "** Criteria met\n\n";
-                // std::cout << "========================= Leaving line search =========================\n\n";
+#ifdef DEBUG_LS
+                std::cout << "** Criteria met\n\n";
+                std::cout << "========================= Leaving line search =========================\n\n";
+#endif
                 return;
             }
 
@@ -380,8 +430,10 @@ public:
                 const Scalar ft = fx - fx_init - step * test_decr;
                 if (ft <= fI_lo)
                 {
-                    // std::cout << "** Maximum step size reached\n\n";
-                    // std::cout << "========================= Leaving line search =========================\n\n";
+#ifdef DEBUG_LS
+                     std::cout << "** Maximum step size reached\n\n";
+                     std::cout << "========================= Leaving line search =========================\n\n";
+#endif
                     return;
                 }
             }
