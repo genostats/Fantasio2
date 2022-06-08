@@ -24,7 +24,7 @@
 #' 
 #' @export
 
-submaps.summary <- function (bedmatrix, a, f, a.threshold = 1) {
+submaps.summary <- function (bedmatrix, a, f, p.lrt, a.threshold = 1) {
   
   w.a <- (a > a.threshold)
   f[w.a] <- NA
