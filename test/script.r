@@ -56,13 +56,18 @@ test.log.likelihood <- function(a = 2) {
   }
 }  
  
-test.forward.backward <- function(k = 2, a = 0.025, f = 0.05) { 
+test.forward.backward <- function(a = 0.025, f = 0.05) { 
   cat("test forward backward\n")
+  S <- as.data.frame( Fantasio2:::festim(sx@bed, sx@p, sx@submap, delta.dist(sx), 1e-5) )
   
   A <- Fantasio2:::m4_logEmiss( sx@bed, sx@p, sx@submap, 1e-5 )
-  R1 <- Fantasio2:::testForwardBackward( sx@bed, sx@p, sx@submap, delta.dist(sx), 1e-5, k, a, f)
-  R2 <- Fantasio2:::forward_backward( A[k*2 + 1:2, ],  delta.dist(sx), a, f ) 
-  list(new = R1, old = R2[2,])
+  R <- NULL
+  for(k in 0:(nrow(x.be)-1)) {
+    R <- cbind(R, Fantasio2:::forward_backward( A[k*2 + 1:2, ],  delta.dist(sx), S$a[k+1], S$f[k+1] )[2,]) 
+  }
+
+  T <- Fantasio2:::probaHBD(sx@bed, sx@p, sx@submap, delta.dist(sx), rep(TRUE, nrow(x.be)), S$a, S$f, 1e-5)
+  list(new = T, old = R)
 }
 
 

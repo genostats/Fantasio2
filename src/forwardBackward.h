@@ -29,7 +29,7 @@ inline void logTrans4(scalar_t d, scalar_t a, scalar_t f, scalar_t lf, scalar_t 
 /**** algorithme forward - backward pour le calcul des probas a posteriori ****/
 
 template<typename scalar_t>
-NumericVector forwardBackward(const std::vector<scalar_t> & logEmiss, const std::vector<scalar_t> & deltaDist, scalar_t a, scalar_t f) {
+std::vector<scalar_t> forwardBackward(const std::vector<scalar_t> & logEmiss, const std::vector<scalar_t> & deltaDist, scalar_t a, scalar_t f) {
   scalar_t logf   = log(f);
   scalar_t logumf = log(1-f);
   scalar_t lt00, lt01, lt10, lt11; // log proba transition
@@ -55,7 +55,7 @@ NumericVector forwardBackward(const std::vector<scalar_t> & logEmiss, const std:
   // backward
   // [on calcule les deux probas dans la boucle car sinon je crains qu'on puisse avoir un souci d'arrondi ---- A TESTER !!!
   //  quand on a une proba proche de 1, mais on ne renvoie que p(HBD = 1)
-  NumericVector Beta = no_init(N);
+  std::vector<scalar_t> Beta(N);
   scalar_t beta0 = 1/(1 + exp( alpha1 + logEmiss[2*N-1] - alpha0 - logEmiss[2*N-2]));
   scalar_t beta1 = 1/(1 + exp( alpha0 + logEmiss[2*N-2] - alpha1 - logEmiss[2*N-1]));
   scalar_t beta0_;

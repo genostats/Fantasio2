@@ -25,6 +25,6 @@ NumericVector testForwardBackward(XPtr<matrix4> p_A, NumericVector p_, IntegerVe
     dDist.push_back(a);
 
   emiss<double> EM(PA, p, submap, wI, epsilon);
-  return forwardBackward<double>( EM.getLogEmiss(i) , dDist, a, f);
+  return wrap(forwardBackward<double>( EM.getLogEmiss(i) , dDist, a, f));
 }
 

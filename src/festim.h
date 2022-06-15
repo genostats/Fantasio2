@@ -21,26 +21,31 @@ List festim(XPtr<matrix4> p_A, NumericVector p_, IntegerVector submap_, NumericV
   for(double a : deltaDist) 
     dDist.push_back(a);
 
+  // parametres
   userParam<scalar_t> pars = getUserParam<scalar_t>();
 
   LBFGSpp::LBFGSBParam<scalar_t> param = pars.BFGSparam;
-
   VECTOR<scalar_t> lb = pars.lb;
   VECTOR<scalar_t> ub = pars.ub;
 
+  // le solver
+  LBFGSpp::LBFGSBSolver<scalar_t> solver(param);
+
+  // stockage des résultats
   std::vector<scalar_t> A(p_A->ncol);
   std::vector<scalar_t> F(p_A->ncol);
   std::vector<scalar_t> LIK0(p_A->ncol);
   std::vector<scalar_t> LIK1(p_A->ncol);
 
+  // l'objet qui calcule les log emissions
   emiss<scalar_t> EM(PA, p, submap, epsilon);
-  LBFGSpp::LBFGSBSolver<scalar_t> solver(param);
+
   clock_t beg = clock();
 
 #pragma omp parallel num_threads(pars.n_threads)
 #pragma omp for firstprivate(EM, solver)
-  for(int i0 = 0; i0 < p_A->ncol; i0 += 4) { 
-    for(int i1 = 0; i1 < 4 & i0 + i1 < p_A->ncol; i1++) {
+  for(int i0 = 0; i0 < p_A->ncol; i0 += 4) {  // boucle sur les individus, de 4 en 4. Chaque thread a un copie de 'EM' -> 4 individus précalculés
+    for(int i1 = 0; i1 < 4 & i0 + i1 < p_A->ncol; i1++) { // boucle de 0 à 3.
       int i = i0 + i1;   
       likelihoodGradient<scalar_t> LG( EM.getLogEmiss(i) , dDist, -1); // (-1) is the scale parameter
       VECTOR<scalar_t> x(2);
