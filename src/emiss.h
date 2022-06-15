@@ -11,13 +11,28 @@
 
 #define SHOW(x) Rcpp::Rcout << #x << " = " << (x) << std::endl;
 
+/* 
+   Il y a deux constructeurs
+   Un où on passe le pointeur de la bed matrix, le vecteur p des frequences de l'allele A2,
+   la submap (vecteur des indices des SNPs qu'on conserve) et epsilon
+
+   Un autre où on passe whichInds = les indices des indidus à garder (C BASED)
+   dans ce cas partial est mis à true et on ne stocke que les log emissions des
+   individus concernés... on ne fait pas de vérification dans getLogEmiss(i) !
+*/
+
 template<typename scalar_t>
 class emiss {
 private:
-  matrix4 * bm;        // bed matrix
-  RVector<double> p;        // vecteur de fréq de l'allele alt
+  matrix4 * bm;          // bed matrix
+  RVector<double> p;     // vecteur de fréq de l'allele alt
   RVector<int> submap;   // indice des SNPs à considérer
-  double epsilon;         // proba d'erreur
+  // !! R indices, ie à partir de 1, cf dans le code submap[i] - 1 !!
+  double epsilon;        // proba d'erreur
+
+  bool partial;
+  RVector<int> whichInds; // les LogicalVectors sont des entiers
+  // !! celui là est C based, ie à partir de 0... !!
 
   int nbInds;
   int nbSnps;
@@ -35,8 +50,23 @@ public:
   // -> au premier appel de getLogEmiss il y aura appel de preCompute
 
   emiss(matrix4 * bm_, RVector<double> p_, RVector<int> submap_, double epsilon_) :
-      bm(bm_), p(p_), submap(submap_), epsilon(epsilon_), nbInds(bm->ncol), nbSnps(submap.size()),
-      nbTotalSnps(bm->nrow), nbPrecomp(4), preComputedFrom(bm->ncol + 1) {
+      bm(bm_), p(p_), submap(submap_), epsilon(epsilon_), partial(false), nbInds(bm->ncol), nbSnps(submap.size()),
+      nbTotalSnps(bm->nrow), nbPrecomp(4), preComputedFrom(bm->ncol + 1) 
+   {
+     init();
+   }
+
+  // quand on n'est interessé que par certains individus
+  emiss(matrix4 * bm_, RVector<double> p_, RVector<int> submap_, RVector<int> whichInds_, double epsilon_) :
+      bm(bm_), p(p_), submap(submap_), epsilon(epsilon_), partial(true), whichInds(whichInds_), nbInds(bm->ncol), nbSnps(submap.size()),
+      nbTotalSnps(bm->nrow), nbPrecomp(4), preComputedFrom(bm->ncol + 1) 
+   {
+     init();
+   }
+
+
+  // commun à tous les constructeurs
+  void init() {
     LEMISS.resize(nbPrecomp);
     for(auto & le : LEMISS) {
       le.reserve(nbSnps);
@@ -52,8 +82,11 @@ public:
       le.clear();
     }
 
+    // remet from à un multiple de 4...
+    from = 4 * (from/4);
+
     for(int i = 0; i < nbSnps; i++) { // snp loop
-      if(submap[i] < 0 || submap[i] > nbTotalSnps) 
+      if(submap[i] < 1 || submap[i] > nbTotalSnps) 
         stop("SNP index out of range");
 
       uint8_t * data = bm->data[submap[i]-1];
@@ -73,16 +106,16 @@ public:
       for(size_t j = 0; j < nbPrecomp/4; j++) {
         uint8_t x = data[from/4 + j];
          for(int ss = 0; ss < 4 && (4*j + ss) < nbInds; ss++) {
-           // logEmiss(2*k,i)     = gg[x&3];
-           // logEmiss(1+2*k++,i) = hh[x&3];
-           LEMISS[k].push_back( gg[x&3] );
-           LEMISS[k].push_back( hh[x&3] );
+           if(!partial || whichInds[from + k]) {
+             LEMISS[k].push_back( gg[x&3] );
+             LEMISS[k].push_back( hh[x&3] );
+           }
            k++;
            x >>= 2;
          }
       }
     }
-    preComputedFrom = (from/4) * 4;
+    preComputedFrom = from;
 
     if(getUserParam<scalar_t>().debug > 1) {
       std::cout << "[log proba emiss precomputed from " << preComputedFrom << "]\n";

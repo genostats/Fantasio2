@@ -12,9 +12,9 @@
 #define __festim__
 
 template<typename scalar_t>
-List festim(XPtr<matrix4> p_A, NumericVector p_, IntegerVector map_, NumericVector deltaDist, scalar_t epsilon) {
+List festim(XPtr<matrix4> p_A, NumericVector p_, IntegerVector submap_, NumericVector deltaDist, scalar_t epsilon) {
   RVector<double> p(p_);
-  RVector<int> map(map_);
+  RVector<int> submap(submap_);
   matrix4 * PA(p_A);
 
   std::vector<scalar_t> dDist;
@@ -33,7 +33,7 @@ List festim(XPtr<matrix4> p_A, NumericVector p_, IntegerVector map_, NumericVect
   std::vector<scalar_t> LIK0(p_A->ncol);
   std::vector<scalar_t> LIK1(p_A->ncol);
 
-  emiss<scalar_t> EM(PA, p, map, epsilon);
+  emiss<scalar_t> EM(PA, p, submap, epsilon);
   LBFGSpp::LBFGSBSolver<scalar_t> solver(param);
   clock_t beg = clock();
 
