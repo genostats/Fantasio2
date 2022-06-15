@@ -1,4 +1,4 @@
-#include "wrap_vecvec.h"
+#include "HBDmatrix.h"
 #include <Rcpp.h>
 #include <RcppEigen.h>
 #include <iostream>
@@ -11,7 +11,6 @@ NumericMatrix probaHBD(XPtr<matrix4> p_A, NumericVector p, IntegerVector submap,
   if(getUserParam<double>().use_float)   
     return wrap(probaHBD<float>(p_A, p, submap, deltaDist, whichInds, a, f, epsilon));
   else {
-    std::vector<std::vector<double>> z(probaHBD<double>(p_A, p, submap, deltaDist, whichInds, a, f, epsilon));
-    return wrap(z);
+    return wrap(probaHBD<double>(p_A, p, submap, deltaDist, whichInds, a, f, epsilon));
   }
 }
