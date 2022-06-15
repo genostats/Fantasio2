@@ -55,7 +55,17 @@ test.log.likelihood <- function(a = 2) {
     if(!all(R1 == R2)) stop(k)
   }
 }  
+ 
+test.forward.backward <- function(k = 2, a = 0.025, f = 0.05) { 
+  cat("test forward backward\n")
   
+  A <- Fantasio2:::m4_logEmiss( sx@bed, sx@p, sx@submap, 1e-5 )
+  R1 <- Fantasio2:::testForwardBackward( sx@bed, sx@p, sx@submap, delta.dist(sx), 1e-5, k, a, f)
+  R2 <- Fantasio2:::forward_backward( A[k*2 + 1:2, ],  delta.dist(sx), a, f ) 
+  list(new = R1, old = R2[2,])
+}
+
+
 ## Il y a un souci de discontinuité du gradient en a = 0
 ## -> revoir les calculs papier...
 

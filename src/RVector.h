@@ -24,7 +24,9 @@ public:
       end_data = rhs.end_data;
       return *this;
    }
-   
+
+   inline RVector() : beg_data(nullptr), end_data(nullptr) {}
+ 
    inline T * begin() { return beg_data; }
    inline T * end() { return end_data; }
    

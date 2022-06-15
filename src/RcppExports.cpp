@@ -37,6 +37,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// forward_backward
+NumericMatrix forward_backward(NumericMatrix logEmiss, NumericVector Dist, double a, double f);
+RcppExport SEXP _Fantasio2_forward_backward(SEXP logEmissSEXP, SEXP DistSEXP, SEXP aSEXP, SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type logEmiss(logEmissSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type Dist(DistSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(forward_backward(logEmiss, Dist, a, f));
+    return rcpp_result_gen;
+END_RCPP
+}
 // logLikelihood_gradient
 NumericVector logLikelihood_gradient(NumericMatrix logEmiss, NumericVector Dist, double a, double f);
 RcppExport SEXP _Fantasio2_logLikelihood_gradient(SEXP logEmissSEXP, SEXP DistSEXP, SEXP aSEXP, SEXP fSEXP) {
@@ -115,6 +129,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// testForwardBackward
+NumericVector testForwardBackward(XPtr<matrix4> p_A, NumericVector p_, IntegerVector map_, NumericVector deltaDist, double epsilon, int i, double a, double f);
+RcppExport SEXP _Fantasio2_testForwardBackward(SEXP p_ASEXP, SEXP p_SEXP, SEXP map_SEXP, SEXP deltaDistSEXP, SEXP epsilonSEXP, SEXP iSEXP, SEXP aSEXP, SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<matrix4> >::type p_A(p_ASEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type p_(p_SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type map_(map_SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type deltaDist(deltaDistSEXP);
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(testForwardBackward(p_A, p_, map_, deltaDist, epsilon, i, a, f));
+    return rcpp_result_gen;
+END_RCPP
+}
 // testLikelihood
 NumericVector testLikelihood(XPtr<matrix4> p_A, NumericVector p_, IntegerVector map_, NumericVector deltaDist, double epsilon, int i, double a, double f);
 RcppExport SEXP _Fantasio2_testLikelihood(SEXP p_ASEXP, SEXP p_SEXP, SEXP map_SEXP, SEXP deltaDistSEXP, SEXP epsilonSEXP, SEXP iSEXP, SEXP aSEXP, SEXP fSEXP) {
@@ -165,13 +197,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // testRVector
-void testRVector(NumericVector x, IntegerVector y);
-RcppExport SEXP _Fantasio2_testRVector(SEXP xSEXP, SEXP ySEXP) {
+void testRVector(NumericVector x, IntegerVector y, LogicalVector z);
+RcppExport SEXP _Fantasio2_testRVector(SEXP xSEXP, SEXP ySEXP, SEXP zSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type y(ySEXP);
-    testRVector(x, y);
+    Rcpp::traits::input_parameter< LogicalVector >::type z(zSEXP);
+    testRVector(x, y, z);
     return R_NilValue;
 END_RCPP
 }
@@ -179,15 +212,17 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_checkOpenMP", (DL_FUNC) &_Fantasio2_checkOpenMP, 0},
     {"_Fantasio2_festim", (DL_FUNC) &_Fantasio2_festim, 5},
+    {"_Fantasio2_forward_backward", (DL_FUNC) &_Fantasio2_forward_backward, 4},
     {"_Fantasio2_logLikelihood_gradient", (DL_FUNC) &_Fantasio2_logLikelihood_gradient, 4},
     {"_Fantasio2_logEmiss", (DL_FUNC) &_Fantasio2_logEmiss, 4},
     {"_Fantasio2_m4_logEmiss", (DL_FUNC) &_Fantasio2_m4_logEmiss, 4},
     {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 17},
     {"_Fantasio2_getUserParam", (DL_FUNC) &_Fantasio2_getUserParam, 0},
+    {"_Fantasio2_testForwardBackward", (DL_FUNC) &_Fantasio2_testForwardBackward, 8},
     {"_Fantasio2_testLikelihood", (DL_FUNC) &_Fantasio2_testLikelihood, 8},
     {"_Fantasio2_testLogEmiss", (DL_FUNC) &_Fantasio2_testLogEmiss, 5},
     {"_Fantasio2_testOptimLikelihood", (DL_FUNC) &_Fantasio2_testOptimLikelihood, 6},
-    {"_Fantasio2_testRVector", (DL_FUNC) &_Fantasio2_testRVector, 2},
+    {"_Fantasio2_testRVector", (DL_FUNC) &_Fantasio2_testRVector, 3},
     {NULL, NULL, 0}
 };
 

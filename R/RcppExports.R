@@ -9,6 +9,10 @@ festim <- function(p_A, p, map, deltaDist, epsilon) {
     .Call(`_Fantasio2_festim`, p_A, p, map, deltaDist, epsilon)
 }
 
+forward_backward <- function(logEmiss, Dist, a, f) {
+    .Call(`_Fantasio2_forward_backward`, logEmiss, Dist, a, f)
+}
+
 logLikelihood_gradient <- function(logEmiss, Dist, a, f) {
     .Call(`_Fantasio2_logLikelihood_gradient`, logEmiss, Dist, a, f)
 }
@@ -29,6 +33,10 @@ getUserParam <- function() {
     .Call(`_Fantasio2_getUserParam`)
 }
 
+testForwardBackward <- function(p_A, p_, map_, deltaDist, epsilon, i, a, f) {
+    .Call(`_Fantasio2_testForwardBackward`, p_A, p_, map_, deltaDist, epsilon, i, a, f)
+}
+
 testLikelihood <- function(p_A, p_, map_, deltaDist, epsilon, i, a, f) {
     .Call(`_Fantasio2_testLikelihood`, p_A, p_, map_, deltaDist, epsilon, i, a, f)
 }
@@ -41,7 +49,7 @@ testOptimLikelihood <- function(p_A, p_, map_, deltaDist, epsilon, i) {
     .Call(`_Fantasio2_testOptimLikelihood`, p_A, p_, map_, deltaDist, epsilon, i)
 }
 
-testRVector <- function(x, y) {
-    invisible(.Call(`_Fantasio2_testRVector`, x, y))
+testRVector <- function(x, y, z) {
+    invisible(.Call(`_Fantasio2_testRVector`, x, y, z))
 }
 

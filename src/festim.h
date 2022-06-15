@@ -62,7 +62,7 @@ List festim(XPtr<matrix4> p_A, NumericVector p_, IntegerVector map_, NumericVect
           if(pars.debug > 0) 
             std::cout << e.what() << " -- x = " << x.transpose() << " [" << count << "/" << pars.max_retries << "]\n";
           // on ne ré essaie que pour ce cas ci
-          if(e.what() != "the line search routine reached the maximum number of iterations" || ++count > pars.max_retries) {
+          if( e.what() != std::string("the line search routine reached the maximum number of iterations") || ++count > pars.max_retries) {
             break;
           }
         }
