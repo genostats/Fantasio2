@@ -5,13 +5,16 @@
 #include "gaston/matrix4.h"
 #include "getUserParam.h"
 #include "probaHBD.h"
+#include "PHBDmatrix.h"
 
 //[[Rcpp::export]]
 NumericMatrix probaHBD(XPtr<matrix4> p_A, NumericVector p, IntegerVector submap, NumericVector deltaDist, LogicalVector whichInds, NumericVector a, NumericVector f, double epsilon) {
-  if(getUserParam<double>().use_float)   
-    return wrap(probaHBD<float>(p_A, p, submap, deltaDist, whichInds, a, f, epsilon));
+  if(getUserParam<double>().use_float) {
+    PHBDmatrix<float> R = probaHBD<float>(p_A, p, submap, deltaDist, whichInds, a, f, epsilon);
+    return( wrap(R.getMatrix()) );
+  }
   else {
-    std::vector<std::vector<double>> z(probaHBD<double>(p_A, p, submap, deltaDist, whichInds, a, f, epsilon));
-    return wrap(z);
+    PHBDmatrix<double> R = probaHBD<double>(p_A, p, submap, deltaDist, whichInds, a, f, epsilon);
+    return( wrap(R.getMatrix()) );
   }
 }

@@ -15,7 +15,7 @@ public:
    inline explicit RVector(const Source & source) 
       : beg_data( const_cast<T*>(source.begin()) ), end_data(beg_data + source.length()) { }
 
-   inline RVector(std::size_t begin, std::size_t end_) : beg_data(begin), end_data(end_) { }
+   inline RVector(T * begin, T * end_) : beg_data(begin), end_data(end_) { }
    
    inline RVector(const RVector & other) : beg_data(other.beg_data), end_data(other.end_data) { }
    

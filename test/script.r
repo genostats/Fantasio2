@@ -56,7 +56,7 @@ test.log.likelihood <- function(a = 2) {
   }
 }  
  
-test.forward.backward <- function(a = 0.025, f = 0.05) { 
+test.forward.backward <- function() { 
   cat("test forward backward\n")
   S <- as.data.frame( Fantasio2:::festim(sx@bed, sx@p, sx@submap, delta.dist(sx), 1e-5) )
   

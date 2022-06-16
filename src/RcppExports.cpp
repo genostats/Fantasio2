@@ -214,6 +214,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// testPHBDmatrix
+NumericMatrix testPHBDmatrix(LogicalVector z, int nbSNPs, int i);
+RcppExport SEXP _Fantasio2_testPHBDmatrix(SEXP zSEXP, SEXP nbSNPsSEXP, SEXP iSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< LogicalVector >::type z(zSEXP);
+    Rcpp::traits::input_parameter< int >::type nbSNPs(nbSNPsSEXP);
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    rcpp_result_gen = Rcpp::wrap(testPHBDmatrix(z, nbSNPs, i));
+    return rcpp_result_gen;
+END_RCPP
+}
 // testRVector
 void testRVector(NumericVector x, IntegerVector y, LogicalVector z);
 RcppExport SEXP _Fantasio2_testRVector(SEXP xSEXP, SEXP ySEXP, SEXP zSEXP) {
@@ -241,6 +254,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_testLikelihood", (DL_FUNC) &_Fantasio2_testLikelihood, 8},
     {"_Fantasio2_testLogEmiss", (DL_FUNC) &_Fantasio2_testLogEmiss, 5},
     {"_Fantasio2_testOptimLikelihood", (DL_FUNC) &_Fantasio2_testOptimLikelihood, 6},
+    {"_Fantasio2_testPHBDmatrix", (DL_FUNC) &_Fantasio2_testPHBDmatrix, 3},
     {"_Fantasio2_testRVector", (DL_FUNC) &_Fantasio2_testRVector, 3},
     {NULL, NULL, 0}
 };

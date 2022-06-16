@@ -53,6 +53,10 @@ testOptimLikelihood <- function(p_A, p_, map_, deltaDist, epsilon, i) {
     .Call(`_Fantasio2_testOptimLikelihood`, p_A, p_, map_, deltaDist, epsilon, i)
 }
 
+testPHBDmatrix <- function(z, nbSNPs, i) {
+    .Call(`_Fantasio2_testPHBDmatrix`, z, nbSNPs, i)
+}
+
 testRVector <- function(x, y, z) {
     invisible(.Call(`_Fantasio2_testRVector`, x, y, z))
 }
