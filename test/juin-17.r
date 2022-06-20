@@ -17,7 +17,7 @@ if(!exists('x.be')) {
   x <- set.dist(x, HumanGeneticMap::genetic.map.b36) # vérifier le build ?
 
   x.be <- select.inds(x, population == "Bedouin")
-  x.be <- x.be[1:47,]
+  # x.be <- x.be[1:47,]
 }
 
 if(!exists("segment.list")) {
@@ -28,7 +28,8 @@ if(!exists("segment.list")) {
 Fantasio.parameters(n_threads = 4)
 
 # pour l'instant, que "by hotspots" avec un summary "by SNPs"
-Fantasio2 <- function(bedmatrix, n, segment.options, min.quality = 0.95, list.id, probs = TRUE, phen.code = c("plink", "R"), 
+set.seed(1)
+Fantasio2 <- function(bedmatrix, n, segment.options, min.quality = 95, list.id, probs = TRUE, phen.code = c("plink", "R"), 
                       q = 1e-4, epsilon = 1e-5) {
 
   if (missing(segment.options))
@@ -88,7 +89,11 @@ Fantasio2 <- function(bedmatrix, n, segment.options, min.quality = 0.95, list.id
     h <- Fantasio2:::updateHashProbas(h, submap, HBD, FLOD)
   }
   Fantasio2:::setRandomSeed(old.seed) # restauring seed
-  
+  # contenu de @HBD_recap et @FLOD_recap
+  x <- Fantasio2:::hashProbasToMatrix(h)
+  rownames(x$HBD) <- rownames(x$FLOD) <- Fantasio2:::uniqueIds(summary$famid[indexes$HBD], summary$id[indexes$HBD])
+  colnames(x$HBD) <- colnames(x$FLOD) <- bedmatrix@snps$id[x$snp]
+  x
 }
 
 debug(Fantasio2)

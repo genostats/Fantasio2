@@ -5,3 +5,5 @@
    les chr sont numériques et en ordre croissant. cf delta.dist. Inclure un check.
 
 -- insérer un estimateur des moments pour le point de départ de l'optimisation ?
+
+-- quality = un % (95) vraiment, au lieu de 0.95 ?

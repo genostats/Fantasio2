@@ -6,8 +6,10 @@ hashProbasToMatrix <- function(h) {
     h[[snp]][['FLOD']] <- h[[snp]][['FLOD']] / h[[snp]][['n']]
   }
 
-  SNP <- SNP[ order(as.integer(SNP)) ]
+  SNPi <- as.integer(SNP)
+  o <- order(SNPi)
+  SNP <- SNP[o]
   HBD <- sapply(SNP, function(snp) h[[snp]][["HBD"]])
   FLOD <- sapply(SNP, function(snp) h[[snp]][["FLOD"]])
-  list(HBD = HBD, FLOD = FLOD)
+  list(HBD = HBD, FLOD = FLOD, snp = SNPi[o] )
 }
