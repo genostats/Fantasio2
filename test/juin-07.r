@@ -27,7 +27,7 @@ if(!exists("segment.list")) {
 
 Fantasio.parameters(n_threads = 4)
 
-n.submaps <- 100
+n.submaps <- 5
 Seeds <- matrix( nrow = length( get(".Random.seed", envir = .GlobalEnv) ), ncol = n.submaps )
 A <- matrix( nrow = nrow(x.be), ncol = n.submaps )
 F <- matrix( nrow = nrow(x.be), ncol = n.submaps )

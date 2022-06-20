@@ -32,10 +32,20 @@ inline void logTrans4(scalar_t d, scalar_t a, scalar_t f, scalar_t lf, scalar_t 
 template<typename scalar_t>
 void forwardBackward(const std::vector<scalar_t> & logEmiss, const std::vector<scalar_t> & deltaDist, 
                      scalar_t a, scalar_t f, RVector<scalar_t> & PHBD) {
+
+  int N = deltaDist.size() + 1;
+  if(f == 0) {
+    for(int n = 0; n < N; n++) PHBD[n] = (scalar_t) 0;
+    return;
+  }
+  if(f == 1) {
+    for(int n = 0; n < N; n++) PHBD[n] = (scalar_t) 1;
+    return;
+  }
+
   scalar_t logf   = log(f);
   scalar_t logumf = log(1-f);
   scalar_t lt00, lt01, lt10, lt11; // log proba transition
-  int N = deltaDist.size() + 1;
   // stocker les alpha
   std::vector<scalar_t> Alpha(2*N);
   // état initial
@@ -61,14 +71,14 @@ void forwardBackward(const std::vector<scalar_t> & logEmiss, const std::vector<s
   // scalar_t beta1 = 1/(1 + exp( alpha0 + logEmiss[2*N-2] - alpha1 - logEmiss[2*N-1]));
   scalar_t beta1 = (scalar_t) 1 - beta0;
   scalar_t beta0_;
-  PHBD[N-1] = (double) beta1;
+  PHBD[N-1] = (scalar_t) beta1;
   for(int n = N-2; n >=0; n--) {
     logTrans4(deltaDist[n], a, f, logf, logumf, lt00, lt01, lt10, lt11);
     beta0_ = exp(logEmiss[2*n])   * ( beta0 * exp(lt00 + Alpha[2*n]   - Alpha[2*n+2]) + beta1 * exp(lt01 + Alpha[2*n]   - Alpha[2*n+3]) );
  // beta1  = exp(logEmiss[2*n+1]) * ( beta0 * exp(lt10 + Alpha[2*n+1] - Alpha[2*n+2]) + beta1 * exp(lt11 + Alpha[2*n+1] - Alpha[2*n+3]) );
     beta1 = (scalar_t) 1 - beta0_;
     beta0 = beta0_;
-    PHBD[n] = (double) beta1;
+    PHBD[n] = (scalar_t) beta1;
   }
 }
 
