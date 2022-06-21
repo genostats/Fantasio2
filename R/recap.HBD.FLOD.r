@@ -36,13 +36,7 @@ recap.HBD.FLOD <- function(atlas, keep.inds, q, recap) {
     for(j in 1:ncol(FLOD))
       FLOD[,j] <- FLOD[,j] - log10( f[j] + q * (1 - f[j]) )
 
-    # ** il faut mettre à 0 les valeurs pour les individus qui ont un a > 1 **
-    # ** pour ne pas prendre en compte ces valeurs...                       **
-    u <- which(a > 1)
-    HBD[, u] <- 0
-    FLOD[, u] <- 0
-
-    h <- updateHashProbas(h, submap, HBD, FLOD)
+    h <- updateHashProbas(h, submap, (a < 1), HBD, FLOD)
   }
   setRandomSeed(old.seed) # restoring seed
 
@@ -51,14 +45,6 @@ recap.HBD.FLOD <- function(atlas, keep.inds, q, recap) {
   x <- hashProbasToMatrix(h)
   rownames(x$HBD) <- rownames(x$FLOD) <- uniqueIds(summary$famid[wi], summary$id[wi])
   colnames(x$HBD) <- colnames(x$FLOD) <- bedmatrix@snps$id[x$snp]
-
-  # la moyenne a été prise sur le nbre de fois où le SNP est vu.
-  # pour les individus avec une qualité < 1 [100] cela biaise la moyenne vers 0 
-  # (cf ligne ** ** ci dessus)
-  # on rétablit en divisant par la qualité (ramenée entre 0 et 1)
-  qual <- summary$quality[wi]/100
-  x$HBD <- x$HBD/qual
-  x$FLOD <- x$FLOD/qual
 
   # c'est fini.
   atlas@HBD_recap <- x$HBD
