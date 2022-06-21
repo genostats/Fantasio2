@@ -20,9 +20,6 @@ if(!exists('x.be')) {
 
 require(Fantasio2)
 Fantasio.parameters(n_threads = 4)
-Fantasio.parameters(use_float = TRUE)
-debug(Fantasio2:::recap.HBD.FLOD)
-
 set.seed(1); a <- Fantasio(x.be, n = 5, phen.code = "plink")
 
 

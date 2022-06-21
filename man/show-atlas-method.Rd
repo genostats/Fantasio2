@@ -2,7 +2,7 @@
 % Please edit documentation in R/atlas-class.r
 \name{show,atlas-method}
 \alias{show,atlas-method}
-\title{Show method of atlas.}
+\title{Show method of class atlas.}
 \usage{
 \S4method{show}{atlas}(object)
 }
@@ -10,5 +10,5 @@
 \item{object}{an atlas object}
 }
 \description{
-Show method of atlas.
+Show method of class atlas.
 }
