@@ -65,9 +65,14 @@ void forwardBackward(const std::vector<scalar_t> & logEmiss, const std::vector<s
     Alpha[2*n+1] = alpha1;
   }
   // backward
-  // [on calcule les deux probas dans la boucle car sinon je crains qu'on puisse avoir un souci d'arrondi ---- A TESTER !!!
-  //  quand on a une proba proche de 1, mais on ne renvoie que p(HBD = 1)
+  // 
+  //   NOTE. La version originale de ce code calculait les deux probas beta0 et beta1 
+  //   dans la boucle pour éviter des pbs d'arrondis en float (on a des probas < 0 et > 1).
+  //   Après expérience, il suffit de calculer beta0 en remettant à 0 (à 1) les valeurs
+  //   calculées < 0 (resp > 1). [lignes "caping"]
   scalar_t beta0 = 1/(1 + exp( alpha1 + logEmiss[2*N-1] - alpha0 - logEmiss[2*N-2]));
+  if(beta0 < 0) beta0 = 0;  // caping
+  if(beta0 > 1) beta0 = 1;  // caping
   // scalar_t beta1 = 1/(1 + exp( alpha0 + logEmiss[2*N-2] - alpha1 - logEmiss[2*N-1]));
   scalar_t beta1 = (scalar_t) 1 - beta0;
   scalar_t beta0_;
@@ -75,7 +80,9 @@ void forwardBackward(const std::vector<scalar_t> & logEmiss, const std::vector<s
   for(int n = N-2; n >=0; n--) {
     logTrans4(deltaDist[n], a, f, logf, logumf, lt00, lt01, lt10, lt11);
     beta0_ = exp(logEmiss[2*n])   * ( beta0 * exp(lt00 + Alpha[2*n]   - Alpha[2*n+2]) + beta1 * exp(lt01 + Alpha[2*n]   - Alpha[2*n+3]) );
- // beta1  = exp(logEmiss[2*n+1]) * ( beta0 * exp(lt10 + Alpha[2*n+1] - Alpha[2*n+2]) + beta1 * exp(lt11 + Alpha[2*n+1] - Alpha[2*n+3]) );
+    if(beta0_ < 0) beta0_ = 0;  // caping
+    if(beta0_ > 1) beta0_ = 1;  // caping
+    // beta1  = exp(logEmiss[2*n+1]) * ( beta0 * exp(lt10 + Alpha[2*n+1] - Alpha[2*n+2]) + beta1 * exp(lt11 + Alpha[2*n+1] - Alpha[2*n+3]) );
     beta1 = (scalar_t) 1 - beta0_;
     beta0 = beta0_;
     PHBD[n] = (scalar_t) beta1;
