@@ -1,11 +1,5 @@
 
-
-#' @export 
-delta.dist <- function(sx) {
-  delta.dist.0(sx, sx@submap)
-}
-
-delta.dist.0 <- function(bedmatrix, submap) {
+delta.dist <- function(bedmatrix, submap) {
   dist <- bedmatrix@snps$dist[ submap ]
   chr  <- bedmatrix@snps$chr[ submap ]
   delta <- diff(dist)
