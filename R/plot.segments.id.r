@@ -12,7 +12,7 @@ plot.segments.id <- function (byROHfile = FALSE, fileOrSubmaps, unit = "cM",
     main = NULL
   plot( x = c(larg * 0.5, larg * 11.5),
         y = c( 0,
-               length.chromosome(1, unit, build) + lengthChromosome(12, unit, build) + 1.25 * ecart),
+               length.chromosome(1, unit, build) + length.chromosome(12, unit, build) + 1.25 * ecart),
         type = "n", xaxt = "n", yaxt = "n", xlab = "", ylab = "", main = main, cex.main = 1.5)
   
   
