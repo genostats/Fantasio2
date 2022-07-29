@@ -21,17 +21,6 @@ plot.HBD.segments.id <- function(Submaps, unit= "cM", id, famid, regions, outfil
   HBD.recap <- Submaps@HBD_recap
   HBDsegments <- Submaps@HBDsegments
   
-  # individuals_name <- rownames(HBD.recap)#get the name of the individual
-  # individuals_name <- strsplit(individuals_name, "_")
-  # individuals_name <- sapply(individuals_name, function(i) match(i[2], Submaps@bedmatrix@ped$id))
-  # family_id <- Submaps@bedmatrix@ped$famid[individuals_name]
-  # individuals_name <- Submaps@bedmatrix@ped$id[individuals_name]
-  
-  # id   <- which(individuals_name == id)
-  
-  # if(length(id) == 0)
-  #  stop("No individual found")
-  
   HBDsegments_rbind <- do.call(rbind, HBDsegments) #binding lines 
   
   HBD <- HBDsegments_rbind[which(HBDsegments_rbind$id==id & HBDsegments_rbind$famid==famid),]
@@ -52,5 +41,5 @@ plot.HBD.segments.id <- function(Submaps, unit= "cM", id, famid, regions, outfil
     outfile <- paste(outfile,".png",sep="") 
   }
   
-  plotSegmentsId(fileOrSubmaps=HBD, unit = unit, regions = myreg, main=paste("HBDsegments of", uniqueIds(famid, id)), build=build)
+  plot.segments.id(fileOrSubmaps=HBD, unit = unit, regions = myreg, main=paste("HBDsegments of", uniqueIds(famid, id)), build=build)
 }
