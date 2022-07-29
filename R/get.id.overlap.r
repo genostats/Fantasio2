@@ -29,7 +29,7 @@ get.id.overlap <- function(bedmatrix, lim, chr, pheno = "case", phen.code = "pli
     }
   }
   
-  list_id <- unique(unlist(lapply(rownames(HBD), function(x) HBDOverlap(x, HBD, start, end))))
+  list_id <- unique(unlist(lapply(rownames(HBD), function(x) HBD.overlap(x, HBD, start, end))))
   
   return(list_id)
 }
