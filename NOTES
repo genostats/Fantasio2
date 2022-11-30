@@ -1,3 +1,4 @@
+-- BFGS in a nutshell https://towardsdatascience.com/bfgs-in-a-nutshell-an-introduction-to-quasi-newton-methods-21b0e13ee504
 
 -- init.sub.bed.matrix (définie dans sub.bed.matrix.r) 
    est appelée à chaque fois qu'on fait un new("sub.bed.matrix", x)
