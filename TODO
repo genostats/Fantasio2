@@ -1,3 +1,5 @@
+-- passer le 'epsilon' en parametre globale (quelque chose comme genotyping.error.rate)
+
 -- Donner à l'utilisateur une fonction lui permettant de récupérer les SNPs de chaque sous carte
 
 -- méthodes : ncol / affichage d'une sub bed matrix
