@@ -29,6 +29,8 @@ Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, list
   # ceci remplit HFLOD
   x <- set.HFLOD(x, indexes$HFLOD)
 
+  x@HBDsegments <- HBD.segments(x, n.consecutive.markers = 5, threshold = 0.5)
+  
   x
 }
 
