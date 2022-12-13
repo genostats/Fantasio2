@@ -1,5 +1,5 @@
 #' @export
-atlas <- function(bedmatrix, segments.list, n, epsilon = 1e-5) {
+atlas <- function(bedmatrix, segments.list, n, epsilon = 1e-3) {
 
   seeds <- matrix( nrow = length( getRandomSeed() ), ncol = n )
 
