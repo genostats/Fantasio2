@@ -31,7 +31,7 @@ plot.HBD.segments.chr <- function(Submaps, unit, chr, list.ids, regions, outfile
   HBD$famid <- as.character(HBD$famid)
   
   if (missing(list.ids)) {
-    list.ids <- unique(paste(HBD$id, HBD$famid, sep = ":"))  
+    list.ids <- unique(paste(HBD$famid, HBD$id, sep = ":"))  
   }
   
   #name the file
