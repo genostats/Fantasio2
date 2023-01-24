@@ -4,6 +4,8 @@
 #include <math.h>
 #include "LSE.h"
 
+// --------------- this should disappear, kept for comparison purposes -----------------
+
 using namespace Rcpp;
 
 // epsilon = proba d'erreur de génotypage

@@ -6,6 +6,9 @@
 
 using namespace Rcpp;
 
+// --------------- this should disappear, kept for comparison purposes -----------------
+
+
 //[[Rcpp::export]]
 NumericMatrix m4_logEmiss(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, double epsilon) {
   int n = p_A->nrow; // nb snps

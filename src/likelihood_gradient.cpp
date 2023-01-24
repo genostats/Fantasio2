@@ -6,6 +6,8 @@
 #include "LSE.h"
 #define SHOW(x) Rcpp::Rcout << #x << " = " << (x) << std::endl;
 
+// --------------- this should disappear, kept for comparison purposes -----------------
+
 using namespace Rcpp;
 
 // pour 0 < f < 1
