@@ -1,4 +1,6 @@
 #' @export Fantasio
+
+#test sidonie
 # pour l'instant, que "by hotspots" avec un summary "by SNPs"
 Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, list.id, 
                      recap = c("SNP", "segment"), phen.code = c("plink", "R"), q = 1e-4, epsilon = 1e-3) {
