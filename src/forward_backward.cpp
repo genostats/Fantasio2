@@ -6,6 +6,8 @@
 #include "LSE.h"
 #define SHOW(x) Rcpp::Rcout << #x << " = " << (x) << std::endl;
 
+// --------------- this should disappear, kept for comparison purposes -----------------
+
 using namespace Rcpp;
 
 inline void logTrans4(double d, double a, double f, double lf, double lumf, double & lt00, double & lt01, double & lt10, double & lt11) {

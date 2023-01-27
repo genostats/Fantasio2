@@ -8,6 +8,9 @@
 #include <RcppCommon.h>
 // [[Rcpp::plugins(cpp11)]]
 
+// extends wrap so that a vector of m vectors (of doubles or floats) 
+// all of length n will be wrapped into a (n x m) numeric matrix 
+
 namespace Rcpp {
   template <typename scalar_t> SEXP wrap(const std::vector<std::vector<scalar_t>> & x);
 }
