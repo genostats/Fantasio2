@@ -92,7 +92,7 @@ public:
       uint8_t * data = bm->data[submap[i]-1];
       scalar_t p_ = (scalar_t) p[submap[i]-1];
 
-      if(std::is::isnan(p_) || p_ < 0 || p_ > 1) { 
+      if(std::isnan(p_) || p_ < 0 || p_ > 1) { 
         // no allelic frequency information
         // will be used in the f/b algorithm to insert SNPs in a submap without 
         // using the genotypes at these new positions
