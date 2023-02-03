@@ -9,7 +9,9 @@
 #ifndef __likelihoodGradient__
 #define __likelihoodGradient__
 
+#ifndef SHOW
 #define SHOW(x) Rcpp::Rcout << #x << " = " << (x) << std::endl;
+#endif
 
 using namespace Rcpp;
 
