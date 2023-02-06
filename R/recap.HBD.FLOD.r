@@ -14,20 +14,43 @@ recap.HBD.FLOD <- function(atlas, keep.inds, q, recap) {
 
   old.seed <- getRandomSeed() # storing current seed
   wi <- which(keep.inds)
-  h <- new.env()
+  
+
+  x <- list() #créer liste avec 2 grandes matrices phbd et FLOD
+
+  
+  
+  #première boucle pour créer la grande sous-carte = union des snps tirés dans les n sous-cartes
+  big.submap <- as.integer(vector())
+  for(i in 1:n){
+    setRandomSeed(seeds[,i])
+    submap <- rsubmap(segments.list)
+    big.submap <- union(big.submap,submap)
+  }
+  big.submap <- sort(big.submap) #ON GARDE ?
+  
+  big.HBD <- matrix(0, nrow = length(wi), ncol = length(big.submap)) #matrice des phbd avec 1 ligne par individu consanguin et 1 colonne par snp tiré
+  big.FLOD <- matrix(0, nrow = length(wi), ncol = length(big.submap)) #matrice des flod avec 1 ligne par individu consanguin et 1 colonne par snp tiré
+  
+  
   for(i in 1:n) { # boucle sur les cartes
     # on re génère les cartes
     setRandomSeed(seeds[,i])
     submap <- rsubmap(segments.list)
-    d.dist <- delta.dist(bedmatrix, submap)
+    d.dist <- delta.dist(bedmatrix, big.submap)
 
     # les a et f pour les individus qui nous intéressent, pour la carte en cours
     a <- A[wi, i]
     f <- F[wi, i]
 
     # matrice des pHBD [une colonne par individu, une ligne par SNP]
-    HBD <- probaHBD(bedmatrix@bed, bedmatrix@p, submap, d.dist, keep.inds, a = A[,i], f = F[,i], epsilon)
+    
+    #créer vecteur freq.submap de NA de longueur big.submap puis remplacer par les freq aux positions tirées
+    freq.submap <- rep(NA, times = length(bedmatrix@p))
+    freq.submap[submap] <- bedmatrix@p[submap]
+    HBD <- probaHBD(bedmatrix@bed, freq.submap, big.submap, d.dist, keep.inds, a = A[,i], f = F[,i], epsilon) #renvoie les snps sur les lignes et les inds sur les colonnes
     HBD[!is.finite(HBD)] <- 0
+    HBD <- t(HBD) # pour avoir les individus sur lignes et snps sur les colonnes comme dans big.submap
 
     # matrice des FLOD (une colonne par individu)
     FLOD <- log10(HBD + q * (1 - HBD))
@@ -36,19 +59,21 @@ recap.HBD.FLOD <- function(atlas, keep.inds, q, recap) {
     for(j in 1:ncol(FLOD))
       FLOD[,j] <- FLOD[,j] - log10( f[j] + q * (1 - f[j]) )
 
-    h <- updateHashProbas(h, submap, (a < 1), HBD, FLOD)
+    big.HBD <- big.HBD + HBD 
+    big.FLOD <- big.FLOD + FLOD  
   }
   setRandomSeed(old.seed) # restoring seed
 
   # calcule les matrices moyennes des HBD / FLOD snp par snp
   # ces matrices ont une ligne par individu / une colonne par SNP
-  x <- hashProbasToMatrix(h)
+  x$HBD <- big.HBD/n #remplacé par division
+  x$FLOD <- big.FLOD/n #remplacé par division
   rownames(x$HBD) <- rownames(x$FLOD) <- uniqueIds(summary$famid[wi], summary$id[wi])
-  colnames(x$HBD) <- colnames(x$FLOD) <- bedmatrix@snps$id[x$snp]
+  colnames(x$HBD) <- colnames(x$FLOD) <- bedmatrix@snps$id[big.submap] #snps vus dans grande sous carte
 
   # c'est fini.
-  atlas@HBD_recap <- x$HBD
-  atlas@FLOD_recap <- x$FLOD
+  atlas@HBD_recap <- x$HBD     #!
+  atlas@FLOD_recap <- x$FLOD   #!
   atlas@recap <- recap
   atlas@q <- q
   atlas
