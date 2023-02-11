@@ -9,7 +9,9 @@
 #ifndef __emiss__
 #define __emiss__
 
+#ifndef SHOW
 #define SHOW(x) Rcpp::Rcout << #x << " = " << (x) << std::endl;
+#endif
 
 /* 
    Il y a deux constructeurs
