@@ -1,5 +1,5 @@
 #' @export
-recap.HBD.FLOD <- function(atlas, keep.inds, q, recap, median=FALSE) {
+recap.HBD.FLOD <- function(atlas, keep.inds, q, recap, median) {
   if(recap != "SNP") stop("Not yet implemented")
 
   # shotcuts for atlas slots
