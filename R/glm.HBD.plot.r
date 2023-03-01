@@ -122,7 +122,7 @@ glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), qq = FAL
     }
   }
   
-  if (plot == 'adj') {
+  else if (plot == 'adj') {
     
     if ('adj' %in% names(x@logisticRegression)){
       adj <- x@logisticRegression$adj
@@ -136,7 +136,7 @@ glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), qq = FAL
     colnames(adj)[colnames(adj) == 'p_value'] <- 'p'
     
     treshold = -log10(0.05/sum(segments.list.summary(x@segments_list)$number_of_segments))
-    lim <- round(max(-log10(adj$p), -log10(unadj$p), treshold))+1
+    lim <- round(max(-log10(adj$p), treshold))+1
     
     if (save == FALSE) { # Default, just print plots on different windows
       
