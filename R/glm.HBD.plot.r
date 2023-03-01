@@ -2,7 +2,7 @@
 #' QQ-Plot & Manhattan Plots for glm on HBD prob or FLOD
 #' 
 #' @param x an atlas object
-#' @param expl_var the explanatory variable 'FLOD' or 'HBD_prob'
+#' @param expl_var the explanatory variable 'FLOD' or 'pHBD'
 #' @param n.cores number of cores for parallelization calculation (default = 1)
 #' @param plot choose to plot 'all' = adj + unadj, 'adj' only, 'unadj' only (default = all)
 #' if 'all' but only 'adj' or 'unadj' data are available the function will only plot available data

@@ -1,7 +1,7 @@
 #' Logistic regression on HBD probability or FLOD score
 #' 
 #' @param x an atlas object
-#' @param expl_var the explanatory variable 'FLOD' or 'HBD_prob'
+#' @param expl_var the explanatory variable 'FLOD' or 'pHBD'
 #' @param covar_df a dataframe containing covariates
 #' @param covar covariates of interest such as 'age', 'sex' , ...
 #' if missing, all covariates of the dataframe are considered
@@ -20,14 +20,14 @@ glm.HBD <- function( x, expl_var, covar_df, covar, n.cores = 1, run = FALSE, phe
     stop("Need an atlas")
   
   if (run) { 
-    if (expl_var == 'HBD_prob') {
-      # Recovery HBD_prob
+    if (expl_var == 'pHBD') {
+      # Recovery pHBD
       hbd <- as.data.frame(x@HBD_recap)
     } else if (expl_var == 'FLOD') {
       # Recovery FLOD
       hbd <- as.data.frame(x@FLOD_recap)
     } else {
-      stop("Explanatory variable must be 'HBD_prob' or 'FLOD'")
+      stop("Explanatory variable must be 'pHBD' or 'FLOD'")
     }
     
     # Recovery phenotype
