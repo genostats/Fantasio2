@@ -21,6 +21,10 @@ logEmiss <- function(Y1, Y2, logFreq, epsilon) {
     .Call(`_Fantasio2_logEmiss`, Y1, Y2, logFreq, epsilon)
 }
 
+logitModel <- function(Y, X, H, beg, end) {
+    .Call(`_Fantasio2_logitModel`, Y, X, H, beg, end)
+}
+
 m4_logEmiss <- function(p_A, p, map, epsilon) {
     .Call(`_Fantasio2_m4_logEmiss`, p_A, p, map, epsilon)
 }
