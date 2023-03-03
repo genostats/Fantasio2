@@ -1,4 +1,3 @@
-
 # Y = vecteur de 0 et 1
 # covar.matrix = matrice de covariables [doit contenir un intercept]
 # H = matrice des pHBD ou des FLOD...
@@ -22,7 +21,7 @@ glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H) {
 
   # ajout d'une colonne vide !
   X <- cbind(X, 0)
-  R <- as.data.frame(Fantasio2:::logitModel(Y, X, H, 0, ncol(H)-1))
+  R <- as.data.frame(logitModel(Y, X, H, 0, ncol(H)-1))
   R$z.value <- R$beta/R$sd.beta
   R$p <- pchisq(R$z.value**2, df = 1, lower.tail = FALSE) 
   R
