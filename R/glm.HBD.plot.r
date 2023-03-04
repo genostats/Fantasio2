@@ -2,7 +2,7 @@
 #' QQ-Plot & Manhattan Plots for glm on HBD prob or FLOD
 #' 
 #' @param x an atlas object
-#' @param expl_var the explanatory variable 'FLOD' or 'HBD_prob'
+#' @param expl_var the explanatory variable 'FLOD' or 'pHBD'
 #' @param n.cores number of cores for parallelization calculation (default = 1)
 #' @param plot choose to plot 'all' = adj + unadj, 'adj' only, 'unadj' only (default = all)
 #' if 'all' but only 'adj' or 'unadj' data are available the function will only plot available data
@@ -122,7 +122,7 @@ glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), qq = FAL
     }
   }
   
-  if (plot == 'adj') {
+  else if (plot == 'adj') {
     
     if ('adj' %in% names(x@logisticRegression)){
       adj <- x@logisticRegression$adj
@@ -136,7 +136,7 @@ glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), qq = FAL
     colnames(adj)[colnames(adj) == 'p_value'] <- 'p'
     
     treshold = -log10(0.05/sum(segments.list.summary(x@segments_list)$number_of_segments))
-    lim <- round(max(-log10(adj$p), -log10(unadj$p), treshold))+1
+    lim <- round(max(-log10(adj$p), treshold))+1
     
     if (save == FALSE) { # Default, just print plots on different windows
       
