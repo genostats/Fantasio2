@@ -45,7 +45,7 @@ glm.HBD <- function( x, expl_var, covar_df, covar, run = FALSE, phen.code) {
     if (missing(covar_df)) {
       message("No covariates given for the analysis = unadjusted data. To use covariates import a dataframe.")
       message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i])"))
-      x@logisticRegression$adj <- cbind(final, glm.HBD.0(pheno, matrix(1, length(pheno)), hbd)) 
+      x@logisticRegression$unadj <- cbind(final, glm.HBD.0(pheno, matrix(1, length(pheno)), hbd)) 
       message("-----------> GLM on UNADJUSTED data Done \n")
     }
     
