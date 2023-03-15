@@ -8,10 +8,10 @@ paint.cytobands <- function (chr, pos = c(0, 0), units = c("bases", "cM"), build
   
   orientation <- match.arg(orientation)
   
-  x <- if(build == 35) Fantasio::cytobands.b35
-  else if(build == 36) Fantasio::cytobands.b36
-  else if(build == 37) Fantasio::cytobands.b37
-  else if(build == 38) Fantasio::cytobands.b38
+  x <- if(build == 35) Fantasio2::cytobands.b35
+  else if(build == 36) Fantasio2::cytobands.b36
+  else if(build == 37) Fantasio2::cytobands.b37
+  else if(build == 38) Fantasio2::cytobands.b38
   
   x <- x[x$chr == chr, ]
   n <- nrow(x)
