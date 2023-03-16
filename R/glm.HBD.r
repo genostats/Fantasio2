@@ -15,7 +15,7 @@
 #' 
 #' @export
 
-glm.HBD <- function( x, expl_var, covar_df, covar, test = match.arg("bilateral", "right", "left"), run = FALSE, phen.code) {
+glm.HBD <- function( x, expl_var, covar_df, covar, test = c("bilateral", "right", "left"), run = FALSE, phen.code) {
   
   if(class(x)[1] != "atlas")
     stop("Need an atlas")

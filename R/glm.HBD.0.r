@@ -2,7 +2,7 @@
 # covar.matrix = matrice de covariables [doit contenir un intercept]
 # H = matrice des pHBD ou des FLOD...
  
-glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, test = match.arg("bilateral", "right", "left")) {
+glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, test = c("bilateral", "right", "left")) {
 
   test <- match.arg(test)
 
