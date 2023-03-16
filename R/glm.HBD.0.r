@@ -2,7 +2,9 @@
 # covar.matrix = matrice de covariables [doit contenir un intercept]
 # H = matrice des pHBD ou des FLOD...
  
-glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H) {
+glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, test = match.arg("bilateral", "right", "left")) {
+
+  test <- match.arg(test)
 
   # déc QR de X pour améliorer la stabilité de l'algo
   if(all(covar.matrix[,1] == 1)) {
@@ -23,6 +25,13 @@ glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H) {
   X <- cbind(X, 0)
   R <- as.data.frame(logitModel(Y, X, H, 0, ncol(H)-1))
   R$z.value <- R$beta/R$sd.beta
-  R$p <- pchisq(R$z.value**2, df = 1, lower.tail = FALSE) 
+   
+  if(test == "bilateral") 
+    R$p <- pchisq(R$z.value**2, df = 1, lower.tail = FALSE) 
+  else if(test == "right")
+    R$p <- pnorm(R$z.value, lower.tail = FALSE) 
+  else 
+    R$p <- pnorm(R$z.value, lower.tail = TRUE)
+
   R
 } 
