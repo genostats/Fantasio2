@@ -1,11 +1,12 @@
 #' Logistic regression on HBD probability or FLOD score
 #' 
 #' @param x an atlas object
-#' @param expl_var the explanatory variable 'FLOD' or 'HBD_prob'
-#' @param covar_df a dataframe containing covariates
+#' @param expl_var the explanatory variable 'FLOD' or 'pHBD'
+#' @param covar_df a dataframe or a matrix containing covariates
 #' @param covar covariates of interest such as 'age', 'sex' , ...
 #' if missing, all covariates of the dataframe are considered
 #' @param n.cores number of cores for parallelization calculation (default = 1)
+#' @param test which test to run. Default is bilateral. Use \code{"right"} to test for deleterious effects.
 #' @param run whether the fonction is called or not (default = FALSE)
 #' @param phen.code phenotype coding :
 #'        - 'R' : 0:control ; 1:case ; NA:unknown (default)
@@ -14,18 +15,18 @@
 #' 
 #' @export
 
-glm.HBD <- function( x, expl_var, covar_df, covar, n.cores = 1, run = FALSE, phen.code) {
+glm.HBD <- function( x, expl_var, covar_df, covar, test = c("bilateral", "right", "left"), run = FALSE, phen.code) {
   
   if(class(x)[1] != "atlas")
     stop("Need an atlas")
   
   if (run) { 
-    if (expl_var == 'HBD_prob') {
-      # Recovery HBD_prob
-      hbd <- as.data.frame(x@HBD_recap)
+    if (expl_var == 'pHBD') {
+      # Recovery pHBD
+      hbd <- x@HBD_recap
     } else if (expl_var == 'FLOD') {
       # Recovery FLOD
-      hbd <- as.data.frame(x@FLOD_recap)
+      hbd <- x@FLOD_recap
     } else {
       stop("Explanatory variable must be 'HBD_prob' or 'FLOD'")
     }
@@ -41,93 +42,33 @@ glm.HBD <- function( x, expl_var, covar_df, covar, n.cores = 1, run = FALSE, phe
     # Recovery chr, snps, pos_cM and pos_Bp 
     final <- get.positions(x)	
     
-    if(n.cores == 1 ) {
-      # unadjusted 
-      if (missing(covar_df)) {
-        message("No covariates given for the analysis = unadjusted data. To use covariates import a dataframe.")
-        message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i])"))
-        for(i in 1:ncol(hbd)){
-          model <- glm( pheno ~ hbd[,i] , family = binomial)
-          final[i,'estimate'] 	<- summary(model)$coef[2,1]
-          final[i,'std_error'] 	<- summary(model)$coef[2,2]
-          final[i,'z_value'] 	<- summary(model)$coef[2,3]
-          final[i,'p_value'] 	<- summary(model)$coef[2,4]
-        }
-        x@logisticRegression$unadj <- final
-        message("-----------> GLM on UNADJUSTED data Done \n")
-      }
-      
-      # adjusted 
-      else {	
-        if(missing(covar)) {
-          message(paste0("No covariates specified - All covariates of the dataframe will be used : " , gsub(",", " +", toString(colnames(covar_df)))))
-          message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i] + ", gsub(",", " +", toString(colnames(covar_df))) ,")" ))
-          df <- na.omit(covar_df[id,])				 # take all covar given in the dataframe
-        } else {
-          message(paste0("Covariates = ", gsub(",", " +", toString(covar))))
-          message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i] + ", gsub(",", " +", toString(covar)) ,")"))
-          df <- na.omit(as.data.frame(covar_df[ id , covar])) #rownames covar_df  = individual id 	
-        }
-        
-        for(i in 1:ncol(hbd)){
-          model <- glm( pheno ~ hbd[,i] + . , data = df,  family = binomial)
-          final[i,'estimate'] 	<- summary(model)$coef[2,1]
-          final[i,'std_error'] 	<- summary(model)$coef[2,2]
-          final[i,'z_value'] 	<- summary(model)$coef[2,3]
-          final[i,'p_value'] 	<- summary(model)$coef[2,4]
-        }
-        x@logisticRegression$adj <- final 
-        message("-----------> GLM on ADJUSTED data Done \n")
-      }
+    # unadjusted 
+    if (missing(covar_df)) {
+      message("No covariates given for the analysis = unadjusted data. To use covariates import a dataframe.")
+      message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i])"))
+      x@logisticRegression$unadj <- cbind(final, glm.HBD.0(pheno, matrix(1, length(pheno)), hbd, test)) 
+      message("-----------> GLM on UNADJUSTED data Done \n")
     }
     
-    # Parallelization - n.cores > 1
+    # adjusted 
     else {
-      ## Com Margot : à bouger :
-      library(foreach)
-      cl <- parallel::makeCluster(n.cores)
-      doParallel::registerDoParallel(cl)
+      if(class(covar_df)[1] != "matrix" & class(covar_df)[1] != "data.frame") 
+        stop("Need a matrix or a dataframe of covariates")
       
-      if(missing(covar_df)) {
-        message("No covariates given for the analysis = unadjusted data. To use covariates import a dataframe.")
-        message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i])"))
-        
-        res <- foreach (i = 1:ncol(hbd), .combine = rbind) %dopar% {
-          model <- glm( pheno ~ hbd[,i] ,  family = binomial)
-          estimate <- summary(model)$coef[2,1]
-          std_error <- summary(model)$coef[2,2]
-          z_value <- summary(model)$coef[2,3]
-          p_value <- summary(model)$coef[2,4]
-          data.frame( estimate, std_error, z_value, p_value)
-        }
-        x@logisticRegression$unadj <- cbind(final, res) 
-        message("-----------> GLM on UNADJUSTED data Done \n")
-      }
+      if (class(covar_df)[1] == "data.frame")
+        covar_df <- as.matrix(covar_df)
       
-      else {
-        
-        if(missing(covar)) {
-          message(paste0("No covariates specified - All covariates of the dataframe will be used : " , gsub(",", " +", toString(colnames(covar_df)))))
-          message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i] + ", gsub(",", " +", toString(colnames(covar_df))) ,")"))
-          df <- na.omit(covar_df[id,])				 # take all covar given in the dataframe
-        } else {
-          message( paste0("Covariates = ", gsub(",", " +", toString(covar))))
-          message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i] + ", gsub(",", " +", toString(covar)),")"))
-          df <- na.omit(as.data.frame(covar_df[ id , covar]))  	
-        } 
-        
-        res <- foreach (i = 1:ncol(hbd), .combine = rbind) %dopar% {
-          model <- glm( pheno ~ hbd[,i] + . , data = df, family = binomial)
-          estimate <- summary(model)$coef[2,1]
-          std_error <- summary(model)$coef[2,2]
-          z_value <- summary(model)$coef[2,3]
-          p_value <- summary(model)$coef[2,4]
-          data.frame( estimate, std_error, z_value, p_value)
-        }
-        x@logisticRegression$adj <- cbind(final, res)
-        message("-----------> GLM on ADJUSTED data Done \n")
+      if(missing(covar)) {
+        message(paste0("No covariates specified - All covariates of the dataframe will be used : " , gsub(",", " +", toString(colnames(covar_df)))))
+        message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i] + ", gsub(",", " +", toString(colnames(covar_df))) ,")" ))
+        df <- na.omit(covar_df[id,])				 # take all covar given in the dataframe
+      } else {
+        message(paste0("Covariates = ", gsub(",", " +", toString(covar))))
+        message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i] + ", gsub(",", " +", toString(covar)) ,")"))
+        df <- na.omit(covar_df[ id , covar]) #rownames covar_df  = individual id 	
       }
-      parallel::stopCluster(cl)
+      x@logisticRegression$adj <- cbind(final, glm.HBD.0(pheno, cbind(1,df), hbd, test)) 
+      message("-----------> GLM on ADJUSTED data Done \n")
     }
   }
   x
