@@ -1,4 +1,6 @@
--- passer le 'epsilon' en parametre globale (quelque chose comme genotyping.error.rate)
+-- remove dep to zoo::rollmean
+
+-- passer le 'epsilon' en parametre global (quelque chose comme genotyping.error.rate)
 
 -- Donner à l'utilisateur une fonction lui permettant de récupérer les SNPs de chaque sous carte
 

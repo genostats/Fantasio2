@@ -20,24 +20,20 @@ glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), qq = FAL
   if (plot == 'all') {
     if ('unadj' %in% names(x@logisticRegression)){
       unadj 	<- x@logisticRegression$unadj
-      unadj <- unadj [which(unadj$p_value != 0), ]
+      unadj <- unadj [which(unadj$p != 0), ]
     } else {
       stop('the operator $unadj is missing in atlas@logisticRegression - see documentation of `glmHBD` function to generate unadjusted data')}
     
     if ('adj' %in% names(x@logisticRegression)){
       adj <- x@logisticRegression$adj
-      adj <- adj [which(adj$p_value != 0), ]
+      adj <- adj [which(adj$p != 0), ]
     } else {
       stop('the operator $adj is missing in atlas@logisticRegression - see documentation of `glmHBD` function to generate adjusted data')}
     
     # Manhattan Plot
     # Change colnames to fit with gaston
     colnames(unadj)[colnames(unadj) == 'pos_Bp'] <- 'pos'
-    colnames(unadj)[colnames(unadj) == 'p_value'] <- 'p'
-    
     colnames(adj)[colnames(adj) == 'pos_Bp'] <- 'pos'
-    colnames(adj)[colnames(adj) == 'p_value'] <- 'p'
-    
     
     treshold = -log10(0.05/sum(segments.list.summary(x@segments_list)$number_of_segments))
     lim <- round(max(-log10(adj$p), -log10(unadj$p), treshold))+1
@@ -84,14 +80,13 @@ glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), qq = FAL
   else if (plot == 'unadj') {
     if ('unadj' %in% names(x@logisticRegression)){
       unadj 	<- x@logisticRegression$unadj
-      unadj <- unadj [which(unadj$p_value != 0), ]
+      unadj <- unadj [which(unadj$p != 0), ]
     } else {
       stop('the operator $unadj is missing in atlas@logisticRegression - see documentation of `glmHBD` function to generate unadjusted data')}
     
     # Manhattan Plot
     # Change colnames to fit with gaston
     colnames(unadj)[colnames(unadj) == 'pos_Bp'] <- 'pos'
-    colnames(unadj)[colnames(unadj) == 'p_value'] <- 'p'
     
     treshold = -log10(0.05/sum(segments.list.summary(x@segments_list)$number_of_segments))
     lim <- round(max( -log10(unadj$p), treshold))+1
@@ -126,14 +121,13 @@ glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), qq = FAL
     
     if ('adj' %in% names(x@logisticRegression)){
       adj <- x@logisticRegression$adj
-      adj <- adj [which(adj$p_value != 0), ]
+      adj <- adj [which(adj$p != 0), ]
     } else {
       stop('the operator $adj is missing in atlas@logisticRegression - see documentation of `glmHBD` function to generate adjusted data')}
     
     # Manhattan Plot
     # Change colnames to fit with gaston
     colnames(adj)[colnames(adj) == 'pos_Bp'] <- 'pos'
-    colnames(adj)[colnames(adj) == 'p_value'] <- 'p'
     
     treshold = -log10(0.05/sum(segments.list.summary(x@segments_list)$number_of_segments))
     lim <- round(max(-log10(adj$p), treshold))+1
