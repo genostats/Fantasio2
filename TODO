@@ -1,3 +1,8 @@
+-- set.dist crée des distances égales pour des SNPs proches. Cela provient
+   des cartes qui sont dans HumanGeneticMap
+   Plutôt que de toucher à ça peut-être aménager la fonction delta.dist pour
+   remplacer les 0 par une petite valeur ? Est-ce bien nécessaire ?
+
 -- remove dep to zoo::rollmean
 
 -- passer le 'epsilon' en parametre global (quelque chose comme genotyping.error.rate)

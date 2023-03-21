@@ -9,7 +9,7 @@ glm.HBD(
   expl_var,
   covar_df,
   covar,
-  test = match.arg("bilateral", "right", "left"),
+  test = c("bilateral", "right", "left"),
   run = FALSE,
   phen.code
 )
