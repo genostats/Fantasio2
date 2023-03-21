@@ -1,11 +1,10 @@
-
 #' QQ-Plot & Manhattan Plots for glm on HBD prob or FLOD
 #' 
 #' @param x an atlas object
 #' @param expl_var the explanatory variable 'FLOD' or 'pHBD'
-#' @param n.cores number of cores for parallelization calculation (default = 1)
 #' @param plot choose to plot 'all' = adj + unadj, 'adj' only, 'unadj' only (default = all)
 #' if 'all' but only 'adj' or 'unadj' data are available the function will only plot available data
+#' @param test which test to plot
 #' @param qq choose to plot qqplot (default = FALSE)
 #' @param save choose if plot are saved or not (.png format) (default = FALSE)
 #' 
@@ -13,13 +12,17 @@
 #' 
 #' @export
 
-glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), qq = FALSE, save = FALSE) {
+glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), test = c("bilateral", "right", "left"), qq = FALSE, save = FALSE) {
   
   plot <- match.arg(plot)
+  test <- match.arg(test)
+  p.name <- paste0("p.", test)
+  x@logisticRegression$unadj$p <- x@logisticRegression$unadj[[p.name]]
+  x@logisticRegression$adj$p <- x@logisticRegression$adj[[p.name]]
   
   if (plot == 'all') {
     if ('unadj' %in% names(x@logisticRegression)){
-      unadj 	<- x@logisticRegression$unadj
+      unadj <- x@logisticRegression$unadj
       unadj <- unadj [which(unadj$p != 0), ]
     } else {
       stop('the operator $unadj is missing in atlas@logisticRegression - see documentation of `glmHBD` function to generate unadjusted data')}
@@ -38,7 +41,7 @@ glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), qq = FAL
     treshold = -log10(0.05/sum(segments.list.summary(x@segments_list)$number_of_segments))
     lim <- round(max(-log10(adj$p), -log10(unadj$p), treshold))+1
     
-    if (save == FALSE) { # Default, just print plots on different windows
+    if (!save) { # Default, just print plots on different windows
       
       # QQ Plot
       if(qq) {
@@ -76,7 +79,6 @@ glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), qq = FAL
       
     }
   }
-  
   else if (plot == 'unadj') {
     if ('unadj' %in% names(x@logisticRegression)){
       unadj 	<- x@logisticRegression$unadj
@@ -116,7 +118,6 @@ glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), qq = FAL
       
     }
   }
-  
   else if (plot == 'adj') {
     
     if ('adj' %in% names(x@logisticRegression)){
