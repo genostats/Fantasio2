@@ -8,7 +8,7 @@ Maintainer: Hervé Perdry <herve.perdry@universite-paris-saclay.fr>
 Author: Isuru Haupe, Margot Derouin, Hervé Perdry, Anne-Louise Leutenegger, Steven Gazal, Amaury Vaysse
 Description: etc
 License: GPL-3
-LinkingTo: gaston, Rcpp, RcppParallel, RcppEigen
+LinkingTo: gaston, Rcpp, RcppParallel, RcppEigen, milorGWAS
 Depends: methods, parallel, gaston
 Imports: zoo
 NeedsCompilation: yes
@@ -16,4 +16,4 @@ LazyLoad: yes
 LazyData: yes
 Suggests: knitr, rmarkdown, HGDP.CEPH
 VignetteBuilder: knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3

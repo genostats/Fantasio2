@@ -22,7 +22,7 @@
 #' #Please refer to vignette 
 #'
 #' @export
-HFLOD.manhattan.plot <- function(submaps, regions, unit = "cM", MA = TRUE, nbSNP_MA = 50)
+HFLOD.manhattan.plot <- function(submaps, regions, unit = "cM", MA = FALSE, nbSNP_MA = 50)
 {
   if (class(submaps@bedmatrix)[1] != "bed.matrix")
     stop("Need a bed.matrix.")
