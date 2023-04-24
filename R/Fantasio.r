@@ -24,7 +24,7 @@ Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, list
   keep.inds <- seq_len(nrow(bedmatrix)) %in% indexes$HBD
 
   # ceci remplit HBD_recap et FLOD_recap
-  x <- recap.HBD.FLOD(x, keep.inds, q, recap)
+  x <- recap.HBD.FLOD(x, keep.inds, q, recap, median)
 
   # ceci remplit HFLOD
   x <- set.HFLOD(x, indexes$HFLOD)
