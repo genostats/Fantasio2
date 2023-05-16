@@ -4,7 +4,11 @@
 #include <ctime>
 #include <math.h>
 #include "LSE.h"
+#ifndef SHOW
 #define SHOW(x) Rcpp::Rcout << #x << " = " << (x) << std::endl;
+#endif
+
+// --------------- this should disappear, kept for comparison purposes -----------------
 
 using namespace Rcpp;
 

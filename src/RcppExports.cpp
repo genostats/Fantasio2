@@ -79,6 +79,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// logitModel
+List logitModel(NumericVector Y, NumericMatrix X, NumericMatrix H, unsigned int beg, unsigned int end);
+RcppExport SEXP _Fantasio2_logitModel(SEXP YSEXP, SEXP XSEXP, SEXP HSEXP, SEXP begSEXP, SEXP endSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type H(HSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type beg(begSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type end(endSEXP);
+    rcpp_result_gen = Rcpp::wrap(logitModel(Y, X, H, beg, end));
+    return rcpp_result_gen;
+END_RCPP
+}
 // m4_logEmiss
 NumericMatrix m4_logEmiss(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, double epsilon);
 RcppExport SEXP _Fantasio2_m4_logEmiss(SEXP p_ASEXP, SEXP pSEXP, SEXP mapSEXP, SEXP epsilonSEXP) {
@@ -246,6 +261,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_forward_backward", (DL_FUNC) &_Fantasio2_forward_backward, 4},
     {"_Fantasio2_logLikelihood_gradient", (DL_FUNC) &_Fantasio2_logLikelihood_gradient, 4},
     {"_Fantasio2_logEmiss", (DL_FUNC) &_Fantasio2_logEmiss, 4},
+    {"_Fantasio2_logitModel", (DL_FUNC) &_Fantasio2_logitModel, 5},
     {"_Fantasio2_m4_logEmiss", (DL_FUNC) &_Fantasio2_m4_logEmiss, 4},
     {"_Fantasio2_probaHBD", (DL_FUNC) &_Fantasio2_probaHBD, 8},
     {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 17},

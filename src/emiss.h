@@ -9,7 +9,9 @@
 #ifndef __emiss__
 #define __emiss__
 
+#ifndef SHOW
 #define SHOW(x) Rcpp::Rcout << #x << " = " << (x) << std::endl;
+#endif
 
 /* 
    Il y a deux constructeurs
@@ -92,15 +94,24 @@ public:
       uint8_t * data = bm->data[submap[i]-1];
       scalar_t p_ = (scalar_t) p[submap[i]-1];
 
-      // HBD 0
-      gg[0] = 2*log(1-p_);  // p^2
-      gg[1] = log(2.) + log(1-p_) + log(p_); // 2pq
-      gg[2] = 2*log(p_);  // q^2
+      if(std::isnan(p_) || p_ < 0 || p_ > 1) { 
+        // no allelic frequency information
+        // will be used in the f/b algorithm to insert SNPs in a submap without 
+        // using the genotypes at these new positions
+        // -> emission proba = 1 ; log emission proba = 0
+        gg[0] = gg[1] = gg[2] = 0;
+        hh[0] = hh[1] = hh[2] = 0;
+      } else {
+        // HBD 0
+        gg[0] = 2*log(1-p_);                   // p^2
+        gg[1] = log(2.) + log(1-p_) + log(p_); // 2pq
+        gg[2] = 2*log(p_);                     // q^2
 
-      // HBD 1
-      hh[0] = log( (1-epsilon)*(1-p_) + epsilon*(1-p_)*(1-p_) );
-      hh[1] = log(epsilon) + gg[1];  // epsilon*2pq
-      hh[2] = log( (1-epsilon)*p_ + epsilon*p_*p_ );
+        // HBD 1
+        hh[0] = log( (1-epsilon)*(1-p_) + epsilon*(1-p_)*(1-p_) );
+        hh[1] = log(epsilon) + gg[1];  // epsilon*2pq
+        hh[2] = log( (1-epsilon)*p_ + epsilon*p_*p_ );
+      }
 
       size_t k = 0;
       for(size_t j = 0; j < nbPrecomp/4; j++) {
