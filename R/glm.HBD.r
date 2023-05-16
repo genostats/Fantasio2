@@ -6,7 +6,6 @@
 #' @param covar covariates of interest such as 'age', 'sex' , ...
 #' if missing, all covariates of the dataframe are considered
 #' @param n.cores number of cores for parallelization calculation (default = 1)
-#' @param test which test to run. Default is bilateral. Use \code{"right"} to test for deleterious effects.
 #' @param run whether the fonction is called or not (default = FALSE)
 #' @param phen.code phenotype coding :
 #'        - 'R' : 0:control ; 1:case ; NA:unknown (default)
@@ -15,8 +14,11 @@
 #' 
 #' @export
 
-glm.HBD <- function( x, expl_var, covar_df, covar, test = c("bilateral", "right", "left"), run = FALSE, phen.code) {
-  
+glm.HBD <- function( x, expl_var = c("FLOD", "pHBD"), covar_df, covar, run = FALSE, phen.code = c("R", "plink")) {
+ 
+  expl_var <- match.arg(expl_var)
+  phen.code <- match.arg(phen.code)
+
   if(class(x)[1] != "atlas")
     stop("Need an atlas")
   
@@ -46,7 +48,7 @@ glm.HBD <- function( x, expl_var, covar_df, covar, test = c("bilateral", "right"
     if (missing(covar_df)) {
       message("No covariates given for the analysis = unadjusted data. To use covariates import a dataframe.")
       message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i])"))
-      x@logisticRegression$unadj <- cbind(final, glm.HBD.0(pheno, matrix(1, length(pheno)), hbd, test)) 
+      x@logisticRegression$unadj <- cbind(final, glm.HBD.0(pheno, matrix(1, length(pheno)), hbd)) 
       message("-----------> GLM on UNADJUSTED data Done \n")
     }
     
@@ -67,7 +69,7 @@ glm.HBD <- function( x, expl_var, covar_df, covar, test = c("bilateral", "right"
         message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i] + ", gsub(",", " +", toString(covar)) ,")"))
         df <- na.omit(covar_df[ id , covar]) #rownames covar_df  = individual id 	
       }
-      x@logisticRegression$adj <- cbind(final, glm.HBD.0(pheno, cbind(1,df), hbd, test)) 
+      x@logisticRegression$adj <- cbind(final, glm.HBD.0(pheno, cbind(1,df), hbd)) 
       message("-----------> GLM on ADJUSTED data Done \n")
     }
   }
