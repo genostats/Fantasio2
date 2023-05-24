@@ -18,11 +18,11 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
 
   x <- list() #créer liste pour les 2 grandes matrices phbd et FLOD
 
-  if(median==TRUE) {
+  if(median) {
     a <- summary$a_median
     f <- summary$f_median
-    }
-  
+  }
+ 
   #première boucle pour créer la grande sous-carte = union des snps tirés dans les n sous-cartes
   big.submap <- as.integer(vector())
   for(i in 1:n){
@@ -42,17 +42,12 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
     submap <- rsubmap(segments.list)
     d.dist <- delta.dist(bedmatrix, big.submap)
 
-    # les a et f pour les individus qui nous intéressent, pour la carte en cours
-    #a <- A[wi, i]
-    #f <- F[wi, i]
-    
     # les a et f pour la carte en cours
-    if(median==FALSE){
+    if(!median){
       a <- A[, i]
       f <- F[, i]
     }
     
-
     # matrice des pHBD [une colonne par individu, une ligne par SNP]
     
     #créer vecteur freq.submap de NA de longueur big.submap puis remplacer par les freq aux positions tirées
