@@ -14,11 +14,11 @@
 #' @param q assumed frequency of the mutation involved in the disease for each individual (default is 0.0001)
 #' @param epsilon genotype error rate (default is 0.001)
 #' @param median define the f and a parameters used to compute pHBD and FLOD
-	   - if FALSE : f and a estimated on each submap
-	   - if TRUE : median value of estimations on all submaps of f and a (default) 
+#'	   - if FALSE : f and a estimated on each submap
+#'	   - if TRUE : median value of estimations on all submaps of f and a (default) 
 #' @param dense.recap define how pHBD and FLOD are combined over the submaps
-	   - if FALSE : pHBD and FLOD are combined SNP by SNP with a mean on the number of submaps that includes this SNP
-	   - if TRUE : mean of pHBD and FLOD on all submaps (default)
+#'	   - if FALSE : pHBD and FLOD are combined SNP by SNP with a mean on the number of submaps that includes this SNP
+#'	   - if TRUE : mean of pHBD and FLOD on all submaps (default)
 
 
 
