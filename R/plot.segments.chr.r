@@ -1,7 +1,7 @@
 plot.segments.chr <- function(byROHfile=FALSE, fileOrSubmaps, unit = "cM", chr, list_id, regions, color2="green4", build=37)
 {
-  if(length(list_id) > 20 )
-    list_id <- list_id[seq_len(20)]
+  #if(length(list_id) > 20 )
+  #  list_id <- list_id[seq_len(20)]
   
   l <- unit.plot.chr(file = fileOrSubmaps, unit, byROHfile = byROHfile) 
   pos1   <- l$pos1
