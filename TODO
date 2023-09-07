@@ -2,6 +2,11 @@
 
 -- fonction pour transformer le slot @HBDsegments en liste de data frame "à la mozza"
 
+-- pour les HBDsegments, mettre la valeur par défaut 0/1 pour le nb de SNPs
+   utiliser Fantasio.parameters ? 
+
+-- Généraliser l'usage de Fantasio.parameters
+
 -- réfléchir au moyen de faciliter la correspondance entre individu de la bed matrix 
    et les objets où il n'y a que les consanguins 
 
