@@ -1,3 +1,10 @@
+-- regler pb RNG / sample.int
+
+-- fonction pour transformer le slot @HBDsegments en liste de data frame "à la mozza"
+
+-- réfléchir au moyen de faciliter la correspondance entre individu de la bed matrix 
+   et les objets où il n'y a que les consanguins 
+
 -- set.dist crée des distances égales pour des SNPs proches. Cela provient
    des cartes qui sont dans HumanGeneticMap
    Plutôt que de toucher à ça peut-être aménager la fonction delta.dist pour
