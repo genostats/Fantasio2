@@ -63,21 +63,33 @@ segments.list.by.hotspots <- function(bedmatrix, intensity = 10 , hotspots = hot
     if(verbose) cat(".")
     chr_segment <- VI[[i]]
     mkr <- VII[[i]]
-    chr <- list()
-    for( j in seq_len(nrow(chr_segment)))
+    n.seg <- nrow(chr_segment)
+    chr <- list( beg = integer(n.seg), end = integer(n.seg) )
+    for( j in seq_len(n.seg))
     {
       b <- which(mkr > chr_segment[j,1] & mkr < chr_segment[j,2]) #which markers are  between two hotspots
-      if (length(b) == 0) next
-      if (length(b) == 1) {
-        chr[[j]] <- b + shift[i]
-      } else {
-        c <- c(b[1], b[length(b)])
-        chr[[j]] <- c + shift[i]
+      if (length(b) == 0) {
+        chr$beg[j] <- NA
+        chr$end[j] <- NA
+        next
       }
+      if(length(b) == 1) {
+        chr$beg[j] <- b + shift[i]
+        chr$end[j] <- b + shift[i]
+        next
+      } 
+      # cas genéral
+      chr$beg[j] <- b[1] + shift[i]
+      chr$end[j] <- b[length(b)] + shift[i]
     }
+    # remove empty segments
+    w <- which(is.na(chr$beg))
+    chr$beg <- chr$beg[-w]
+    chr$end <- chr$end[-w]
+    # fuse short segments
+    chr <- fusion.segments(chr, minMarkers)
+ 
     VIII[[i]] <- chr
-    VIII[[i]] <- null.remover(VIII[[i]])
-    VIII[[i]] <- clean.hotspots(VIII[[i]], minMarkers)  
   }
   if(verbose) cat("\n")
   

@@ -7,10 +7,9 @@ rsubmap <- function(segmentsList){
   
   submap <- integer(max)
   
-  for(chr in seq_along(segmentsList))
-  {
+  for(chr in seq_along(segmentsList)) {
     chrMarker <- segmentsList[[chr]]
-    randomMarkerVector <- get.random.marker.chromosome(chrMarker)
+    randomMarkerVector <- random.snp(chrMarker)
     submap[(shift[chr]+1):shift[chr+1]] <- randomMarkerVector
   }
   
