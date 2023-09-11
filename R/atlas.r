@@ -1,7 +1,10 @@
 #' @export
 atlas <- function(bedmatrix, segments.list, n, epsilon = 1e-3) {
 
-  seeds <- matrix( nrow = length( getRandomSeed() ), ncol = n )
+  # on copie la graine de R
+  copyRseed();
+
+  seeds <- matrix( nrow = 625, ncol = n )
 
   # ceci correspond à peu près à ce que faisait make Atlas suivi de festim
   A <- matrix( nrow = nrow(bedmatrix), ncol = n )
@@ -12,8 +15,11 @@ atlas <- function(bedmatrix, segments.list, n, epsilon = 1e-3) {
   P.LRT <- matrix( nrow = nrow(bedmatrix), ncol = n )
 
   for(i in 1:n) {
-    seeds[,i] <- getRandomSeed()
+    seeds[,i] <- getSeed()
     submap <- rsubmap(segments.list)
+    # pour garder la graine de R synchrone avec la nôtre
+    runif( length(submap) )
+   
     d.dist <- delta.dist(bedmatrix, submap)
     S <- festim(bedmatrix@bed, bedmatrix@p, submap, d.dist, epsilon)
     A[,i] <- S$a

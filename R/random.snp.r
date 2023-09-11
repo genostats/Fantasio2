@@ -1,5 +1,4 @@
-random.snp <- function(x)
-{
+random.snp <- function(x) {
   beg <- x$beg
   end <- x$end
   submap <- integer(length(beg))

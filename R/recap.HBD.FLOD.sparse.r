@@ -12,7 +12,6 @@ recap.HBD.FLOD.sparse <- function(atlas, keep.inds, q, recap, median) {
   summary <- atlas@submap_summary
   epsilon <- atlas@epsilon
 
-  old.seed <- getRandomSeed() # storing current seed
   wi <- which(keep.inds)
   h <- new.env()
 
@@ -23,7 +22,7 @@ recap.HBD.FLOD.sparse <- function(atlas, keep.inds, q, recap, median) {
 
   for(i in 1:n) { # boucle sur les cartes
     # on re génère les cartes
-    setRandomSeed(seeds[,i])
+    setSeed(seeds[,i])
     submap <- rsubmap(segments.list)
     d.dist <- delta.dist(bedmatrix, submap)
 
@@ -49,7 +48,6 @@ recap.HBD.FLOD.sparse <- function(atlas, keep.inds, q, recap, median) {
 
     h <- updateHashProbas(h, submap, (aa < 1), HBD, FLOD)
   }
-  setRandomSeed(old.seed) # restoring seed
 
   # calcule les matrices moyennes des HBD / FLOD snp par snp
   # ces matrices ont une ligne par individu / une colonne par SNP

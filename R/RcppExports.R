@@ -29,8 +29,20 @@ m4_logEmiss <- function(p_A, p, map, epsilon) {
     .Call(`_Fantasio2_m4_logEmiss`, p_A, p, map, epsilon)
 }
 
+getSeed <- function() {
+    .Call(`_Fantasio2_getSeed`)
+}
+
+setSeed <- function(seed) {
+    invisible(.Call(`_Fantasio2_setSeed`, seed))
+}
+
 probaHBD <- function(p_A, p, submap, deltaDist, whichInds, a, f, epsilon) {
     .Call(`_Fantasio2_probaHBD`, p_A, p, submap, deltaDist, whichInds, a, f, epsilon)
+}
+
+randomSnp <- function(L) {
+    .Call(`_Fantasio2_randomSnp`, L)
 }
 
 setUserParam <- function(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, use_float, debug) {

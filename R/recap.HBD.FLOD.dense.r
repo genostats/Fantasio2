@@ -12,7 +12,6 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
   summary <- atlas@submap_summary
   epsilon <- atlas@epsilon
 
-  old.seed <- getRandomSeed() # storing current seed
   wi <- which(keep.inds)
   
 
@@ -26,7 +25,7 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
   #première boucle pour créer la grande sous-carte = union des snps tirés dans les n sous-cartes
   big.submap <- as.integer(vector())
   for(i in 1:n){
-    setRandomSeed(seeds[,i])
+    setSeed(seeds[,i])
     submap <- rsubmap(segments.list)
     big.submap <- union(big.submap,submap)
   }
@@ -38,7 +37,7 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
   
   for(i in 1:n) { # boucle sur les cartes
     # on re génère les cartes
-    setRandomSeed(seeds[,i])
+    setSeed(seeds[,i])
     submap <- rsubmap(segments.list)
     d.dist <- delta.dist(bedmatrix, big.submap)
 
@@ -69,7 +68,6 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
     big.HBD <- big.HBD + HBD 
     big.FLOD <- big.FLOD + FLOD  
   }
-  setRandomSeed(old.seed) # restoring seed
 
   
   # calcule les matrices moyennes des HBD / FLOD snp par snp

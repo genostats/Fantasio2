@@ -9,7 +9,7 @@ rsubmap <- function(segmentsList){
   
   for(chr in seq_along(segmentsList)) {
     chrMarker <- segmentsList[[chr]]
-    randomMarkerVector <- random.snp(chrMarker)
+    randomMarkerVector <- randomSnp(chrMarker)
     submap[(shift[chr]+1):shift[chr+1]] <- randomMarkerVector
   }
   

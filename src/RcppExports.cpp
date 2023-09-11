@@ -108,6 +108,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// getSeed
+IntegerVector getSeed();
+RcppExport SEXP _Fantasio2_getSeed() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(getSeed());
+    return rcpp_result_gen;
+END_RCPP
+}
+// setSeed
+void setSeed(IntegerVector seed);
+RcppExport SEXP _Fantasio2_setSeed(SEXP seedSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type seed(seedSEXP);
+    setSeed(seed);
+    return R_NilValue;
+END_RCPP
+}
 // probaHBD
 NumericMatrix probaHBD(XPtr<matrix4> p_A, NumericVector p, IntegerVector submap, NumericVector deltaDist, LogicalVector whichInds, NumericVector a, NumericVector f, double epsilon);
 RcppExport SEXP _Fantasio2_probaHBD(SEXP p_ASEXP, SEXP pSEXP, SEXP submapSEXP, SEXP deltaDistSEXP, SEXP whichIndsSEXP, SEXP aSEXP, SEXP fSEXP, SEXP epsilonSEXP) {
@@ -123,6 +143,17 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type f(fSEXP);
     Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
     rcpp_result_gen = Rcpp::wrap(probaHBD(p_A, p, submap, deltaDist, whichInds, a, f, epsilon));
+    return rcpp_result_gen;
+END_RCPP
+}
+// randomSnp
+IntegerVector randomSnp(List L);
+RcppExport SEXP _Fantasio2_randomSnp(SEXP LSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type L(LSEXP);
+    rcpp_result_gen = Rcpp::wrap(randomSnp(L));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -263,7 +294,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_logEmiss", (DL_FUNC) &_Fantasio2_logEmiss, 4},
     {"_Fantasio2_logitModel", (DL_FUNC) &_Fantasio2_logitModel, 5},
     {"_Fantasio2_m4_logEmiss", (DL_FUNC) &_Fantasio2_m4_logEmiss, 4},
+    {"_Fantasio2_getSeed", (DL_FUNC) &_Fantasio2_getSeed, 0},
+    {"_Fantasio2_setSeed", (DL_FUNC) &_Fantasio2_setSeed, 1},
     {"_Fantasio2_probaHBD", (DL_FUNC) &_Fantasio2_probaHBD, 8},
+    {"_Fantasio2_randomSnp", (DL_FUNC) &_Fantasio2_randomSnp, 1},
     {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 17},
     {"_Fantasio2_getUserParam", (DL_FUNC) &_Fantasio2_getUserParam, 0},
     {"_Fantasio2_testForwardBackward", (DL_FUNC) &_Fantasio2_testForwardBackward, 8},
