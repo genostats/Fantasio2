@@ -1,5 +1,5 @@
 #' @export
-atlas <- function(bedmatrix, segments.list, n, epsilon = 1e-3) {
+atlas <- function(bedmatrix, segments.list, n, min.quality, epsilon = 1e-3) {
 
   seeds <- matrix( nrow = length( getRandomSeed() ), ncol = n )
 
@@ -26,7 +26,7 @@ atlas <- function(bedmatrix, segments.list, n, epsilon = 1e-3) {
   # A et F correspondent au contenu du slot estimation_summary (qui n'est pas un summary)
 
   # Ceci correspond au slot submap_summary
-  summary <- submaps.summary(bedmatrix, A, F, P.LRT)
+  summary <- submaps.summary(bedmatrix, A, F, P.LRT, min.quality)
   new("atlas", bedmatrix, seeds, epsilon, segments.list, list(a = A, f = F, p = P.LRT), summary)
 }
 

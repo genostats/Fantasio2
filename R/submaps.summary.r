@@ -24,7 +24,7 @@
 #' 
 #' @export
 
-submaps.summary <- function (bedmatrix, a, f, p.lrt, a.threshold = 1) {
+submaps.summary <- function (bedmatrix, a, f, p.lrt, min.quality, a.threshold = 1) {
   
   w.a <- (a > a.threshold)
   f[w.a] <- NA
@@ -50,7 +50,7 @@ submaps.summary <- function (bedmatrix, a, f, p.lrt, a.threshold = 1) {
                    f_median      = apply(f, 1, median, na.rm=TRUE),
                    a_median      = apply(a, 1, median, na.rm=TRUE),
                    pLRT_median   = pLRT_median,
-                   inbred        = pLRT_median < 0.05,
+                   inbred        = pLRT_median < 0.05 & quality > min.quality-1,
                    pLRT_inf_0.05 = nValidSubmap
   )
   for(i in seq_len(nrow(df))) {
