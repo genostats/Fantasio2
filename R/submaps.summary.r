@@ -50,7 +50,7 @@ submaps.summary <- function (bedmatrix, a, f, p.lrt, min.quality, a.threshold = 
                    f_median      = apply(f, 1, median, na.rm=TRUE),
                    a_median      = apply(a, 1, median, na.rm=TRUE),
                    pLRT_median   = pLRT_median,
-                   inbred        = pLRT_median < 0.05 & quality > min.quality-1,
+                   inbred        = pLRT_median < 0.05 & quality >= min.quality,
                    pLRT_inf_0.05 = nValidSubmap
   )
   for(i in seq_len(nrow(df))) {
