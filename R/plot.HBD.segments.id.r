@@ -11,7 +11,7 @@
 #*** return a plot                                                               #
 ##################################################################################
 
-plot.HBD.segments.id <- function(Submaps, unit= "cM", id, famid, regions, outfile, build)
+plot.HBD.segments.id <- function(Submaps, unit= "cM", id, famid, regions, quality = 95, outfile, build)
 {
   if(!is.character(id))
     return("Need individual id as character")
