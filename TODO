@@ -1,3 +1,5 @@
+-- Faire passer q, epsilon et epsilon2 en paramètre globale
+
 -- regler pb RNG / sample.int
 
 -- fonction pour transformer le slot @HBDsegments en liste de data frame "à la mozza"
