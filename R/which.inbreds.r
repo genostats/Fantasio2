@@ -1,8 +1,8 @@
 which.inbreds <- function(summary, list.id, phen.code) {
   if (phen.code == 'plink') {
-    test <- any( summary$pheno == 2 ) 
+    test <- any( summary$pheno == 2, na.rm = TRUE ) 
   } else {
-    test <- any( summary$pheno == 1 ) 
+    test <- any( summary$pheno == 1, na.rm = TRUE ) 
   }
   if(missing(list.id)) { # pas de list.id : défaut 
     if(test) { # il y a des atteints
