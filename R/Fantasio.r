@@ -53,6 +53,8 @@ Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, list
     bedmatrix@p <- allele.freq
   }
   
+  #NA
+  bedmatrix <- bedmatrix[, !is.na(bedmatrix@p) ]
   #p=1
   bedmatrix@p <- ifelse(bedmatrix@p == 1, 1 - epsilon2, bedmatrix@p) 
   #p=0
