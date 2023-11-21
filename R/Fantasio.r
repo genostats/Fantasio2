@@ -47,7 +47,7 @@ Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, list
     if(length(allele.freq) != ncol(bedmatrix)) {
       stop("allele.freq length should be equal to the number of SNPs in bedmatrix")
     }
-    if(any(allele.freq < 0) | any(allele.freq > 1)) {
+    if(any(allele.freq < 0, na.rm = T) | any(allele.freq > 1, na.rm = T)) {
       stop("allele frequencies should be between 0 and 1")
     }
     bedmatrix@p <- allele.freq
