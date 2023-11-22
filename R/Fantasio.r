@@ -7,6 +7,7 @@
 #' @param n the number of submaps (default is 100)
 #' @param min.quality minimal quality (in \%) to include an inbred individual into the analysis (default is 95)
 #' @param list.id a list of individuals of interest ('famid:id') (default = no list id)
+#' @param allele.freq a vector of allele frequencies (for allele A2), if \code{bedmatrix@p} isn't appropriate
 #' @param recap if you want the summary of probabilities by snps or by segments (only by SNPs for the moment)
 #' @param phen.code phenotype coding :
 #'        - 'R' : 0:control ; 1:case ; NA:unknown 
@@ -34,14 +35,30 @@
 
 
 # pour l'instant, que "by hotspots" avec un summary "by SNPs"
-Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, list.id, 
-                     recap = c("SNP", "segment"), phen.code = c("plink", "R"), q = 1e-4, epsilon = 1e-3, median = TRUE, dense.recap = TRUE) {
+Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, list.id, allele.freq, 
+                     recap = c("SNP", "segment"), phen.code = c("plink", "R"), q = 1e-4, epsilon = 1e-3, epsilon2 = 1e-3, median = TRUE, dense.recap = TRUE) {
 
   phen.code <- match.arg(phen.code)
 
   recap <- match.arg(recap)
   if(recap != "SNP") stop("Not yet implemented")
 
+  if (!missing(allele.freq)) {
+    if(length(allele.freq) != ncol(bedmatrix)) {
+      stop("allele.freq length should be equal to the number of SNPs in bedmatrix")
+    }
+    if(any(allele.freq < 0, na.rm = T) | any(allele.freq > 1, na.rm = T)) {
+      stop("allele frequencies should be between 0 and 1")
+    }
+    bedmatrix@p <- allele.freq
+  }
+  
+  #NA
+  bedmatrix <- bedmatrix[, !is.na(bedmatrix@p) ]
+  #p=1
+  bedmatrix@p <- ifelse(bedmatrix@p == 1, 1 - epsilon2, bedmatrix@p) 
+  #p=0
+  bedmatrix@p <- ifelse(bedmatrix@p == 0, epsilon2, bedmatrix@p) 
 
   if (missing(segment.options))
     segment.options <- list()

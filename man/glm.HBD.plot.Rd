@@ -8,6 +8,7 @@ glm.HBD.plot(
   x,
   expl_var,
   plot = c("all", "unadj", "adj"),
+  test = c("bilateral", "right", "left"),
   qq = FALSE,
   save = FALSE
 )
@@ -20,11 +21,11 @@ glm.HBD.plot(
 \item{plot}{choose to plot 'all' = adj + unadj, 'adj' only, 'unadj' only (default = all)
 if 'all' but only 'adj' or 'unadj' data are available the function will only plot available data}
 
+\item{test}{which test to plot}
+
 \item{qq}{choose to plot qqplot (default = FALSE)}
 
 \item{save}{choose if plot are saved or not (.png format) (default = FALSE)}
-
-\item{n.cores}{number of cores for parallelization calculation (default = 1)}
 }
 \description{
 QQ-Plot & Manhattan Plots for glm on HBD prob or FLOD
