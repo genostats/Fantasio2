@@ -87,7 +87,7 @@ HFLOD.manhattan.plot <- function(submaps, regions, unit = "cM", MA = FALSE, nbSN
   
   
   ymax <- max(3.3, max(HFLOD$HFLOD))
-  mycol <- rep(c("cadetblue2", 8), 11)
+  mycol <- rep(c("cadetblue2", "gray"), 11)
   
   
   for (i in unique(chromosome))
