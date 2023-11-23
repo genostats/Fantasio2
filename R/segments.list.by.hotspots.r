@@ -73,19 +73,15 @@ segments.list.by.hotspots <- function(bedmatrix, intensity = 10 , hotspots = hot
         chr$end[j] <- NA
         next
       }
-      if(length(b) == 1) {
-        chr$beg[j] <- b + shift[i]
-        chr$end[j] <- b + shift[i]
-        next
-      } 
-      # cas genéral
       chr$beg[j] <- b[1] + shift[i]
       chr$end[j] <- b[length(b)] + shift[i]
     }
     # remove empty segments
     w <- which(is.na(chr$beg))
-    chr$beg <- chr$beg[-w]
-    chr$end <- chr$end[-w]
+    if(length(w) > 0) {
+      chr$beg <- chr$beg[-w]
+      chr$end <- chr$end[-w]
+    }
     # fuse short segments
     chr <- fusion.segments(chr, minMarkers)
  
