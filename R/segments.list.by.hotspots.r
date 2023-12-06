@@ -16,13 +16,13 @@
 #' @return an hotspots.segments object
 #'
 #' @export
-segments.list.by.hotspots <- function(bedmatrix, intensity = 10 , hotspots = hotspot_hg19, minMarkers = 0, verbose = TRUE)
+segments.list.by.hotspots <- function(bedmatrix, intensity = 10, hotspots = hotspot_hg19, minMarkers = 0, verbose = TRUE)
 {
   if(class(bedmatrix)[1] != "bed.matrix" )
     stop("Need a bed.matrix")
   
-  if(verbose) 
-    cat( paste("Using hotspots from ", deparse(substitute(hotspots)), "\n") )
+  if(verbose & !is.null(attr(hotspots, "mapName"))) 
+    cat( paste("Using hotspots from ", attr(hotspots, "mapName"), "\n") )
   
   dataFrameColNames <- c("Chromosome", "Start", "End", "IntensitycMMb")
   if(!all(dataFrameColNames %in% colnames(hotspots)))
