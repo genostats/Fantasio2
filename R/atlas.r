@@ -4,7 +4,7 @@ atlas <- function(bedmatrix, segments.list, n, epsilon = 1e-3) {
   # on copie la graine de R
   copyRseed();
 
-  seeds <- matrix( nrow = 625, ncol = n )
+  seeds <- matrix( nrow = length(getSeed()), ncol = n )
 
   # ceci correspond à peu près à ce que faisait make Atlas suivi de festim
   A <- matrix( nrow = nrow(bedmatrix), ncol = n )
