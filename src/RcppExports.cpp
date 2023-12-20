@@ -128,6 +128,16 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// mt_runif
+double mt_runif();
+RcppExport SEXP _Fantasio2_mt_runif() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(mt_runif());
+    return rcpp_result_gen;
+END_RCPP
+}
 // probaHBD
 NumericMatrix probaHBD(XPtr<matrix4> p_A, NumericVector p, IntegerVector submap, NumericVector deltaDist, LogicalVector whichInds, NumericVector a, NumericVector f, double epsilon);
 RcppExport SEXP _Fantasio2_probaHBD(SEXP p_ASEXP, SEXP pSEXP, SEXP submapSEXP, SEXP deltaDistSEXP, SEXP whichIndsSEXP, SEXP aSEXP, SEXP fSEXP, SEXP epsilonSEXP) {
@@ -296,6 +306,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_m4_logEmiss", (DL_FUNC) &_Fantasio2_m4_logEmiss, 4},
     {"_Fantasio2_getSeed", (DL_FUNC) &_Fantasio2_getSeed, 0},
     {"_Fantasio2_setSeed", (DL_FUNC) &_Fantasio2_setSeed, 1},
+    {"_Fantasio2_mt_runif", (DL_FUNC) &_Fantasio2_mt_runif, 0},
     {"_Fantasio2_probaHBD", (DL_FUNC) &_Fantasio2_probaHBD, 8},
     {"_Fantasio2_randomSnp", (DL_FUNC) &_Fantasio2_randomSnp, 1},
     {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 17},

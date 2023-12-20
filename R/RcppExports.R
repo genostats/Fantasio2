@@ -37,6 +37,10 @@ setSeed <- function(seed) {
     invisible(.Call(`_Fantasio2_setSeed`, seed))
 }
 
+mt_runif <- function() {
+    .Call(`_Fantasio2_mt_runif`)
+}
+
 probaHBD <- function(p_A, p, submap, deltaDist, whichInds, a, f, epsilon) {
     .Call(`_Fantasio2_probaHBD`, p_A, p, submap, deltaDist, whichInds, a, f, epsilon)
 }
