@@ -76,9 +76,7 @@ HFLOD.manhattan.plot <- function(submaps, regions, unit = "cM", MA = FALSE, nbSN
           border = color2,
           lwd    = 2
         )
-        
-        myreg_mp = rbind(myreg_mp,
-                         max(c(0, axis_mp)) + 10 + myreg_chr$start[i] + myreg_chr$end[i])
+        myreg_mp = rbind(myreg_mp, max(c(0, axis_mp)) + 10 + myreg_chr$start[i] + myreg_chr$end[i])
       }
     }
   }
@@ -87,32 +85,23 @@ HFLOD.manhattan.plot <- function(submaps, regions, unit = "cM", MA = FALSE, nbSN
   
   
   ymax <- max(3.3, max(HFLOD$HFLOD))
-  mycol <- rep(c("cadetblue2", "gray"), 11)
+  mycol <- c("cadetblue2", "gray") 
   
-  
-  for (i in unique(chromosome))
-  {
-    pos_chr <- pos[chromosome == i]
+  chr_ids <- unique(chromosome)
+  for (i in seq_along(chr_ids)) {
+    pos_chr <- pos[chromosome == chr_ids[i]]
     chr_pos[i+1] <- pos_chr[length(pos_chr)]
     axis_mp <- c(axis_mp, max(c(0, axis_mp), na.rm = TRUE) + 10 + pos_chr)
   }
+
   chr_pos  <- cumsum(chr_pos + 10)
   chr_axis <- sapply(seq_along(chr_pos)-1, function(i) mean(c(chr_pos[i], chr_pos[i+1])))
   chr_axis <- chr_axis[-1]
-  
-  plot (
-    axis_mp,
-    HFLOD$HFLOD,
-    pch = 16,
-    ylim = c(0, ymax),
-    xlab = "",
-    ylab = "HFLOD",
-    cex.lab = 1.4,
-    cex.axis = 1.5,
-    col = mycol[chromosome],
-    xaxt = "n",
-    cex = 0.75
-  )
+
+  chr_colors <- mycol[ 1 + match(chromosome, chr_ids) %% 2 ]
+
+  plot(axis_mp, HFLOD$HFLOD, pch = 16, ylim = c(0, ymax), xlab = "chr", ylab = "HFLOD",
+       cex.lab = 1.4, cex.axis = 1.5, col = chr_colors, xaxt = "n", cex = 0.75)
   
   if (!missing(regions)) {
     for (i in seq_len(nrow(myreg_mp))) {
@@ -124,34 +113,16 @@ HFLOD.manhattan.plot <- function(submaps, regions, unit = "cM", MA = FALSE, nbSN
         lwd = 2
       )
     }
-    points(axis_mp,
-           HFLOD[, 1],
-           pch = 16,
-           col = mycol[chromosome],
-           cex = 0.75)
+    points(axis_mp, HFLOD[, 1], pch = 16, col = chr_colors, cex = 0.75)
   }
   
   if(MA)
     lines(axis_mp, zoo::rollmean(HFLOD$HFLOD, as.numeric(nbSNP_MA), fill = "extend"), col="red", lwd=2)
   
-  for (i in seq_along(unique(chromosome))) {
-    abline(v = chr_pos[i], col = "grey", lwd = 2)
-    axis(1, at = chr_axis[i], i, col.ticks = 0, cex.axis = 1.5)
-  }
+  abline(v = chr_pos - 10, col = "grey", lwd = 2)
+  axis(1, at = chr_axis, chr_ids, col.ticks = 0, cex.axis = 1.5)
   
-  abline(v = chr_pos[ length(chr_pos) ], col = "grey", lwd = 2)
-  
-  for (i in seq_len(3))
-    abline(
-      h = i,
-      col = "grey",
-      lwd = 1,
-      lty = 2
-    )
-  
-  
+  abline(h = 1:3, col = "grey", lwd = 1, lty = 2)
   abline(h = 3.3, col = "grey", lwd = 2)
-  
-  
   
 }
