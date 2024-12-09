@@ -32,8 +32,8 @@ HFLOD.plot.chr <- function(submaps, unit = c("cM", "bases"), chr, regions, color
   if(is.null(submaps@HFLOD))
     stop("HFLOD slots in the object is empty, cannot plot")
   
-  chromosome <- HFLOD$chr
   HFLOD <- submaps@HFLOD
+  chromosome <- HFLOD$chr
   unit <- match.arg(unit)
   
   if(unit == "cM"){
@@ -49,8 +49,8 @@ HFLOD.plot.chr <- function(submaps, unit = c("cM", "bases"), chr, regions, color
   else { 
     myreg  <- regions
     color2 <- "green4"
-    myreg$start <- regions$start/coeff
-    myreg$end   <- regions$end/coeff
+    myreg$start <- regions$start*coeff
+    myreg$end   <- regions$end*coeff
   }
 
    #1)graphs per chromosome
