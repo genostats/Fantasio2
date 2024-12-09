@@ -1,4 +1,7 @@
--- Faire passer q, epsilon et epsilon2 en paramètre globale
+-- revoir le découpage en fonctions pour permettre de réestimer les pHBD et FLOD HFLOD 
+   à partir de valeurs a, f données par l'utilisateur...
+
+-- Faire passer q, epsilon et epsilon2 en paramètre global
 
 -- regler pb RNG / sample.int
 
