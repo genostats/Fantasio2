@@ -23,8 +23,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // festim
-List festim(XPtr<matrix4> p_A, NumericVector p, IntegerVector submap, NumericVector deltaDist, double epsilon);
-RcppExport SEXP _Fantasio2_festim(SEXP p_ASEXP, SEXP pSEXP, SEXP submapSEXP, SEXP deltaDistSEXP, SEXP epsilonSEXP) {
+List festim(XPtr<matrix4> p_A, NumericVector p, IntegerVector submap, NumericVector deltaDist, double epsilon, NumericVector f_start, NumericVector a_start);
+RcppExport SEXP _Fantasio2_festim(SEXP p_ASEXP, SEXP pSEXP, SEXP submapSEXP, SEXP deltaDistSEXP, SEXP epsilonSEXP, SEXP f_startSEXP, SEXP a_startSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -33,7 +33,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerVector >::type submap(submapSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type deltaDist(deltaDistSEXP);
     Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
-    rcpp_result_gen = Rcpp::wrap(festim(p_A, p, submap, deltaDist, epsilon));
+    Rcpp::traits::input_parameter< NumericVector >::type f_start(f_startSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type a_start(a_startSEXP);
+    rcpp_result_gen = Rcpp::wrap(festim(p_A, p, submap, deltaDist, epsilon, f_start, a_start));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -168,8 +170,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // setUserParam
-void setUserParam(int m, double epsilon, int past, double delta, int max_iterations, int max_submin, int max_linesearch, double min_step, double max_step, double ftol, double wolfe, int max_retries, Rcpp::NumericVector lower, Rcpp::NumericVector upper, int n_threads, bool use_float, int debug);
-RcppExport SEXP _Fantasio2_setUserParam(SEXP mSEXP, SEXP epsilonSEXP, SEXP pastSEXP, SEXP deltaSEXP, SEXP max_iterationsSEXP, SEXP max_subminSEXP, SEXP max_linesearchSEXP, SEXP min_stepSEXP, SEXP max_stepSEXP, SEXP ftolSEXP, SEXP wolfeSEXP, SEXP max_retriesSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP n_threadsSEXP, SEXP use_floatSEXP, SEXP debugSEXP) {
+void setUserParam(int m, double epsilon, int past, double delta, int max_iterations, int max_submin, int max_linesearch, double min_step, double max_step, double ftol, double wolfe, int max_retries, Rcpp::NumericVector lower, Rcpp::NumericVector upper, int n_threads, bool use_float, int debug, bool use_froh, int minNbSNPs, double minROHlength, double minDistHet, double maxGapLength);
+RcppExport SEXP _Fantasio2_setUserParam(SEXP mSEXP, SEXP epsilonSEXP, SEXP pastSEXP, SEXP deltaSEXP, SEXP max_iterationsSEXP, SEXP max_subminSEXP, SEXP max_linesearchSEXP, SEXP min_stepSEXP, SEXP max_stepSEXP, SEXP ftolSEXP, SEXP wolfeSEXP, SEXP max_retriesSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP n_threadsSEXP, SEXP use_floatSEXP, SEXP debugSEXP, SEXP use_frohSEXP, SEXP minNbSNPsSEXP, SEXP minROHlengthSEXP, SEXP minDistHetSEXP, SEXP maxGapLengthSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type m(mSEXP);
@@ -189,7 +191,12 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type n_threads(n_threadsSEXP);
     Rcpp::traits::input_parameter< bool >::type use_float(use_floatSEXP);
     Rcpp::traits::input_parameter< int >::type debug(debugSEXP);
-    setUserParam(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, use_float, debug);
+    Rcpp::traits::input_parameter< bool >::type use_froh(use_frohSEXP);
+    Rcpp::traits::input_parameter< int >::type minNbSNPs(minNbSNPsSEXP);
+    Rcpp::traits::input_parameter< double >::type minROHlength(minROHlengthSEXP);
+    Rcpp::traits::input_parameter< double >::type minDistHet(minDistHetSEXP);
+    Rcpp::traits::input_parameter< double >::type maxGapLength(maxGapLengthSEXP);
+    setUserParam(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, use_float, debug, use_froh, minNbSNPs, minROHlength, minDistHet, maxGapLength);
     return R_NilValue;
 END_RCPP
 }
@@ -298,7 +305,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_checkOpenMP", (DL_FUNC) &_Fantasio2_checkOpenMP, 0},
-    {"_Fantasio2_festim", (DL_FUNC) &_Fantasio2_festim, 5},
+    {"_Fantasio2_festim", (DL_FUNC) &_Fantasio2_festim, 7},
     {"_Fantasio2_forward_backward", (DL_FUNC) &_Fantasio2_forward_backward, 4},
     {"_Fantasio2_logLikelihood_gradient", (DL_FUNC) &_Fantasio2_logLikelihood_gradient, 4},
     {"_Fantasio2_logEmiss", (DL_FUNC) &_Fantasio2_logEmiss, 4},
@@ -309,7 +316,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_mt_runif", (DL_FUNC) &_Fantasio2_mt_runif, 0},
     {"_Fantasio2_probaHBD", (DL_FUNC) &_Fantasio2_probaHBD, 8},
     {"_Fantasio2_randomSnp", (DL_FUNC) &_Fantasio2_randomSnp, 1},
-    {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 17},
+    {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 22},
     {"_Fantasio2_getUserParam", (DL_FUNC) &_Fantasio2_getUserParam, 0},
     {"_Fantasio2_testForwardBackward", (DL_FUNC) &_Fantasio2_testForwardBackward, 8},
     {"_Fantasio2_testLikelihood", (DL_FUNC) &_Fantasio2_testLikelihood, 8},

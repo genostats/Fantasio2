@@ -36,7 +36,8 @@
 
 # pour l'instant, que "by hotspots" avec un summary "by SNPs"
 Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, list.id, allele.freq, 
-                     recap = c("SNP", "segment"), phen.code = c("plink", "R"), q = 1e-4, epsilon = 1e-3, epsilon2 = 1e-3, median = TRUE, dense.recap = TRUE) {
+                     recap = c("SNP", "segment"), phen.code = c("plink", "R"), q = 1e-4, 
+                     epsilon = 1e-3, epsilon2 = 1e-3, median = TRUE, dense.recap = TRUE) {
 
   phen.code <- match.arg(phen.code)
 
@@ -53,8 +54,10 @@ Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, list
     bedmatrix@p <- allele.freq
   }
   
-  #NA
-  bedmatrix <- bedmatrix[, !is.na(bedmatrix@p) ]
+  #NA [est-ce nécessaire ?]
+  if(any(is.na(bedmatrix@p))) {
+    bedmatrix <- bedmatrix[, !is.na(bedmatrix@p) ]
+  }
   #p=1
   bedmatrix@p <- ifelse(bedmatrix@p == 1, 1 - epsilon2, bedmatrix@p) 
   #p=0

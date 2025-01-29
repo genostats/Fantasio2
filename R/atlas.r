@@ -1,6 +1,21 @@
 #' @export
 atlas <- function(bedmatrix, segments.list, n, epsilon = 1e-3) {
 
+  # si use_froh est vrai, on commence par utiliser gaston::fROH ave les paramètres
+  # définis dans Fantasio.parameters()
+  # ces valeurs seront utilisées comme point de départ
+  pars <- Fantasio.parameters()
+  if(pars$use_froh) {
+    froh <- gaston::fROH(bedmatrix, "cM", "het", pars$minNbSNPs, pars$minROHlength, pars$minDistHet, pars$maxGapLength)
+    # a estimé par a = 1/((1- f) * longueur moyenne HBD) 
+    froh$aROH <- froh$nbSegments / (froh$length * (1 - froh$fROH))
+    # NOTE : c'est NaN si pas de ROHs détectés. La fonction festim ne fera pas l'estimation pour a = NaN
+  } else {
+    # si on n'utilise pas fROH, on prendra les pts de départ f = 0.05 et a = 0.05
+    froh = data.frame( fROH = rep(0.05, nrow(bedmatrix)), aROH = rep(0.05, nrow(bedmatrix)) )
+  }
+
+  # énumération des sous cartes
   # on copie la graine de R
   copyRseed();
 
@@ -21,7 +36,7 @@ atlas <- function(bedmatrix, segments.list, n, epsilon = 1e-3) {
     runif( length(submap) )
    
     d.dist <- delta.dist(bedmatrix, submap)
-    S <- festim(bedmatrix@bed, bedmatrix@p, submap, d.dist, epsilon)
+    S <- festim(bedmatrix@bed, bedmatrix@p, submap, d.dist, epsilon, froh$fROH, froh$aROH)
     A[,i] <- S$a
     F[,i] <- S$f
     # LIK.0[,i] <- S$likelihood.0
@@ -33,6 +48,11 @@ atlas <- function(bedmatrix, segments.list, n, epsilon = 1e-3) {
 
   # Ceci correspond au slot submap_summary
   summary <- submaps.summary(bedmatrix, A, F, P.LRT)
+
+  if(pars$use_froh) {
+    summary <- cbind( froh[, c("fROH", "aROH") ], summary) 
+  } 
+
   new("atlas", bedmatrix, seeds, epsilon, segments.list, list(a = A, f = F, p = P.LRT), summary)
 }
 
