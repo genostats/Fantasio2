@@ -31,7 +31,7 @@ HBD.plot.chr <- function(Submaps, ROH, unit="cM", chr, list.ids, regions, outfil
 {
   if(inbred)
   {
-    list.ids <- which(Submaps@submap_summary$inbred ==TRUE)
+    list.ids <- which(Submaps@submap_summary$inbred)
     ind      <- as.vector(Submaps@submap_summary$id[list.ids])
     fam      <- as.vector(Submaps@submap_summary$famid[list.ids])
     # list.ids <- paste(ind, fam, sep="_")
