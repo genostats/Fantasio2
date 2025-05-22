@@ -1,3 +1,12 @@
+-- verifier que la parallelisation avec openMP dans logitModel respecte bien le nombre de coeurs
+
+-- dans les fonctions où il y a une options phen.code = R ou plink, tester la cohérence 
+   et émettre un warning
+
+-- ajouter une fonction ROH, meme rudimentaire
+   elle pourrait servir à faire un screening rapide du génome : les individus qui n'ont
+   pas de ROH peuvent avoir f = 0 sans passer par le HMM...
+
 -- revoir le découpage en fonctions pour permettre de réestimer les pHBD et FLOD HFLOD 
    à partir de valeurs a, f données par l'utilisateur...
 
