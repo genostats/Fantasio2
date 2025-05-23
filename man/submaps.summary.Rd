@@ -4,7 +4,7 @@
 \alias{submaps.summary}
 \title{Submap summary}
 \usage{
-submaps.summary(bedmatrix, a, f, p.lrt, a.threshold = 1)
+submaps.summary(bedmatrix, a, f, p.lrt, min.quality, a.threshold = 1)
 }
 \arguments{
 \item{bedmatrix}{the original bedmatrix}

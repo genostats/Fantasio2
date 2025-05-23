@@ -16,4 +16,4 @@ LazyLoad: yes
 LazyData: yes
 Suggests: knitr, rmarkdown, HGDP.CEPH
 VignetteBuilder: knitr
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2

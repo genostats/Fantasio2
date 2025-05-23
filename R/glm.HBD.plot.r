@@ -1,161 +1,23 @@
-#' QQ-Plot & Manhattan Plots for glm on HBD prob or FLOD
+#' Manhattan Plot for glm on HBD prob or FLOD
 #' 
-#' @param x an atlas object
-#' @param expl_var the explanatory variable 'FLOD' or 'pHBD'
-#' @param plot choose to plot 'all' = adj + unadj, 'adj' only, 'unadj' only (default = all)
-#' if 'all' but only 'adj' or 'unadj' data are available the function will only plot available data
+#' @param x a data frame such as sent by HBD.glm
 #' @param test which test to plot
-#' @param qq choose to plot qqplot (default = FALSE)
-#' @param save choose if plot are saved or not (.png format) (default = FALSE)
+#' @param chrom.col chromosome colors
+#' @param ... extra arguments for the plot
 #' 
-#' @seealso \code{\link{glmHBD}}
+#' @seealso \code{\link{HBD.glm}}
 #' 
 #' @export
 
-glm.HBD.plot = function ( x, expl_var, plot = c('all', 'unadj', 'adj'), test = c("bilateral", "right", "left"), qq = FALSE, save = FALSE) {
+glm.HBD.plot = function (x, test = c("bilateral", "right", "left"), chrom.col = c("darksalmon", "darkturquoise"), ... ) {
   
-  plot <- match.arg(plot)
   test <- match.arg(test)
   p.name <- paste0("p.", test)
-  x@logisticRegression$unadj$p <- x@logisticRegression$unadj[[p.name]]
-  x@logisticRegression$adj$p <- x@logisticRegression$adj[[p.name]]
-  
-  if (plot == 'all') {
-    if ('unadj' %in% names(x@logisticRegression)){
-      unadj <- x@logisticRegression$unadj
-      unadj <- unadj [which(unadj$p != 0), ]
-    } else {
-      stop('the operator $unadj is missing in atlas@logisticRegression - see documentation of `glmHBD` function to generate unadjusted data')}
-    
-    if ('adj' %in% names(x@logisticRegression)){
-      adj <- x@logisticRegression$adj
-      adj <- adj [which(adj$p != 0), ]
-    } else {
-      stop('the operator $adj is missing in atlas@logisticRegression - see documentation of `glmHBD` function to generate adjusted data')}
-    
-    # Manhattan Plot
-    # Change colnames to fit with gaston
-    colnames(unadj)[colnames(unadj) == 'pos_Bp'] <- 'pos'
-    colnames(adj)[colnames(adj) == 'pos_Bp'] <- 'pos'
-    
-    treshold = -log10(0.05/sum(segments.list.summary(x@segments_list)$number_of_segments))
-    lim <- round(max(-log10(adj$p), -log10(unadj$p), treshold))+1
-    
-    if (!save) { # Default, just print plots on different windows
-      
-      # QQ Plot
-      if(qq) {
-        gaston::qqplot.pvalues(unadj$p, main = paste("QQ-plot GLM with", expl_var, "- unadjusted data"), ylim = c(0,lim) )
-        gaston::qqplot.pvalues(adj$p, main = paste("QQ-plot GLM with", expl_var, "- adjusted data"), ylim = c(0,lim))
-      }
-      
-      #Manhattan plot
-      gaston::manhattan(unadj, main = paste("Manhattan Plot \n GLM with ", expl_var, "- unadjusted data"), chrom.col = c("darksalmon", "darkturquoise"), ylim = c(0,lim))
-      abline(h=treshold, col = 'red')
-      
-      gaston::manhattan(adj, main = paste("Manhattan Plot \n GLM with ", expl_var, "- adjusted data"), chrom.col = c("darksalmon", "darkturquoise"), ylim = c(0,lim))
-      abline(h=treshold, col = 'red')
-      
-      
-    } else { # save plots in png files 
-      
-      png(paste('qqplot.GLM.', expl_var,'unadj.png')) 		# U = unadjusted
-      gaston::qqplot.pvalues(unadj$p, main = paste("QQ-plot GLM with", expl_var, "- unadjusted data"), ylim = c(0,lim) )
-      dev.off()
-      
-      png(paste('qqplot.GLM.', expl_var, 'adj.png'))		# A = adjusted
-      gaston::qqplot.pvalues(adj$p, main = paste("QQ-plot GLM with", expl_var, "- adjusted data"), ylim = c(0,lim))
-      dev.off()
-      
-      png(paste( 'manhattanplot.GLM.', expl_var,'unadj.png'))
-      gaston::manhattan(unadj, main = paste("Manhattan Plot \n GLM with ", expl_var, "- unadjusted data"), chrom.col = c("darksalmon", "darkturquoise"), ylim = c(0,lim))
-      abline(h=treshold, col = 'red')
-      dev.off()	
-      
-      png(paste( 'manhattanplot.GLM.', expl_var,'adj.png'))
-      gaston::manhattan(adj, main = paste("Manhattan Plot \n GLM with ", expl_var, "- adjusted data"), chrom.col = c("darksalmon", "darkturquoise"), ylim = c(0,lim))
-      abline(h=treshold, col = 'red')
-      dev.off()	
-      
-    }
-  }
-  else if (plot == 'unadj') {
-    if ('unadj' %in% names(x@logisticRegression)){
-      unadj 	<- x@logisticRegression$unadj
-      unadj <- unadj [which(unadj$p != 0), ]
-    } else {
-      stop('the operator $unadj is missing in atlas@logisticRegression - see documentation of `glmHBD` function to generate unadjusted data')}
-    
-    # Manhattan Plot
-    # Change colnames to fit with gaston
-    colnames(unadj)[colnames(unadj) == 'pos_Bp'] <- 'pos'
-    
-    treshold = -log10(0.05/sum(segments.list.summary(x@segments_list)$number_of_segments))
-    lim <- round(max( -log10(unadj$p), treshold))+1
-    
-    if (save == FALSE) { # Default, just print plots on different windows
-      
-      # QQ Plot
-      if(qq) {
-        gaston::qqplot.pvalues(unadj$p, main = paste("QQ-plot GLM with", expl_var, "- unadjusted data"), ylim = c(0,lim) )
-      }
-      
-      #Manhattan plot
-      gaston::manhattan(unadj, main = paste("Manhattan Plot \n GLM with ", expl_var, "- unadjusted data"), chrom.col = c("darksalmon", "darkturquoise"), ylim = c(0,lim))
-      abline(h=treshold, col = 'red')
-      
-      
-    } else { # save plots in png files 
-      
-      png(paste('qqplot.GLM.', expl_var,'unadj.png')) 		# U = unadjusted
-      gaston::qqplot.pvalues(unadj$p, main = paste("QQ-plot GLM with", expl_var, "- unadjusted data"), ylim = c(0,lim) )
-      dev.off()
-      
-      png(paste( 'manhattanplot.GLM.', expl_var,'unadj.png'))
-      gaston::manhattan(unadj, main = paste("Manhattan Plot \n GLM with ", expl_var, "- unadjusted data"), chrom.col = c("darksalmon", "darkturquoise"), ylim = c(0,lim))
-      abline(h=treshold, col = 'red')
-      dev.off()	
-      
-    }
-  }
-  else if (plot == 'adj') {
-    
-    if ('adj' %in% names(x@logisticRegression)){
-      adj <- x@logisticRegression$adj
-      adj <- adj [which(adj$p != 0), ]
-    } else {
-      stop('the operator $adj is missing in atlas@logisticRegression - see documentation of `glmHBD` function to generate adjusted data')}
-    
-    # Manhattan Plot
-    # Change colnames to fit with gaston
-    colnames(adj)[colnames(adj) == 'pos_Bp'] <- 'pos'
-    
-    treshold = -log10(0.05/sum(segments.list.summary(x@segments_list)$number_of_segments))
-    lim <- round(max(-log10(adj$p), treshold))+1
-    
-    if (save == FALSE) { # Default, just print plots on different windows
-      
-      # QQ Plot
-      if(qq) {
-        gaston::qqplot.pvalues(adj$p, main = paste("QQ-plot GLM with", expl_var, "- adjusted data"), ylim = c(0,lim))
-      }
-      
-      #Manhattan plot
-      gaston::manhattan(adj, main = paste("Manhattan Plot \n GLM with ", expl_var, "- adjusted data"), chrom.col = c("darksalmon", "darkturquoise"), ylim = c(0,lim))
-      abline(h=treshold, col = 'red')
-      
-      
-    } else { # save plots in png files 
-      
-      png(paste('qqplot.GLM.', expl_var, 'adj.png'))		# A = adjusted
-      gaston::qqplot.pvalues(adj$p, main = paste("QQ-plot GLM with", expl_var, "- adjusted data"), ylim = c(0,lim))
-      dev.off()
-      
-      png(paste( 'manhattanplot.GLM.', expl_var,'adj.png'))
-      gaston::manhattan(adj, main = paste("Manhattan Plot \n GLM with ", expl_var, "- adjusted data"), chrom.col = c("darksalmon", "darkturquoise"), ylim = c(0,lim))
-      abline(h=treshold, col = 'red')
-      dev.off()	
-      
-    }
-  }
+  x$p <- x[[p.name]]
+
+  # Manhattan Plot
+  # Change colnames to fit with gaston
+  # colnames(x)[colnames(x) == 'pos_Bp'] <- 'pos'
+
+  gaston::manhattan(x, chrom.col = chrom.col , ...)
 }

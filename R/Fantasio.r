@@ -9,9 +9,6 @@
 #' @param list.id a list of individuals of interest ('famid:id') (default = no list id)
 #' @param allele.freq a vector of allele frequencies (for allele A2), if \code{bedmatrix@p} isn't appropriate
 #' @param recap if you want the summary of probabilities by snps or by segments (only by SNPs for the moment)
-#' @param phen.code phenotype coding :
-#'        - 'R' : 0:control ; 1:case ; NA:unknown 
-#'        - 'plink' : 1:control ; 2:case ; 0/-9/NA:unknown (default)
 #' @param q assumed frequency of the mutation involved in the disease for each individual (default is 0.0001)
 #' @param epsilon genotype error rate (default is 0.001)
 #' @param median define the f and a parameters used to compute pHBD and FLOD
@@ -35,11 +32,9 @@
 
 
 # pour l'instant, que "by hotspots" avec un summary "by SNPs"
-Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, list.id, allele.freq, 
-                     recap = c("SNP", "segment"), phen.code = c("plink", "R"), q = 1e-4, 
+Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, allele.freq, 
+                     recap = c("SNP", "segment"), q = 1e-4, 
                      epsilon = 1e-3, epsilon2 = 1e-3, median = TRUE, dense.recap = TRUE) {
-
-  phen.code <- match.arg(phen.code)
 
   recap <- match.arg(recap)
   if(recap != "SNP") stop("Not yet implemented")
@@ -74,17 +69,14 @@ Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, list
   # détermine les indices des individus sur lesquels on calcule HBD et FLOD 
   # et parmi ceux ci lequels seront à prendre en compte pour le HFLOD
   # (cas consanguins ou autre selon les valeurs de min.quality list.id et phen.code...)
-  indexes <- which.inbreds(x@submap_summary, list.id, phen.code)
-  keep.inds <- seq_len(nrow(bedmatrix)) %in% indexes$HBD
+  indexes <- which( x@submap_summary$inbred )
+  keep.inds <- seq_len(nrow(bedmatrix)) %in% indexes
 
   # ceci remplit HBD_recap et FLOD_recap
   if(dense.recap)
     x <- recap.HBD.FLOD.dense(x, keep.inds, q, recap, median)
   else
     x <- recap.HBD.FLOD.sparse(x, keep.inds, q, recap, median)
-
-  # ceci remplit HFLOD
-  x <- set.HFLOD(x, indexes$HFLOD)
 
   x@HBDsegments <- HBD.segments(x, n.consecutive.markers = 5, threshold = 0.5)
   

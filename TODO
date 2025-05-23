@@ -1,3 +1,8 @@
+-- il faut intégrer le calcul du seuil (fonctions glm.HBD.plot ??? plutot a la fin de HBD.glm ?)
+
+-- on pourrait simplifier which.inbreds : pour avoir le HFLOD sur 0tous les individus, on peut
+   simplement fournir un vecteur de phenotype avec tout le monde atteint...
+
 -- verifier que la parallelisation avec openMP dans logitModel respecte bien le nombre de coeurs
 
 -- dans les fonctions où il y a une options phen.code = R ou plink, tester la cohérence 
