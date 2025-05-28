@@ -60,10 +60,14 @@ Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, alle
 
   if (missing(segment.options))
     segment.options <- list()
+
+  verbose <- Fantasio.parameters("verbose")
+  if(verbose) cat("* Calling segments.list.by.hotspots\n")
   segments.list <- do.call(segments.list.by.hotspots, c(bedmatrix = bedmatrix, segment.options))
 
   # le constructeur atlas() fait à peu près ce que faisait make Atlas suivi de festim
   # les slots "remplis" sont bedmatrix, seeds, epsilon, segments_list, estimations, submap_summary
+  if(verbose) cat("\n* Calling atlas\n")
   x <- atlas(bedmatrix, segments.list, n, min.quality, epsilon)
   
   # détermine les indices des individus sur lesquels on calcule HBD et FLOD 
@@ -73,11 +77,14 @@ Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, alle
   keep.inds <- seq_len(nrow(bedmatrix)) %in% indexes
 
   # ceci remplit HBD_recap et FLOD_recap
+
+  if(verbose) cat("\n* Computing HBD and FLOD matrices\n")
   if(dense.recap)
     x <- recap.HBD.FLOD.dense(x, keep.inds, q, recap, median)
   else
     x <- recap.HBD.FLOD.sparse(x, keep.inds, q, recap, median)
 
+  if(verbose) cat("\n* Construction of HBD segments (5 consecutive markers with threshold > 0.5)\n")
   x@HBDsegments <- HBD.segments(x, n.consecutive.markers = 5, threshold = 0.5)
   
   x

@@ -22,6 +22,9 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
     f <- summary$f_median
   }
  
+  verbose <- Fantasio.parameters("verbose")
+  if(verbose) cat("Merging submaps for dense HBD computation\n")
+
   #première boucle pour créer la grande sous-carte = union des snps tirés dans les n sous-cartes
   big.submap <- as.integer(vector())
   for(i in 1:n){
@@ -36,6 +39,7 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
   
   
   for(i in 1:n) { # boucle sur les cartes
+    if(verbose) cat("Computing HBD and FLOD using SNPs from submap", i, "\r")
     # on re génère les cartes
     setSeed(seeds[,i])
     submap <- rsubmap(segments.list)
@@ -70,7 +74,7 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
     big.HBD <- big.HBD + HBD 
     big.FLOD <- big.FLOD + FLOD  
   }
-
+  if(verbose) cat("\n")
   
   # calcule les matrices moyennes des HBD / FLOD snp par snp
   # ces matrices doivent avoir une ligne par individu / une colonne par SNP

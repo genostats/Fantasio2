@@ -6,7 +6,6 @@
 #' @param intensity hotspots intensity threshold in cM/Mb
 #' @param hotspots a data frame of recombination rates
 #' @param minMarkers minimum number of markers in a segment
-#' @param verbose if \code{TRUE}, displays information on the process
 #' 
 #' @details This function creates an object of class hotspots.segments, containing a list of segments delimited
 #' by hotspots. The object is a list of list of vectors indices of SNPs. There are as many sublists as
@@ -16,11 +15,12 @@
 #' @return an hotspots.segments object
 #'
 #' @export
-segments.list.by.hotspots <- function(bedmatrix, intensity = 10, hotspots = hotspot_hg19, minMarkers = 0, verbose = TRUE)
-{
+segments.list.by.hotspots <- function(bedmatrix, intensity = 10, hotspots = hotspot_hg19, minMarkers = 0) {
+
   if(class(bedmatrix)[1] != "bed.matrix" )
     stop("Need a bed.matrix")
   
+  verbose <- Fantasio.parameters("verbose")
   if(verbose & !is.null(attr(hotspots, "mapName"))) 
     cat( paste("Using hotspots from ", attr(hotspots, "mapName"), "\n") )
   

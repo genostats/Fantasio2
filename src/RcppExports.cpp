@@ -170,8 +170,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // setUserParam
-void setUserParam(int m, double epsilon, int past, double delta, int max_iterations, int max_submin, int max_linesearch, double min_step, double max_step, double ftol, double wolfe, int max_retries, Rcpp::NumericVector lower, Rcpp::NumericVector upper, int n_threads, bool use_float, int debug, bool use_froh, int minNbSNPs, double minROHlength, double minDistHet, double maxGapLength);
-RcppExport SEXP _Fantasio2_setUserParam(SEXP mSEXP, SEXP epsilonSEXP, SEXP pastSEXP, SEXP deltaSEXP, SEXP max_iterationsSEXP, SEXP max_subminSEXP, SEXP max_linesearchSEXP, SEXP min_stepSEXP, SEXP max_stepSEXP, SEXP ftolSEXP, SEXP wolfeSEXP, SEXP max_retriesSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP n_threadsSEXP, SEXP use_floatSEXP, SEXP debugSEXP, SEXP use_frohSEXP, SEXP minNbSNPsSEXP, SEXP minROHlengthSEXP, SEXP minDistHetSEXP, SEXP maxGapLengthSEXP) {
+void setUserParam(int m, double epsilon, int past, double delta, int max_iterations, int max_submin, int max_linesearch, double min_step, double max_step, double ftol, double wolfe, int max_retries, Rcpp::NumericVector lower, Rcpp::NumericVector upper, int n_threads, bool use_float, int debug, bool verbose, bool use_froh, int minNbSNPs, double minROHlength, double minDistHet, double maxGapLength);
+RcppExport SEXP _Fantasio2_setUserParam(SEXP mSEXP, SEXP epsilonSEXP, SEXP pastSEXP, SEXP deltaSEXP, SEXP max_iterationsSEXP, SEXP max_subminSEXP, SEXP max_linesearchSEXP, SEXP min_stepSEXP, SEXP max_stepSEXP, SEXP ftolSEXP, SEXP wolfeSEXP, SEXP max_retriesSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP n_threadsSEXP, SEXP use_floatSEXP, SEXP debugSEXP, SEXP verboseSEXP, SEXP use_frohSEXP, SEXP minNbSNPsSEXP, SEXP minROHlengthSEXP, SEXP minDistHetSEXP, SEXP maxGapLengthSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type m(mSEXP);
@@ -191,12 +191,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type n_threads(n_threadsSEXP);
     Rcpp::traits::input_parameter< bool >::type use_float(use_floatSEXP);
     Rcpp::traits::input_parameter< int >::type debug(debugSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
     Rcpp::traits::input_parameter< bool >::type use_froh(use_frohSEXP);
     Rcpp::traits::input_parameter< int >::type minNbSNPs(minNbSNPsSEXP);
     Rcpp::traits::input_parameter< double >::type minROHlength(minROHlengthSEXP);
     Rcpp::traits::input_parameter< double >::type minDistHet(minDistHetSEXP);
     Rcpp::traits::input_parameter< double >::type maxGapLength(maxGapLengthSEXP);
-    setUserParam(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, use_float, debug, use_froh, minNbSNPs, minROHlength, minDistHet, maxGapLength);
+    setUserParam(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, use_float, debug, verbose, use_froh, minNbSNPs, minROHlength, minDistHet, maxGapLength);
     return R_NilValue;
 END_RCPP
 }
@@ -316,7 +317,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_mt_runif", (DL_FUNC) &_Fantasio2_mt_runif, 0},
     {"_Fantasio2_probaHBD", (DL_FUNC) &_Fantasio2_probaHBD, 8},
     {"_Fantasio2_randomSnp", (DL_FUNC) &_Fantasio2_randomSnp, 1},
-    {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 22},
+    {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 23},
     {"_Fantasio2_getUserParam", (DL_FUNC) &_Fantasio2_getUserParam, 0},
     {"_Fantasio2_testForwardBackward", (DL_FUNC) &_Fantasio2_testForwardBackward, 8},
     {"_Fantasio2_testLikelihood", (DL_FUNC) &_Fantasio2_testLikelihood, 8},

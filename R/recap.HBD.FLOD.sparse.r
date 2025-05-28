@@ -20,7 +20,10 @@ recap.HBD.FLOD.sparse <- function(atlas, keep.inds, q, recap, median) {
     f <- summary$f_median
   }
 
+  verbose <- Fantasio.parameters("verbose")
+
   for(i in 1:n) { # boucle sur les cartes
+    if(verbose) cat("Computing HBD and FLOD on submap", i, "\r")
     # on re génère les cartes
     setSeed(seeds[,i])
     submap <- rsubmap(segments.list)
@@ -51,6 +54,7 @@ recap.HBD.FLOD.sparse <- function(atlas, keep.inds, q, recap, median) {
 
   # calcule les matrices moyennes des HBD / FLOD snp par snp
   # ces matrices ont une ligne par individu / une colonne par SNP
+  if(verbose) cat("Merging HBD and FLOD values\n")
   x <- hashProbasToMatrix(h)
   rownames(x$HBD) <- rownames(x$FLOD) <- uniqueIds(summary$famid[wi], summary$id[wi])
   colnames(x$HBD) <- colnames(x$FLOD) <- bedmatrix@snps$id[x$snp]

@@ -49,8 +49,8 @@ randomSnp <- function(L) {
     .Call(`_Fantasio2_randomSnp`, L)
 }
 
-setUserParam <- function(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, use_float, debug, use_froh, minNbSNPs, minROHlength, minDistHet, maxGapLength) {
-    invisible(.Call(`_Fantasio2_setUserParam`, m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, use_float, debug, use_froh, minNbSNPs, minROHlength, minDistHet, maxGapLength))
+setUserParam <- function(m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, use_float, debug, verbose, use_froh, minNbSNPs, minROHlength, minDistHet, maxGapLength) {
+    invisible(.Call(`_Fantasio2_setUserParam`, m, epsilon, past, delta, max_iterations, max_submin, max_linesearch, min_step, max_step, ftol, wolfe, max_retries, lower, upper, n_threads, use_float, debug, verbose, use_froh, minNbSNPs, minROHlength, minDistHet, maxGapLength))
 }
 
 getUserParam <- function() {
