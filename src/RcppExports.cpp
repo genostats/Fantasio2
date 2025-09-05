@@ -12,6 +12,20 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// acfd
+double acfd(double d, NumericVector z, IntegerVector Chr, NumericVector Dist);
+RcppExport SEXP _Fantasio2_acfd(SEXP dSEXP, SEXP zSEXP, SEXP ChrSEXP, SEXP DistSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type d(dSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type z(zSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type Chr(ChrSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type Dist(DistSEXP);
+    rcpp_result_gen = Rcpp::wrap(acfd(d, z, Chr, Dist));
+    return rcpp_result_gen;
+END_RCPP
+}
 // checkOpenMP
 bool checkOpenMP();
 RcppExport SEXP _Fantasio2_checkOpenMP() {
@@ -107,6 +121,23 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerVector >::type map(mapSEXP);
     Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
     rcpp_result_gen = Rcpp::wrap(m4_logEmiss(p_A, p, map, epsilon));
+    return rcpp_result_gen;
+END_RCPP
+}
+// maxGaussianGenome
+NumericVector maxGaussianGenome(int nSimus, double lambda, double sigma, double dist, NumericVector len, unsigned int seed, int nThreads);
+RcppExport SEXP _Fantasio2_maxGaussianGenome(SEXP nSimusSEXP, SEXP lambdaSEXP, SEXP sigmaSEXP, SEXP distSEXP, SEXP lenSEXP, SEXP seedSEXP, SEXP nThreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type nSimus(nSimusSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type dist(distSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type len(lenSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< int >::type nThreads(nThreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(maxGaussianGenome(nSimus, lambda, sigma, dist, len, seed, nThreads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -305,6 +336,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_Fantasio2_acfd", (DL_FUNC) &_Fantasio2_acfd, 4},
     {"_Fantasio2_checkOpenMP", (DL_FUNC) &_Fantasio2_checkOpenMP, 0},
     {"_Fantasio2_festim", (DL_FUNC) &_Fantasio2_festim, 7},
     {"_Fantasio2_forward_backward", (DL_FUNC) &_Fantasio2_forward_backward, 4},
@@ -312,6 +344,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_logEmiss", (DL_FUNC) &_Fantasio2_logEmiss, 4},
     {"_Fantasio2_logitModel", (DL_FUNC) &_Fantasio2_logitModel, 5},
     {"_Fantasio2_m4_logEmiss", (DL_FUNC) &_Fantasio2_m4_logEmiss, 4},
+    {"_Fantasio2_maxGaussianGenome", (DL_FUNC) &_Fantasio2_maxGaussianGenome, 7},
     {"_Fantasio2_getSeed", (DL_FUNC) &_Fantasio2_getSeed, 0},
     {"_Fantasio2_setSeed", (DL_FUNC) &_Fantasio2_setSeed, 1},
     {"_Fantasio2_mt_runif", (DL_FUNC) &_Fantasio2_mt_runif, 0},
