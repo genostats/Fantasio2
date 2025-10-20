@@ -4,7 +4,7 @@
 \alias{HBD.gwas}
 \title{Computation of HFLOD scores for HBD-GWAS}
 \usage{
-HBD.gwas(atlas, phen, phen.code = c("plink", "R"))
+HBD.gwas(atlas, phen, phen.code = c("R", "plink"))
 }
 \arguments{
 \item{atlas}{a atlas object}

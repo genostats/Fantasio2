@@ -21,6 +21,10 @@ logLikelihood_gradient <- function(logEmiss, Dist, a, f) {
     .Call(`_Fantasio2_logLikelihood_gradient`, logEmiss, Dist, a, f)
 }
 
+likelihoods_ <- function(p_A, p, submap, deltaDist, epsilon, a, f) {
+    .Call(`_Fantasio2_likelihoods_`, p_A, p, submap, deltaDist, epsilon, a, f)
+}
+
 logEmiss <- function(Y1, Y2, logFreq, epsilon) {
     .Call(`_Fantasio2_logEmiss`, Y1, Y2, logFreq, epsilon)
 }
