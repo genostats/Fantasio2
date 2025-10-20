@@ -23,12 +23,10 @@ setClassUnion("logicalOrNULL",members = c("numeric", "NULL"))
 #' @slot HBD_recap a dataframe with for one individual and for one marker a mean computation of all the HBD probabilities computed, on every individuals.
 #' @slot FLOD_recap a dataframe with for one individual and for one marker a mean computation of all the FLOD scores computed, on every individuals.
 #' @slot HBDsegments a list of dataframe with the HBDsegments, on all individuals.
-#' @slot HFLOD a dataframe with the value of HFLOD scores for every markers through all submaps.
 #' @slot bedmatrix  a bed.matrix object (refer to gaston package)
 #' @slot bySegments a boolean indicating wheter the creation of summary statistics was made by segments (see documentation of Fantasio function)
 #' @slot unit   the unit of the markers (cM or Bp).
 #' @slot gap   the value of the gap used to pick marker when doing submaps by snps. (see function Fantasio for more infos)
-#' @slot logisticRegression the results of logistic regression
 
 setClass("atlas", representation(
         bedmatrix            = 'bed.matrix', 
@@ -44,10 +42,8 @@ setClass("atlas", representation(
         HBD_recap            = 'matrixOrNULL',
         FLOD_recap           = 'matrixOrNULL',  
         HBDsegments          = 'listOrNULL',
-        HFLOD                = 'dataframeOrNULL',
         unit                 = "characterOrNULL", 
-        gap                  = "doubleOrNULL",
-        logisticRegression   = "listOrNULL"
+        gap                  = "doubleOrNULL"
 ))
 
 #' Show method of class atlas.

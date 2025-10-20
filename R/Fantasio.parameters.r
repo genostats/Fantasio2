@@ -26,18 +26,31 @@
 
 Fantasio.parameters <- function(...) {
   params <- getUserParam()
-  update <- list(...)
-  if(length(update) == 0) 
+  L <- list(...)
+
+  # query for all options
+  if(length(L) == 0)
     return(params)
 
-  for(a in names(update)) {
+  # query for some named options
+  naL <- names(L)
+  if(is.null(naL)) {
+    R <- list()
+    for(x in unlist(L)) R[[x]] <- params[[x]]
+    if(length(R) == 1) return(unlist(R)) else return(R)
+  }
+
+  # set options
+  for(a in names(L)) {
     if( !(a %in% names(params)) ) 
       stop(a, " is not a valid parameter")
-    params[[a]] <- update[[a]]
+    params[[a]] <- L[[a]]
   }
+
   if(params$n_threads > 1 & !checkOpenMP()) {
     params$n_treads <- 1
     warning("Fantasio was not compiled with OpenMP, multithreading is impossible")
   }
+
   do.call(setUserParam, params)
 }

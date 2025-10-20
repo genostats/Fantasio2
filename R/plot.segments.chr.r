@@ -24,8 +24,7 @@ plot.segments.chr <- function(byROHfile=FALSE, fileOrSubmaps, unit = "cM", chr, 
   
   #empty plot
   y_max <- length(list_id)+1
-  mar.default <- c(5,4,4,2) + 0.1
-  par(mar = mar.default + c(0, y_max/2.5, 0, 0)) 
+  par(mar = c(5.1, 0.1 + max(nchar(list_id))/1.4, 4.1, 2.1))
   
   plot(x <- c(start,end), y <- c(0,y_max), 
        type="n", yaxt="n", ylab="", xlab=myxlab, 

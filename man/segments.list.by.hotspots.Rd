@@ -8,8 +8,7 @@ segments.list.by.hotspots(
   bedmatrix,
   intensity = 10,
   hotspots = hotspot_hg19,
-  minMarkers = 0,
-  verbose = TRUE
+  minMarkers = 0
 )
 }
 \arguments{
@@ -20,8 +19,6 @@ segments.list.by.hotspots(
 \item{hotspots}{a data frame of recombination rates}
 
 \item{minMarkers}{minimum number of markers in a segment}
-
-\item{verbose}{if \code{TRUE}, displays information on the process}
 }
 \value{
 an hotspots.segments object

@@ -6,7 +6,7 @@
 \usage{
 HFLOD.plot.chr(
   submaps,
-  unit = "cM",
+  unit = c("cM", "bases"),
   chr,
   regions,
   color2 = "green4",
@@ -17,7 +17,7 @@ HFLOD.plot.chr(
 \arguments{
 \item{submaps}{a atlas object}
 
-\item{unit}{the unit used to plot, two options are allowed "Bases", "cM" (default is "CM")}
+\item{unit}{the unit used to plot, two options are allowed "bases", "cM" (default is "cM")}
 
 \item{chr}{the chromosome number from which to plot HFLOD score}
 

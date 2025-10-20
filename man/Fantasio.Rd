@@ -9,11 +9,11 @@ Fantasio(
   segment.options,
   n = 100,
   min.quality = 95,
-  list.id,
+  allele.freq,
   recap = c("SNP", "segment"),
-  phen.code = c("plink", "R"),
   q = 1e-04,
   epsilon = 0.001,
+  epsilon2 = 0.001,
   median = TRUE,
   dense.recap = TRUE
 )
@@ -27,13 +27,9 @@ Fantasio(
 
 \item{min.quality}{minimal quality (in \%) to include an inbred individual into the analysis (default is 95)}
 
-\item{list.id}{a list of individuals of interest ('famid:id') (default = no list id)}
+\item{allele.freq}{a vector of allele frequencies (for allele A2), if \code{bedmatrix@p} isn't appropriate}
 
 \item{recap}{if you want the summary of probabilities by snps or by segments (only by SNPs for the moment)}
-
-\item{phen.code}{phenotype coding :
-- 'R' : 0:control ; 1:case ; NA:unknown 
-- 'plink' : 1:control ; 2:case ; 0/-9/NA:unknown (default)}
 
 \item{q}{assumed frequency of the mutation involved in the disease for each individual (default is 0.0001)}
 
@@ -46,6 +42,8 @@ Fantasio(
 \item{dense.recap}{define how pHBD and FLOD are combined over the submaps
 - if FALSE : pHBD and FLOD are combined SNP by SNP with a mean on the number of submaps that includes this SNP
 - if TRUE : mean of pHBD and FLOD on all submaps (default)}
+
+\item{list.id}{a list of individuals of interest ('famid:id') (default = no list id)}
 }
 \description{
 This function is used as a wrapper for the package Fantasio to create segments list and submaps

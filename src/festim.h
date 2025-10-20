@@ -12,7 +12,8 @@
 #define __festim__
 
 template<typename scalar_t>
-List festim(XPtr<matrix4> p_A, NumericVector p_, IntegerVector submap_, NumericVector deltaDist, scalar_t epsilon) {
+List festim(XPtr<matrix4> p_A, NumericVector p_, IntegerVector submap_, NumericVector deltaDist, scalar_t epsilon, 
+            NumericVector f_start, NumericVector a_start) {
   RVector<double> p(p_);
   RVector<int> submap(submap_);
   matrix4 * PA(p_A);
@@ -44,7 +45,7 @@ List festim(XPtr<matrix4> p_A, NumericVector p_, IntegerVector submap_, NumericV
 
 #pragma omp parallel num_threads(pars.n_threads)
 #pragma omp for firstprivate(EM, solver)
-  for(int i0 = 0; i0 < p_A->ncol; i0 += 4) {  // boucle sur les individus, de 4 en 4. Chaque thread a un copie de 'EM' -> 4 individus précalculés
+  for(int i0 = 0; i0 < p_A->ncol; i0 += 4) {  // boucle sur les individus, de 4 en 4. Chaque thread a une copie de 'EM' -> 4 individus précalculés
     for(int i1 = 0; i1 < 4 & i0 + i1 < p_A->ncol; i1++) { // boucle de 0 à 3.
       int i = i0 + i1;   
       likelihoodGradient<scalar_t> LG( EM.getLogEmiss(i) , dDist, -1); // (-1) is the scale parameter
@@ -55,26 +56,37 @@ List festim(XPtr<matrix4> p_A, NumericVector p_, IntegerVector submap_, NumericV
       
       LIK0[i] = -LG(x, grad);
 
-      x << 0.05, 0.05;
-      scalar_t fx;
-      int count = 1;
-    
-      while(true) {
-        try {
-          solver.minimize(LG, x, fx, lb, ub);
-          break;
-        } catch(std::runtime_error const & e) {
-          if(pars.debug > 0) 
-            std::cout << e.what() << " -- x = " << x.transpose() << " [" << count << "/" << pars.max_retries << "]\n";
-          // on ne ré essaie que pour ce cas ci
-          if( e.what() != std::string("the line search routine reached the maximum number of iterations") || ++count > pars.max_retries) {
+      // si a_start[i] est NAN on met a = 0, f = 0 sans faire l'EMV
+      // si a_start[i] n'est pas NAN on maximise
+      if(a_start[i] != a_start[i]) {
+        A[i] = 0;
+        F[i] = 0;
+        LIK1[i] = LIK0[i];
+      } else {
+        // valeurs initiales
+        x[0] = a_start[i];
+        x[1] = f_start[i];
+        scalar_t fx;
+        int count = 1;
+     
+        // une boucle qui reprend la maximisation dans le cas où l'erreur est dans la line search...
+        while(true) {
+          try {
+            solver.minimize(LG, x, fx, lb, ub);
             break;
+          } catch(std::runtime_error const & e) {
+            if(pars.debug > 0) 
+              std::cout << e.what() << " -- x = " << x.transpose() << " [" << count << "/" << pars.max_retries << "]\n";
+            // on ne ré essaie que pour ce cas ci
+            if( e.what() != std::string("the line search routine reached the maximum number of iterations") || ++count > pars.max_retries) {
+              break;
+            }
           }
         }
+        A[i] = x[0];
+        F[i] = x[1];
+        LIK1[i] = -fx;  // likelihood = - f(x) 
       }
-      A[i] = x[0];
-      F[i] = x[1];
-      LIK1[i] = -fx;  // likelihood = - f(x) 
     }
   }
   if(pars.debug) {

@@ -1,4 +1,24 @@
--- Faire passer q, epsilon et epsilon2 en paramètre globale
+-- il faut intégrer le calcul du seuil (fonctions glm.HBD.plot ??? plutot a la fin de HBD.glm ?)
+
+-- dans code C++ probaHBD.h : la boucle avec (i1 & 4 < i1 + i0 < ...) ne peut pas être déroulée
+   à la compilation, essayer de traiter la dernière valeur de i0 à part
+
+-- on pourrait simplifier which.inbreds : pour avoir le HFLOD sur 0tous les individus, on peut
+   simplement fournir un vecteur de phenotype avec tout le monde atteint...
+
+-- verifier que la parallelisation avec openMP dans logitModel respecte bien le nombre de coeurs
+
+-- dans les fonctions où il y a une options phen.code = R ou plink, tester la cohérence 
+   et émettre un warning
+
+-- ajouter une fonction ROH, meme rudimentaire
+   elle pourrait servir à faire un screening rapide du génome : les individus qui n'ont
+   pas de ROH peuvent avoir f = 0 sans passer par le HMM...
+
+-- revoir le découpage en fonctions pour permettre de réestimer les pHBD et FLOD HFLOD 
+   à partir de valeurs a, f données par l'utilisateur...
+
+-- Faire passer q, epsilon et epsilon2 en paramètre global
 
 -- regler pb RNG / sample.int
 

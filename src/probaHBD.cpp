@@ -15,6 +15,6 @@ NumericMatrix probaHBD(XPtr<matrix4> p_A, NumericVector p, IntegerVector submap,
   }
   else {
     PHBDmatrix<double> R = probaHBD<double>(p_A, p, submap, deltaDist, whichInds, a, f, epsilon);
-    return( wrap(R.getMatrix()) );
+    return wrap(R.getMatrix());
   }
 }

@@ -1,0 +1,13 @@
+set.seed(1)
+Fantasio2:::copyRseed()
+for(i in 1:10) Fantasio2:::mt_runif()
+se <- Fantasio2:::getSeed()
+le <- length(se)
+a <- Fantasio2:::mt_runif() 
+Fantasio2:::setSeed(se)
+b <- Fantasio2:::mt_runif()
+Fantasio2:::setSeed(se)
+c <- Fantasio2:::mt_runif()
+
+if(a != b | b != c) stop("C++ Mersenne Twister a = ", a, ", b = ", b, ", c = ", c, ", seed length = ", le, "\n")
+cat("Mersenne Twister OK, a =", a, "seed length =", le, "\n")

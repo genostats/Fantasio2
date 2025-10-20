@@ -26,8 +26,6 @@ Class \code{atlas} This is the class used to create an object which will contain
 
 \item{\code{HBDsegments}}{a list of dataframe with the HBDsegments, on all individuals.}
 
-\item{\code{HFLOD}}{a dataframe with the value of HFLOD scores for every markers through all submaps.}
-
 \item{\code{bedmatrix}}{a bed.matrix object (refer to gaston package)}
 
 \item{\code{bySegments}}{a boolean indicating wheter the creation of summary statistics was made by segments (see documentation of Fantasio function)}
@@ -35,7 +33,5 @@ Class \code{atlas} This is the class used to create an object which will contain
 \item{\code{unit}}{the unit of the markers (cM or Bp).}
 
 \item{\code{gap}}{the value of the gap used to pick marker when doing submaps by snps. (see function Fantasio for more infos)}
-
-\item{\code{logisticRegression}}{the results of logistic regression}
 }}
 

@@ -11,16 +11,28 @@ using VECTOR = Eigen::Matrix<scalar_t, Eigen::Dynamic, 1>;
 template<typename scalar_t>
 class userParam {
 public:
+
+  /// parameters for BFGS
   LBFGSpp::LBFGSBParam<scalar_t> BFGSparam;
   VECTOR<scalar_t> lb;
   VECTOR<scalar_t> ub;
   int max_retries;
   
-  int n_threads;
-  bool use_float;
-  int debug;
+  // parameters for Fantasio
+  int n_threads;   // in festim, pHBD and logitModel
+  bool use_float;  // in festim, pHBD and logitModel
+  int debug;       // for optimisation procedure only at this moment
+  bool verbose;    // in R code (to be generalised)
 
-  userParam() : BFGSparam(), lb(2), ub(2), max_retries(5), n_threads(1), use_float(false), debug(0) {
+  // parameter for fROH
+  bool use_froh;
+  int minNbSNPs; 
+  double minROHlength; 
+  double minDistHet; 
+  double maxGapLength;
+
+  userParam() : BFGSparam(), lb(2), ub(2), max_retries(5), n_threads(1), use_float(false), debug(0), verbose(false), 
+                use_froh(true), minNbSNPs(400), minROHlength(2), minDistHet(1), maxGapLength(1) {
     lb << 0, 0;
     ub << INFINITY, 1;
   }
@@ -28,7 +40,8 @@ public:
 
   void set(int m, double epsilon, int past, double delta, int max_iterations, int max_submin, 
            int max_linesearch, double min_step, double max_step, double ftol, double wolfe, int max_retries_,
-           Rcpp::NumericVector lower, Rcpp::NumericVector upper, int n_threads_, bool use_float_, int debug_) {
+           Rcpp::NumericVector lower, Rcpp::NumericVector upper, int n_threads_, bool use_float_, int debug_,
+           bool verbose_, bool use_froh_, int minNbSNPs_, double minROHlength_, double minDistHet_, double maxGapLength_) {
   
     BFGSparam.m              = m;
     BFGSparam.epsilon        = epsilon;
@@ -46,6 +59,13 @@ public:
     max_retries = max_retries_;
     use_float = use_float_;
     debug = debug_;
+    verbose = verbose_;
+
+    use_froh = use_froh_;
+    minNbSNPs = minNbSNPs_;
+    minROHlength = minROHlength_;
+    minDistHet = minDistHet_;
+    maxGapLength = maxGapLength_;
   
     lb[0] = lower[0];
     lb[1] = lower[1];
@@ -74,6 +94,14 @@ public:
     L["n_threads"] = n_threads;
     L["use_float"] = use_float;
     L["debug"] = debug;
+    L["verbose"] = verbose;
+    
+    L["use_froh"]     = use_froh;
+    L["minNbSNPs"]    = minNbSNPs;
+    L["minROHlength"] = minROHlength;
+    L["minDistHet"]   = minDistHet;
+    L["maxGapLength"] = maxGapLength;
+
     return L;
   }
 

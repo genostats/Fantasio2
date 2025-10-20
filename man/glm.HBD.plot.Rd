@@ -2,34 +2,27 @@
 % Please edit documentation in R/glm.HBD.plot.r
 \name{glm.HBD.plot}
 \alias{glm.HBD.plot}
-\title{QQ-Plot & Manhattan Plots for glm on HBD prob or FLOD}
+\title{Manhattan Plot for glm on HBD prob or FLOD}
 \usage{
 glm.HBD.plot(
   x,
-  expl_var,
-  plot = c("all", "unadj", "adj"),
   test = c("bilateral", "right", "left"),
-  qq = FALSE,
-  save = FALSE
+  chrom.col = c("darksalmon", "darkturquoise"),
+  ...
 )
 }
 \arguments{
-\item{x}{an atlas object}
-
-\item{expl_var}{the explanatory variable 'FLOD' or 'pHBD'}
-
-\item{plot}{choose to plot 'all' = adj + unadj, 'adj' only, 'unadj' only (default = all)
-if 'all' but only 'adj' or 'unadj' data are available the function will only plot available data}
+\item{x}{a data frame such as sent by HBD.glm}
 
 \item{test}{which test to plot}
 
-\item{qq}{choose to plot qqplot (default = FALSE)}
+\item{chrom.col}{chromosome colors}
 
-\item{save}{choose if plot are saved or not (.png format) (default = FALSE)}
+\item{...}{extra arguments for the plot}
 }
 \description{
-QQ-Plot & Manhattan Plots for glm on HBD prob or FLOD
+Manhattan Plot for glm on HBD prob or FLOD
 }
 \seealso{
-\code{\link{glmHBD}}
+\code{\link{HBD.glm}}
 }
