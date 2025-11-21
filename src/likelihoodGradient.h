@@ -19,7 +19,6 @@ template<typename scalar_t>
 using VECTOR = Eigen::Matrix<scalar_t, Eigen::Dynamic, 1>;
 
 
-// pour 0 < f < 1
 template<typename scalar_t>
 class likelihoodGradient {
 private:
@@ -66,6 +65,7 @@ public:
  
 private:
  
+  // pour 0 < f < 1
   scalar_t ff(scalar_t a, scalar_t f, VECTOR<scalar_t> & grad) {
     scalar_t lt00, lt01, lt10, lt11; // log proba transition
     scalar_t df_lt00, df_lt01, df_lt10, df_lt11;

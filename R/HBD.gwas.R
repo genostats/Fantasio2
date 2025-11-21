@@ -12,7 +12,7 @@
 #' @return the atlas object with its slot HFLOD completed
 #' @export
 
-HBD.gwas <- function(atlas, phen, phen.code = c("plink", "R"))
+HBD.gwas <- function(atlas, phen, phen.code = c("R", "plink"))
 {
   #phenotype
   phen.code <- match.arg(phen.code)

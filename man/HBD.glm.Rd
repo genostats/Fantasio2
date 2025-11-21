@@ -10,7 +10,7 @@ HBD.glm(
   phen,
   covar_df,
   covar,
-  phen.code = c("plink", "R"),
+  phen.code = c("R", "plink"),
   threshold
 )
 }

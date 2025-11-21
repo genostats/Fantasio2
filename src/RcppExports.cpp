@@ -81,6 +81,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// likelihoods_
+NumericVector likelihoods_(XPtr<matrix4> p_A, NumericVector p, IntegerVector submap, NumericVector deltaDist, double epsilon, NumericVector a, NumericVector f);
+RcppExport SEXP _Fantasio2_likelihoods_(SEXP p_ASEXP, SEXP pSEXP, SEXP submapSEXP, SEXP deltaDistSEXP, SEXP epsilonSEXP, SEXP aSEXP, SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<matrix4> >::type p_A(p_ASEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type submap(submapSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type deltaDist(deltaDistSEXP);
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(likelihoods_(p_A, p, submap, deltaDist, epsilon, a, f));
+    return rcpp_result_gen;
+END_RCPP
+}
 // logEmiss
 NumericMatrix logEmiss(NumericVector Y1, NumericVector Y2, NumericMatrix logFreq, double epsilon);
 RcppExport SEXP _Fantasio2_logEmiss(SEXP Y1SEXP, SEXP Y2SEXP, SEXP logFreqSEXP, SEXP epsilonSEXP) {
@@ -341,6 +358,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_festim", (DL_FUNC) &_Fantasio2_festim, 7},
     {"_Fantasio2_forward_backward", (DL_FUNC) &_Fantasio2_forward_backward, 4},
     {"_Fantasio2_logLikelihood_gradient", (DL_FUNC) &_Fantasio2_logLikelihood_gradient, 4},
+    {"_Fantasio2_likelihoods_", (DL_FUNC) &_Fantasio2_likelihoods_, 7},
     {"_Fantasio2_logEmiss", (DL_FUNC) &_Fantasio2_logEmiss, 4},
     {"_Fantasio2_logitModel", (DL_FUNC) &_Fantasio2_logitModel, 5},
     {"_Fantasio2_m4_logEmiss", (DL_FUNC) &_Fantasio2_m4_logEmiss, 4},

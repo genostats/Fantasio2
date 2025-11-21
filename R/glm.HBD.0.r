@@ -3,6 +3,14 @@
 # H = matrice des pHBD ou des FLOD...
  
 glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H) {
+  # in case there are some missing phenotypes, deal with it by 
+  # extracting the corresponding lines
+  w <- which(is.na(Y))
+  if( length(w) > 0 ) {
+    Y <- Y[-w]
+    covar.matrix <- covar.matrix[-w, ]
+    H <- H[-w,]
+  }
 
   # déc QR de X pour améliorer la stabilité de l'algo
   if(all(covar.matrix[,1] == 1)) {
