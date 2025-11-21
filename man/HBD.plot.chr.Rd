@@ -36,10 +36,10 @@ HBD.plot.chr(
 \item{build}{the value of the build to use to plot chromosome in the plot value accepted are 35, 36, 37, 38 (default is 37)}
 }
 \value{
-return a plot of the chromosome HBDsegments for all the individual
+return a plot of the chromosome HBD segments for all the individual
 }
 \description{
-This function plots the HBDsegments for a given chromosome and all the individuals
+This function plots the HBD segments for a given chromosome and all the individuals
 }
 \details{
 If you use the regions options make sure to pass a matrix containing one line per region to be highlighted with in each line :

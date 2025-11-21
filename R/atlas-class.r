@@ -22,7 +22,7 @@ setClassUnion("logicalOrNULL",members = c("numeric", "NULL"))
 #' @slot submap_summary a dataframe with summary statitistics about the submaps
 #' @slot HBD_recap a dataframe with for one individual and for one marker a mean computation of all the HBD probabilities computed, on every individuals.
 #' @slot FLOD_recap a dataframe with for one individual and for one marker a mean computation of all the FLOD scores computed, on every individuals.
-#' @slot HBDsegments a list of dataframe with the HBDsegments, on all individuals.
+#' @slot HBD_segments a list of dataframe with the HBD segments, on all individuals.
 #' @slot bedmatrix  a bed.matrix object (refer to gaston package)
 #' @slot bySegments a boolean indicating wheter the creation of summary statistics was made by segments (see documentation of Fantasio function)
 #' @slot unit   the unit of the markers (cM or Bp).
@@ -41,7 +41,7 @@ setClass("atlas", representation(
         q                    = "doubleOrNULL",
         HBD_recap            = 'matrixOrNULL',
         FLOD_recap           = 'matrixOrNULL',  
-        HBDsegments          = 'listOrNULL',
+        HBD_segments          = 'listOrNULL',
         unit                 = "characterOrNULL", 
         gap                  = "doubleOrNULL"
 ))

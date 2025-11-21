@@ -85,7 +85,7 @@ Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, alle
     x <- recap.HBD.FLOD.sparse(x, keep.inds, q, recap, median)
 
   if(verbose) cat("\n* Construction of HBD segments (5 consecutive markers with threshold > 0.5)\n")
-  x@HBDsegments <- HBD.segments(x, n.consecutive.markers = 5, threshold = 0.5)
+  x@HBD_segments <- HBD.segments(x, n.consecutive.markers = 5, threshold = 0.5)
   
   x
 }

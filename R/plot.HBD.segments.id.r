@@ -19,11 +19,11 @@ plot.HBD.segments.id <- function(Submaps, unit= "cM", id, famid, regions, qualit
     return("Need family id as character")
   
   HBD.recap <- Submaps@HBD_recap
-  HBDsegments <- Submaps@HBDsegments
+  HBD_segments <- Submaps@HBD_segments
   
-  HBDsegments_rbind <- do.call(rbind, HBDsegments) #binding lines 
+  HBD_segments_rbind <- do.call(rbind, HBD_segments) #binding lines 
   
-  HBD <- HBDsegments_rbind[which(HBDsegments_rbind$id==id & HBDsegments_rbind$famid==famid),]
+  HBD <- HBD_segments_rbind[which(HBD_segments_rbind$id==id & HBD_segments_rbind$famid==famid),]
   
   if(nrow(HBD) == 0)
     if ((id %in% Submaps@submap_summary$id & famid %in% Submaps@submap_summary$famid ) == FALSE)
@@ -46,5 +46,5 @@ plot.HBD.segments.id <- function(Submaps, unit= "cM", id, famid, regions, qualit
     outfile <- paste(outfile,".png",sep="") 
   }
   
-  plot.segments.id(fileOrSubmaps=HBD, unit = unit, regions = myreg, main=paste("HBDsegments of", uniqueIds(famid, id)), build=build)
+  plot.segments.id(fileOrSubmaps=HBD, unit = unit, regions = myreg, main=paste("HBD segments of", uniqueIds(famid, id)), build=build)
 }

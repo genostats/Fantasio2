@@ -24,7 +24,7 @@ Class \code{atlas} This is the class used to create an object which will contain
 
 \item{\code{FLOD_recap}}{a dataframe with for one individual and for one marker a mean computation of all the FLOD scores computed, on every individuals.}
 
-\item{\code{HBDsegments}}{a list of dataframe with the HBDsegments, on all individuals.}
+\item{\code{HBD_segments}}{a list of dataframe with the HBD segments, on all individuals.}
 
 \item{\code{bedmatrix}}{a bed.matrix object (refer to gaston package)}
 

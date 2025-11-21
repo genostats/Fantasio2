@@ -1,6 +1,6 @@
 #' plot of HBD segment 
 #' 
-#' This function plots the HBDsegments for a given chromosome and all the individuals
+#' This function plots the HBD segments for a given chromosome and all the individuals
 #' 
 #' @param Submaps a list.submap object
 #' @param ROH a data frame from which the segments will be plotted (optional)
@@ -20,7 +20,7 @@
 #' @seealso Fantasio
 #' @seealso setHFLOD
 #' 
-#' @return return a plot of the chromosome HBDsegments for all the individual
+#' @return return a plot of the chromosome HBD segments for all the individual
 #' 
 #' @examples  
 #' #Please refer to vignette 

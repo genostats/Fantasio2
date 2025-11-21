@@ -4,14 +4,12 @@
 \alias{threshold}
 \title{Threshold of the association analysis}
 \usage{
-threshold(as, n.sims = 10000, n.cores = 10)
+threshold(as, n.sims = 10000)
 }
 \arguments{
 \item{as}{a data.frame with "chr", "dist" and "z.value" columns}
 
 \item{n.sims}{the number of simulations (default is 1e4)}
-
-\item{n.cores}{the number of threads (default is 10)}
 }
 \description{
 This function calculate the threshold of the association analysis
