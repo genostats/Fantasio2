@@ -55,4 +55,3 @@ atlas <- function(bedmatrix, segments.list, n, min.quality, epsilon = 1e-3) {
   if(pars$verbose) cat(sum(summary$inbred), "inbred individuals\n")
   new("atlas", bedmatrix, seeds, epsilon, segments.list, list(a = A, f = F, p = P.LRT), summary)
 }
-

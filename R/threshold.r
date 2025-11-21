@@ -4,13 +4,15 @@
 #' 
 #' @param as a data.frame with "chr", "dist" and "z.value" columns  
 #' @param n.sims the number of simulations (default is 1e4)
-#' @param n.cores the number of threads (default is 10)
 
 #' @export threshold
 
 
 # as = un data frame avec chr, dist, z.value
-threshold <- function(as, n.sims = 1e4, n.cores = 10) {
+threshold <- function(as, n.sims = 1e4) {
+
+  n.cores <- Fantasio.parameters("n_threads")
+  
   # cette version n utilise plus du tout la vraisemblance
   # le lamba est calcule a partir de la fonction d auto-correlation
   qq <- quantile(as$z.value, c(0.05, 0.95))
@@ -40,7 +42,7 @@ threshold <- function(as, n.sims = 1e4, n.cores = 10) {
   # fonction de simus en cpp
   # dist = 0.1 produit une valeur plus grande (plus juste si le processus etait vraiment Gaussien)
   # la valeur produite par dist = 1 semble largement assez grande
-  M <- maxGaussianGenome(1e5, lambda, sqrt(s2), dist = 1, len = LE, seed = 2^32 * runif(1), nThreads = 4)
+  M <- maxGaussianGenome(1e5, lambda, sqrt(s2), dist = 1, len = LE, seed = 2^32 * runif(1), nThreads = n.cores)
   
   # et voila le seuil pour le test a droite...
   threshold <- mu + quantile(M, 0.95)
