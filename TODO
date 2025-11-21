@@ -1,3 +1,6 @@
+-- Quand il y a 0 consanguins, Fantasio plante avec "erreur dans FLOD[ ,j] : indices hors limites"
+   (étape Computing HBD et FLOD matrices)
+
 -- il faut intégrer le calcul du seuil (fonctions glm.HBD.plot ??? plutot a la fin de HBD.glm ?)
 
 -- dans code C++ probaHBD.h : la boucle avec (i1 & 4 < i1 + i0 < ...) ne peut pas être déroulée
