@@ -2,7 +2,7 @@
 #' 
 #' This fonction plot the HFLOD score for a chromosome
 #' 
-#' @param submaps a atlas object
+#' @param HFLOD the HBD.gwas results
 #' @param unit the unit used to plot, two options are allowed "bases", "cM" (default is "cM") 
 #' @param chr the chromosome number from which to plot HFLOD score
 #' @param regions a matrix containing the value to ve highlighted in the plot
@@ -24,15 +24,8 @@
 #' #Please refer to vignette 
 #'
 #' @export
-HFLOD.plot.chr <- function(submaps, unit = c("cM", "bases"), chr, regions, color2="green4", MA = TRUE, nbSNP_MA = 50) 
+HFLOD.plot.chr <- function(HFLOD, unit = c("cM", "bases"), chr, regions, color2="green4", MA = TRUE, nbSNP_MA = 50) 
 {
-
-
-  
-  if(is.null(submaps@HFLOD))
-    stop("HFLOD slots in the object is empty, cannot plot")
-  
-  HFLOD <- submaps@HFLOD
   chromosome <- HFLOD$chr
   unit <- match.arg(unit)
   
