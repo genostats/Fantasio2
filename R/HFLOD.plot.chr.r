@@ -1,3 +1,4 @@
+:i
 #' Plot of the HFLOD 
 #' 
 #' This fonction plot the HFLOD score for a chromosome
@@ -26,8 +27,8 @@
 #' @export
 HFLOD.plot.chr <- function(submaps, unit = c("cM", "bases"), chr, regions, color2="green4", MA = TRUE, nbSNP_MA = 50) 
 {
-  if(class(submaps@bedmatrix)[1] != "bed.matrix")
-    stop("Need a bed.matrix.")
+
+
   
   if(is.null(submaps@HFLOD))
     stop("HFLOD slots in the object is empty, cannot plot")

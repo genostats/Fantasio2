@@ -22,15 +22,12 @@
 #' #Please refer to vignette 
 #'
 #' @export
-HFLOD.manhattan.plot <- function(submaps, regions, unit = "cM", MA = FALSE, nbSNP_MA = 50)
+HFLOD.manhattan.plot <- function(HFLOD, regions, unit = "cM", MA = FALSE, nbSNP_MA = 50)
 {
-  if (class(submaps@bedmatrix)[1] != "bed.matrix")
-    stop("Need a bed.matrix.")
   
-  if (is.null(submaps@HFLOD))
-    stop("HFLOD slots in the object is empty, cannot plot")
+  if (is.null(HFLOD))
+    stop("No HFLOD, cannot plot")
   
-  HFLOD <- submaps@HFLOD
   #to get mean position when working by segments
   if (unit == "cM")
     pos <- HFLOD$dist
