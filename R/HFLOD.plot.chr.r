@@ -1,4 +1,3 @@
-:i
 #' Plot of the HFLOD 
 #' 
 #' This fonction plot the HFLOD score for a chromosome
