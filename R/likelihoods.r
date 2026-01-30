@@ -1,3 +1,9 @@
+#' Compute the likelihood for a given f and a parameters
+#' 
+#' @param atlas an atlas object
+#' @param f a value of inbreeding coefficient f
+#' @param a a value of HBD length parameter a
+#'
 #' @export
 likelihoods <- function(atlas, f, a) { # keep.inds, q, recap, median) {
   # shortcuts for atlas slots

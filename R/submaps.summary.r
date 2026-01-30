@@ -3,6 +3,10 @@
 #' This function creates a summary on the submaps created. 
 #' 
 #' @param bedmatrix the original bedmatrix
+#' @param a a matrix of the estimations of a for all individuals on each submaps
+#' @param f a matrix of the estimations of f for all individuals on each submaps
+#' @param p.lrt a matrix of the pvalue of the likelihood test for all individuals on each submaps
+#' @param min.quality minimal quality (in \%) to include an inbred individual into the analysis (default is 95)
 #' @param a.threshold  the maximum value for a (default is 1)
 #' 
 #' @details This function gives for each genotyped individual summary statistics about the calculations.

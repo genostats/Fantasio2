@@ -1,10 +1,10 @@
 #' Creation of an manhattan plot of the HFLOD
 #'
-#' This fonction to plot a manhanttan plot of the HFLOD score
+#' This fonction plot a manhanttan plot of the HFLOD score
 #'
-#' @param submaps a atlas object
+#' @param HFLOD the output of the HBD.gwas function
 #' @param regions a matrix containing the value to be highlighted in the plot
-#' @param unit the unit used to plot, two options are allowed "Bases", "cM" (default is "CM")
+#' @param unit the unit used to plot, two options are allowed "Bases", "cM" (default is "cM")
 #' @param MA a boolean indicating whether a red line has to be drawn for the moving average
 #' @param nbSNP_MA number of SNP for the moving average (default is 50)
 #'

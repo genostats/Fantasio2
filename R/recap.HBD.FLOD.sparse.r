@@ -1,3 +1,15 @@
+#' Sparse summary of pHBD and FLOD
+#' 
+#' pHBD and FLOD are combined over the submaps SNP by SNP with a mean on the number of submaps that includes this SNP
+#'
+#' @param atlas an atlas object
+#' @param keep.inds the vector of index of consanguineous individuals
+#' @param q assumed frequency of the mutation involved in the disease for each individual (default is 0.0001)
+#' @param recap if you want the summary of probabilities by snps or by segments (only by SNPs for the moment)
+#' @param median define the f and a parameters used to compute pHBD and FLOD
+#'	   - if FALSE : f and a estimated on each submap
+#'	   - if TRUE : median value of estimations on all submaps of f and a (default)
+#'
 #' @export
 recap.HBD.FLOD.sparse <- function(atlas, keep.inds, q, recap, median) {
   if(recap != "SNP") stop("Not yet implemented")

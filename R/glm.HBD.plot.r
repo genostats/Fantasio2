@@ -1,4 +1,4 @@
-#' Manhattan Plot for glm on HBD prob or FLOD
+#' Manhattan Plot for glm on HBD probabilities or FLOD
 #' 
 #' @param x a data frame such as sent by HBD.glm
 #' @param test which test to plot

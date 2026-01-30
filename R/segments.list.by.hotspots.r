@@ -3,9 +3,9 @@
 #' Creates a list of segments delimited by recombination hotspots
 #'
 #' @param bedmatrix a bed.matrix object 
-#' @param intensity hotspots intensity threshold in cM/Mb
-#' @param hotspots a data frame of recombination rates
-#' @param minMarkers minimum number of markers in a segment
+#' @param intensity hotspots intensity threshold in cM/Mb (default is 10)
+#' @param hotspots a data frame of recombination rates (default is hg19)
+#' @param minMarkers minimum number of markers in a segment (default is 0)
 #' 
 #' @details This function creates an object of class hotspots.segments, containing a list of segments delimited
 #' by hotspots. The object is a list of list of vectors indices of SNPs. There are as many sublists as

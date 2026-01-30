@@ -2,8 +2,8 @@
 #This function is uses to create a plot of the HBD for a chromosome and for all  #
 #the individual on the submap                                                    #
 #                                                                                #
-#!!! Submaps : the list of object                                                #                                       
-#!!! unit : bases or cM                                                          #
+#!!! atlas : an atlas object                                                #                                       
+#!!! unit : Bases or cM                                                          #
 #!!! chr : the number of the chromosome wanted                                   #
 #!!! list.ids : (optional) a list of indivial to plot with                       #
 #!!! regions  : a regions to be emphasize                                        #
@@ -12,9 +12,9 @@
 #*** return a new submap object                                                  #
 ##################################################################################
 
-plot.HBD.segments.chr <- function(Submaps, unit, chr, list.ids, regions, outfile, build)
+plot.HBD.segments.chr <- function(atlas, unit, chr, list.ids, regions, outfile, build)
 {
-  HBD_segments <- Submaps@HBD_segments
+  HBD_segments <- atlas@HBD_segments
   
   if(missing(regions)) 
     myreg <- NULL

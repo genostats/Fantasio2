@@ -1,6 +1,7 @@
-
+#'
 #' @param pheno : c("case", "control", "all") 
 #' @param phen.code : c("plink", "R") 
+#'
 #' @export
 
 get.id.overlap <- function(bedmatrix, lim, chr, pheno = "case", phen.code = "plink") {

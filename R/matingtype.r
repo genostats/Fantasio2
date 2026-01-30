@@ -1,3 +1,11 @@
+#' Mating type of individuals
+#'
+#' This function determines the mating type of the parents of all consanguineous individuals (1C,2C, 2x1C, AV or unrelated)
+
+
+
+
+
 #options(echo=FALSE);
 
 #param       <- commandArgs(trailingOnly=T)

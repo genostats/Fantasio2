@@ -1,13 +1,13 @@
-#' Plot of the HFLOD 
+#' Plot of the HFLOD for a given chromosome
 #' 
 #' This fonction plot the HFLOD score for a chromosome
 #' 
-#' @param HFLOD the HBD.gwas results
-#' @param unit the unit used to plot, two options are allowed "bases", "cM" (default is "cM") 
+#' @param HFLOD the output of the HBD.gwas function
+#' @param unit the unit used to plot, two options are allowed "Bases", "cM" (default is "cM") 
 #' @param chr the chromosome number from which to plot HFLOD score
-#' @param regions a matrix containing the value to ve highlighted in the plot
+#' @param regions a matrix containing the value to be highlighted in the plot
 #' @param color2 the color of the regions highlighted (default is "green4")
-#' @param MA a boolean indicating whether a red line has to be drawn for the moving average
+#' @param MA a boolean indicating whether a red line has to be drawn for the moving average (default is FALSE)
 #' @param nbSNP_MA number of SNP for the moving average (default is 50)
 #' 
 #' @details If you use the regions options make sure to pass a matrix containing one line per region to be highlighted with in each line : 
@@ -24,7 +24,7 @@
 #' #Please refer to vignette 
 #'
 #' @export
-HFLOD.plot.chr <- function(HFLOD, unit = c("cM", "bases"), chr, regions, color2="green4", MA = TRUE, nbSNP_MA = 50) 
+HFLOD.plot.chr <- function(HFLOD, unit = c("cM", "Bases"), chr, regions, color2="green4", MA = FALSE, nbSNP_MA = 50) 
 {
   chromosome <- HFLOD$chr
   unit <- match.arg(unit)

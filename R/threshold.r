@@ -1,6 +1,6 @@
 #' Threshold of the association analysis
 #' 
-#' This function calculate the threshold of the association analysis
+#' This function calculate the threshold of the association analysis using a Ornstein-Uhlenbeck process
 #' 
 #' @param as a data.frame with "chr", "dist" and "z.value" columns  
 #' @param n.sims the number of simulations (default is 1e4)

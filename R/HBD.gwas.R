@@ -2,7 +2,7 @@
 #' 
 #' This function is used to compute HFLOD scores on individuals in a sample for the HBD-GWAS method
 #' 
-#' @param atlas a atlas object
+#' @param atlas an atlas object
 #' @param phen the phenotype (default is the bed.matrix phenotype)
 #' @param phen.code phenotype coding :
 #'        - 'R' : 0:control ; 1:case ; NA:unknown (default)
