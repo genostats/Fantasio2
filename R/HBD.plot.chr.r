@@ -1,10 +1,10 @@
-#' plot of HBD segment 
+#' Plot the HBD segments on a given chromosome
 #' 
-#' This function plots the HBDsegments for a given chromosome and all the individuals
+#' This function plots all the HBD segments for a given chromosome and all the individuals
 #' 
-#' @param Submaps a list.submap object
+#' @param atlas an atlas object
 #' @param ROH a data frame from which the segments will be plotted (optional)
-#' @param unit the unit used to plot, two options are allowed "Bases", "cM" (default is "CM")
+#' @param unit the unit used to plot, two options are allowed "Bases", "cM" (default is "cM")
 #' @param chr the chromosome number from which to plot HBD segment
 #' @param list.ids a vector containing a list of individuals from which only the HBDsegments for this chromosome will be ploted (optional)
 #' @param regions a specific region to be enlighted in the plot (optional)
@@ -18,37 +18,37 @@
 #' @details -end
 #' 
 #' @seealso Fantasio
-#' @seealso setHFLOD
+#' @seealso set.HFLOD
 #' 
-#' @return return a plot of the chromosome HBDsegments for all the individual
+#' @return return a plot of the chromosome HBD segments for all individuals
 #' 
 #' @examples  
 #' #Please refer to vignette 
 #'
 #' 
 #' @export
-HBD.plot.chr <- function(Submaps, ROH, unit="cM", chr, list.ids, regions, outfile, inbred = FALSE, build=37)
+HBD.plot.chr <- function(atlas, ROH, unit="cM", chr, list.ids, regions, outfile, inbred = FALSE, build=37)
 {
   if(inbred)
   {
-    list.ids <- which(Submaps@submap_summary$inbred)
-    ind      <- as.vector(Submaps@submap_summary$id[list.ids])
-    fam      <- as.vector(Submaps@submap_summary$famid[list.ids])
+    list.ids <- which(atlas@submap_summary$inbred)
+    ind      <- as.vector(atlas@submap_summary$id[list.ids])
+    fam      <- as.vector(atlas@submap_summary$famid[list.ids])
     # list.ids <- paste(ind, fam, sep="_")
     list.ids <- uniqueIds(fam, ind)
   }
   
-  if(class(Submaps@bedmatrix)[1] != "bed.matrix")
+  if(class(atlas@bedmatrix)[1] != "bed.matrix")
     stop("Need a bed.matrix")
   
-  if(is.null(Submaps@HBD_recap))
+  if(is.null(atlas@HBD_recap))
     stop("HBD_recap is empty cannot plot, make sure to have atleast one individual considered inbred.")
   
-  if(!missing(Submaps) & !missing(ROH))
+  if(!missing(atlas) & !missing(ROH))
   {
-    plot.ROH.segments.chr(ROH = ROH, submaps = Submaps, unit = unit, chr = chr, outfile=outfile, listid=list.ids, regions=regions, build=build)
+    plot.ROH.segments.chr(ROH = ROH, submaps = atlas, unit = unit, chr = chr, outfile=outfile, listid=list.ids, regions=regions, build=build)
   }else{
-    if(!missing(Submaps))
-      plot.HBD.segments.chr(Submaps=Submaps, unit=unit, chr=chr, list.ids=list.ids, regions=regions, outfile=outfile, build=build)
+    if(!missing(atlas))
+      plot.HBD.segments.chr(atlas=atlas, unit=unit, chr=chr, list.ids=list.ids, regions=regions, outfile=outfile, build=build)
   }
 }

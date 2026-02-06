@@ -1,3 +1,13 @@
+#' Atlas creation
+#' 
+#' This function construct and complete the atlas
+#' 
+#' @param bedmatrix a bed.matrix 
+#' @param segments.list a list of segments used to create the submaps
+#' @param n the number of submaps
+#' @param min.quality minimal quality (in \%) to include an inbred individual into the analysis
+#' @param epsilon genotype error rate (default is 0.001)
+#' 
 #' @export
 atlas <- function(bedmatrix, segments.list, n, min.quality, epsilon = 1e-3) {
 
@@ -55,4 +65,3 @@ atlas <- function(bedmatrix, segments.list, n, min.quality, epsilon = 1e-3) {
   if(pars$verbose) cat(sum(summary$inbred), "inbred individuals\n")
   new("atlas", bedmatrix, seeds, epsilon, segments.list, list(a = A, f = F, p = P.LRT), summary)
 }
-

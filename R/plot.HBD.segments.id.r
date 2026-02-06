@@ -1,36 +1,36 @@
 ##################################################################################
 #This function plots the HBD probabilities by segments                           #
 #                                                                                #
-#!!! Submaps : the list of object                                                #                                       
+#!!! atlas : an atlas object                                                #                                       
 #!!! unit : cM or Bases                                                          #
 #!!! regions : a region to be emphasize in the plot                              #
 #!!! outfile: (optional) a name for the plot                                     #
 #!!! famid : the family id                                                   #
-#!!! id = the individual id                                           #
+#!!! id : the individual id                                           #
 #                                                                                #
 #*** return a plot                                                               #
 ##################################################################################
 
-plot.HBD.segments.id <- function(Submaps, unit= "cM", id, famid, regions, quality = 95, outfile, build)
+plot.HBD.segments.id <- function(atlas, unit= "cM", id, famid, regions, quality = 95, outfile, build)
 {
   if(!is.character(id))
     return("Need individual id as character")
   if(!is.character(famid))
     return("Need family id as character")
   
-  HBD.recap <- Submaps@HBD_recap
-  HBDsegments <- Submaps@HBDsegments
+  HBD.recap <- atlas@HBD_recap
+  HBD_segments <- atlas@HBD_segments
   
-  HBDsegments_rbind <- do.call(rbind, HBDsegments) #binding lines 
+  HBD_segments_rbind <- do.call(rbind, HBD_segments) #binding lines 
   
-  HBD <- HBDsegments_rbind[which(HBDsegments_rbind$id==id & HBDsegments_rbind$famid==famid),]
+  HBD <- HBD_segments_rbind[which(HBD_segments_rbind$id==id & HBD_segments_rbind$famid==famid),]
   
   if(nrow(HBD) == 0)
-    if ((id %in% Submaps@submap_summary$id & famid %in% Submaps@submap_summary$famid ) == FALSE)
+    if ((id %in% atlas@submap_summary$id & famid %in% atlas@submap_summary$famid ) == FALSE)
       stop("No individual found, check spelling of id and famid")
-    else if (Submaps@submap_summary$quality[which(Submaps@submap_summary$id == id & Submaps@submap_summary$famid == famid)]<= quality)
+    else if (atlas@submap_summary$quality[which(atlas@submap_summary$id == id & atlas@submap_summary$famid == famid)]<= quality)
       stop("No HBD segment evaluation for this individual because of low QUALITY (<=",quality,")")
-    else if(Submaps@submap_summary$inbred[which(Submaps@submap_summary$id == id & Submaps@submap_summary$famid == famid)] == FALSE)
+    else if(atlas@submap_summary$inbred[which(atlas@submap_summary$id == id & atlas@submap_summary$famid == famid)] == FALSE)
       stop("Individual with good QUALITY (>=",quality,") but No HBD segment evaluation because he is not inbred")
   
   #regions options
@@ -46,5 +46,5 @@ plot.HBD.segments.id <- function(Submaps, unit= "cM", id, famid, regions, qualit
     outfile <- paste(outfile,".png",sep="") 
   }
   
-  plot.segments.id(fileOrSubmaps=HBD, unit = unit, regions = myreg, main=paste("HBDsegments of", uniqueIds(famid, id)), build=build)
+  plot.segments.id(fileOrSubmaps=HBD, unit = unit, regions = myreg, main=paste("HBD segments of", uniqueIds(famid, id)), build=build)
 }

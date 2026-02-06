@@ -1,6 +1,7 @@
-
+#'
 #' @param pheno : c("case", "control", "all") 
 #' @param phen.code : c("plink", "R") 
+#'
 #' @export
 
 get.id.overlap <- function(bedmatrix, lim, chr, pheno = "case", phen.code = "plink") {
@@ -11,9 +12,9 @@ get.id.overlap <- function(bedmatrix, lim, chr, pheno = "case", phen.code = "pli
   start <- HFLOD_chr$dist[1]
   end <- HFLOD_chr$dist[nrow(HFLOD_chr)]
   
-  HBD_segments <- bedmatrix@HBDsegments
-  HBDsegments_rbind <- do.call(rbind, HBD_segments)
-  HBD <- subset(HBDsegments_rbind, HBDsegments_rbind$chromosome==chr)
+  HBD_segments <- bedmatrix@HBD_segments
+  HBD_segments_rbind <- do.call(rbind, HBD_segments)
+  HBD <- subset(HBD_segments_rbind, HBD_segments_rbind$chromosome==chr)
   
   if(phen.code == 'plink') {
     if(pheno == "case"){

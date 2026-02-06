@@ -1,4 +1,4 @@
-#' Logistic regression on HBD probability or FLOD score
+#' Logistic regression on HBD probabilities or FLOD score
 #' 
 #' @param x an atlas object
 #' @param expl_var the explanatory variable 'FLOD' or 'pHBD'
@@ -6,7 +6,6 @@
 #' @param covar_df a dataframe or a matrix containing covariates
 #' @param covar covariates of interest such as 'age', 'sex' , ...
 #' if missing, all covariates of the dataframe are considered
-#' @param n.cores number of cores for parallelization calculation (default = 1)
 #' @param phen.code phenotype coding :
 #'        - 'R' : 0:control ; 1:case ; NA:unknown (default)
 #'        - 'plink' : 1:control ; 2:case ; 0/-9/NA:unknown

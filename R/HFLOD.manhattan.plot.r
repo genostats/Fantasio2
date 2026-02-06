@@ -1,10 +1,10 @@
 #' Creation of an manhattan plot of the HFLOD
 #'
-#' This fonction to plot a manhanttan plot of the HFLOD score
+#' This fonction plot a manhanttan plot of the HFLOD score
 #'
-#' @param submaps a atlas object
+#' @param HFLOD the output of the HBD.gwas function
 #' @param regions a matrix containing the value to be highlighted in the plot
-#' @param unit the unit used to plot, two options are allowed "Bases", "cM" (default is "CM")
+#' @param unit the unit used to plot, two options are allowed "Bases", "cM" (default is "cM")
 #' @param MA a boolean indicating whether a red line has to be drawn for the moving average
 #' @param nbSNP_MA number of SNP for the moving average (default is 50)
 #'
@@ -22,15 +22,12 @@
 #' #Please refer to vignette 
 #'
 #' @export
-HFLOD.manhattan.plot <- function(submaps, regions, unit = "cM", MA = FALSE, nbSNP_MA = 50)
+HFLOD.manhattan.plot <- function(HFLOD, regions, unit = "cM", MA = FALSE, nbSNP_MA = 50)
 {
-  if (class(submaps@bedmatrix)[1] != "bed.matrix")
-    stop("Need a bed.matrix.")
   
-  if (is.null(submaps@HFLOD))
-    stop("HFLOD slots in the object is empty, cannot plot")
+  if (is.null(HFLOD))
+    stop("No HFLOD, cannot plot")
   
-  HFLOD <- submaps@HFLOD
   #to get mean position when working by segments
   if (unit == "cM")
     pos <- HFLOD$dist

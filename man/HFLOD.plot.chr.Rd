@@ -5,7 +5,7 @@
 \title{Plot of the HFLOD}
 \usage{
 HFLOD.plot.chr(
-  submaps,
+  HFLOD,
   unit = c("cM", "bases"),
   chr,
   regions,
@@ -15,7 +15,7 @@ HFLOD.plot.chr(
 )
 }
 \arguments{
-\item{submaps}{a atlas object}
+\item{HFLOD}{the HBD.gwas results}
 
 \item{unit}{the unit used to plot, two options are allowed "bases", "cM" (default is "cM")}
 

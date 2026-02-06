@@ -2,8 +2,8 @@
 #This function is uses to create a plot of the HBD for a chromosome and for all  #
 #the individual on the submap                                                    #
 #                                                                                #
-#!!! Submaps : the list of object                                                #                                       
-#!!! unit : bases or cM                                                          #
+#!!! atlas : an atlas object                                                #                                       
+#!!! unit : Bases or cM                                                          #
 #!!! chr : the number of the chromosome wanted                                   #
 #!!! list.ids : (optional) a list of indivial to plot with                       #
 #!!! regions  : a regions to be emphasize                                        #
@@ -12,9 +12,9 @@
 #*** return a new submap object                                                  #
 ##################################################################################
 
-plot.HBD.segments.chr <- function(Submaps, unit, chr, list.ids, regions, outfile, build)
+plot.HBD.segments.chr <- function(atlas, unit, chr, list.ids, regions, outfile, build)
 {
-  HBDsegments <- Submaps@HBDsegments
+  HBD_segments <- atlas@HBD_segments
   
   if(missing(regions)) 
     myreg <- NULL
@@ -22,10 +22,10 @@ plot.HBD.segments.chr <- function(Submaps, unit, chr, list.ids, regions, outfile
     myreg <- regions[regions$chr == chr,]
   }
   
-  #Get the lines for the wanted chromosome in the HBDsegments dataframe
-  HBDsegments_rbind <- do.call(rbind, HBDsegments) #binding lines
+  #Get the lines for the wanted chromosome in the HBD_segments dataframe
+  HBD_segments_rbind <- do.call(rbind, HBD_segments) #binding lines
   
-  HBD <- subset(HBDsegments_rbind, HBDsegments_rbind$chromosome==chr)#only the wanted lines
+  HBD <- subset(HBD_segments_rbind, HBD_segments_rbind$chromosome==chr)#only the wanted lines
   
   HBD$id <- as.character(HBD$id) #otherwise factors level in the vector
   HBD$famid <- as.character(HBD$famid)

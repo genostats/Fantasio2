@@ -32,7 +32,7 @@ public:
   double maxGapLength;
 
   userParam() : BFGSparam(), lb(2), ub(2), max_retries(5), n_threads(1), use_float(false), debug(0), verbose(false), 
-                use_froh(true), minNbSNPs(400), minROHlength(2), minDistHet(1), maxGapLength(1) {
+                use_froh(true), minNbSNPs(50), minROHlength(1), minDistHet(0.5), maxGapLength(1) {
     lb << 0, 0;
     ub << INFINITY, 1;
   }
