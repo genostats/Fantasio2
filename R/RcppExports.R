@@ -33,6 +33,14 @@ logitModel <- function(Y, X, H, beg, end) {
     .Call(`_Fantasio2_logitModel`, Y, X, H, beg, end)
 }
 
+logitModelScore <- function(Y1, W, A, H, beg, end) {
+    .Call(`_Fantasio2_logitModelScore`, Y1, W, A, H, beg, end)
+}
+
+logitModelScore_nocovar <- function(Y1, w, H, beg, end, compute_variance = TRUE) {
+    .Call(`_Fantasio2_logitModelScore_nocovar`, Y1, w, H, beg, end, compute_variance)
+}
+
 m4_logEmiss <- function(p_A, p, map, epsilon) {
     .Call(`_Fantasio2_m4_logEmiss`, p_A, p, map, epsilon)
 }

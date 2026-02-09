@@ -127,6 +127,38 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// logitModelScore
+List logitModelScore(NumericVector Y1, NumericVector W, NumericMatrix A, NumericMatrix H, unsigned int beg, unsigned int end);
+RcppExport SEXP _Fantasio2_logitModelScore(SEXP Y1SEXP, SEXP WSEXP, SEXP ASEXP, SEXP HSEXP, SEXP begSEXP, SEXP endSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type Y1(Y1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type W(WSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type A(ASEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type H(HSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type beg(begSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type end(endSEXP);
+    rcpp_result_gen = Rcpp::wrap(logitModelScore(Y1, W, A, H, beg, end));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logitModelScore_nocovar
+List logitModelScore_nocovar(NumericVector Y1, double w, NumericMatrix H, unsigned int beg, unsigned int end, bool compute_variance);
+RcppExport SEXP _Fantasio2_logitModelScore_nocovar(SEXP Y1SEXP, SEXP wSEXP, SEXP HSEXP, SEXP begSEXP, SEXP endSEXP, SEXP compute_varianceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type Y1(Y1SEXP);
+    Rcpp::traits::input_parameter< double >::type w(wSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type H(HSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type beg(begSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type end(endSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_variance(compute_varianceSEXP);
+    rcpp_result_gen = Rcpp::wrap(logitModelScore_nocovar(Y1, w, H, beg, end, compute_variance));
+    return rcpp_result_gen;
+END_RCPP
+}
 // m4_logEmiss
 NumericMatrix m4_logEmiss(XPtr<matrix4> p_A, NumericVector p, IntegerVector map, double epsilon);
 RcppExport SEXP _Fantasio2_m4_logEmiss(SEXP p_ASEXP, SEXP pSEXP, SEXP mapSEXP, SEXP epsilonSEXP) {
@@ -361,6 +393,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_likelihoods_", (DL_FUNC) &_Fantasio2_likelihoods_, 7},
     {"_Fantasio2_logEmiss", (DL_FUNC) &_Fantasio2_logEmiss, 4},
     {"_Fantasio2_logitModel", (DL_FUNC) &_Fantasio2_logitModel, 5},
+    {"_Fantasio2_logitModelScore", (DL_FUNC) &_Fantasio2_logitModelScore, 6},
+    {"_Fantasio2_logitModelScore_nocovar", (DL_FUNC) &_Fantasio2_logitModelScore_nocovar, 6},
     {"_Fantasio2_m4_logEmiss", (DL_FUNC) &_Fantasio2_m4_logEmiss, 4},
     {"_Fantasio2_maxGaussianGenome", (DL_FUNC) &_Fantasio2_maxGaussianGenome, 7},
     {"_Fantasio2_getSeed", (DL_FUNC) &_Fantasio2_getSeed, 0},

@@ -29,7 +29,7 @@ glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H) {
 
   # ajout d'une colonne vide !
   X <- cbind(X, 0)
-  R <- as.data.frame(logitModel(Y, X, H, 0, ncol(H)-1))
+  R <- as.data.frame(logitModel(Y, X, H, 0, ncol(H) - 1L))
   R$z.value <- R$beta/R$sd.beta
    
   R$p.left <- pnorm(R$z.value, lower.tail = TRUE)

@@ -1,4 +1,34 @@
 set.seed(1);
+
+expit <- function(x) 1/(1 + exp(-x))
+
+X <- cbind(1,runif(1000))
+G <- runif(1000)
+L <- cbind(X, G) %*% c(0, -.5, .4)
+Y <- rbinom(1000, 1, expit(L))
+
+H <- cbind(G, matrix(runif(4000), ncol = 4))
+
+R1 <- Fantasio2:::glm.HBD.0(Y, X, H)
+R2 <- Fantasio2:::glm.HBD.score.0(Y, X, H)
+
+R1
+R2
+
+# sans covariables
+X <- matrix(1, nrow = 1000)
+R3 <- Fantasio2:::glm.HBD.score.0(Y, X, H)
+R3
+
+# quand on permute la variance ne change pas 
+R4 <- Fantasio2:::glm.HBD.score.0(sample(Y), X, H)
+R4
+
+# donc on peut réutiliser la variance calculée la première fois
+R5 <- Fantasio2:::glm.HBD.score.0(sample(Y), X, H, R3$variance)
+R5
+
+
 expit <- function(x) 1/(1 + exp(-x))
 source("~/COURS/SDS/stats/cours/GLMs/score_test_regression_logistique.r")
 
