@@ -11,13 +11,16 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
   # phenotype coding
 
   phen_code <- match.arg(phen.code)
+  
+  # explanatory variable
+  
+  expl_var <- match.arg(expl.var)
 
   # recover phenotype
 
-  if(missing(phen)){
+  if(missing(phen)) {
     pheno <- atlas@bedmatrix@ped$pheno
-  }
-  else{
+  } else {
     pheno <- phen
   }
 
@@ -39,7 +42,7 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
     pheno[cases] <- 1
     pheno[controls] <- 0
     
-    reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, phen.code = "R", score = TRUE)
+    reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, phen.code = "R", score = TRUE, pval = FALSE)
     z.max[1] <- max(reg$z.value)
     sigma2 <- reg$variance
     
@@ -50,7 +53,7 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
       pheno[cases] <- 1
       pheno[controls] <- 0
 
-      reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, phen.code = "R", score = TRUE, variance = sigma2)
+      reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, phen.code = "R", score = TRUE, variance = sigma2, pval = FALSE)
       z.max[j] <- max(reg$z.value)
     }
     
@@ -61,7 +64,7 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
       pheno[cases] <- 1
       pheno[controls] <- 0
 
-      reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, phen.code = "R", score = FALSE)
+      reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, phen.code = "R", score = FALSE, pval = FALSE)
       z.max[j] <- max(reg$z.value)
     }
   }
@@ -69,7 +72,7 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
   z.max
   z.max.95 <- quantile(z.max, 0.95)
 
-  res <- list(z.max = z.max, z.max.95 = z.max.95)
+  res <- list(z.max = z.max, threshold = z.max.95, signif = (z.max > z.max.95))
 
   res
 
