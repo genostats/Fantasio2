@@ -14,7 +14,7 @@
 #' 
 #' @export
 
-HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df, covar, phen.code = c("R", "plink"), threshold) {
+HBD.glm <- function(x, expl_var = c("FLOD", "pHBD"), phen, covar_df, covar, phen.code = c("R", "plink"), threshold) {
  
   expl_var <- match.arg(expl_var)
   phen.code <- match.arg(phen.code)

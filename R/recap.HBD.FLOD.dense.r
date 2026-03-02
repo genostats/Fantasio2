@@ -27,7 +27,7 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
   wi <- which(keep.inds)
   
   #tester s'il y a des inds consanguins
-  #si oui, remplir les matrices de FLOD et pHBD par NULL
+  #si non, remplir les matrices de FLOD et pHBD par NULL
   if(length(wi)==0){
     atlas@HBD_recap <- NULL     
     atlas@FLOD_recap <- NULL  
