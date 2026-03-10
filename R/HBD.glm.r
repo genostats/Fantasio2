@@ -59,12 +59,8 @@ HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df, covar, phe
     message("No covariates given for the analysis = unadjusted data. To use covariates import a dataframe.")
     message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i])"))
     if(score) {
-    	if(missing(variance)) {
-    		res <- cbind(final, glm.HBD.score.0(pheno, matrix(1, length(pheno)), expl.var, pval))
-    	} else {
-    		res <- cbind(final, glm.HBD.score.0(pheno, matrix(1, length(pheno)), expl.var, variance, pval))
-    	}
-    } else {
+      res <- cbind(final, glm.HBD.score.0(pheno, matrix(1, length(pheno)), expl.var, variance, pval))
+   	} else {
     	res <- cbind(final, glm.HBD.0(pheno, matrix(1, length(pheno)), expl.var, pval))
     }
     message("-----------> GLM on UNADJUSTED data Done \n")
