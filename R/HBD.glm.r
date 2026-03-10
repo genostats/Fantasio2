@@ -82,11 +82,7 @@ HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df, covar, phe
       df <- na.omit(covar_df[ id , covar]) #rownames covar_df  = individual id 	
     }
     if(score) {
-    	if(missing(variance)) {
-    		res <- cbind(final, glm.HBD.score.0(pheno, cbind(1,df), expl.var, pval))
-    	} else {
-    		res <- cbind(final, glm.HBD.score.0(pheno, cbind(1,df), expl.var, variance, pval))
-    	}
+      res <- cbind(final, glm.HBD.score.0(pheno, cbind(1,df), expl.var, variance, pval))
     } else {
     	res <- cbind(final, glm.HBD.0(pheno, cbind(1,df), expl.var, pval))
     } 
