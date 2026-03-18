@@ -2,7 +2,7 @@
 # covar.matrix = matrice de covariables [doit contenir un intercept]
 # H = matrice des pHBD ou des FLOD...
  
-glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H) {
+glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, pval=TRUE) {
   # in case there are some missing phenotypes, deal with it by 
   # extracting the corresponding lines
   w <- which(is.na(Y))
@@ -31,10 +31,12 @@ glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H) {
   X <- cbind(X, 0)
   R <- as.data.frame(logitModel(Y, X, H, 0, ncol(H) - 1L))
   R$z.value <- R$beta/R$sd.beta
-   
-  R$p.left <- pnorm(R$z.value, lower.tail = TRUE)
-  R$p.bilateral <- pchisq(R$z.value**2, df = 1, lower.tail = FALSE) 
-  R$p.right <- pnorm(R$z.value, lower.tail = FALSE) 
-
+  
+  if(pval) { 
+    R$p.left <- pnorm(R$z.value, lower.tail = TRUE)
+    R$p.bilateral <- pchisq(R$z.value**2, df = 1, lower.tail = FALSE) 
+    R$p.right <- pnorm(R$z.value, lower.tail = FALSE) 
+  }
+  
   R
 } 

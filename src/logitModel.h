@@ -43,7 +43,8 @@ List logitModel(NumericVector Y, NumericMatrix X, NumericMatrix H, unsigned int 
 
   // les copies de beta et varbeta sont nécessaires pour qu'ils soient bien dimensionnés
   // il faut évidemment une copie privée de x pour chaque thread !
-#pragma omp parallel for firstprivate(beta) firstprivate(varbeta) firstprivate(x) num_threads(pars.n_threads)
+  omp_set_num_threads(pars.n_threads);
+#pragma omp parallel for firstprivate(beta) firstprivate(varbeta) firstprivate(x)
   for(unsigned int i = beg; i <= end; i++) {
     // copie de la colonne i de H dans la dernière colonne de X
     for(unsigned int k = 0; k < n; k++) 

@@ -4,7 +4,7 @@
 # variance = ne sera pris en compte que si covar.matrix est réduit à un intercept
 #            c'est le vecteur des variances des scores si elles ont déjà été calculées
 #            -> utile pour des permutations car la variance est toujours la même
-glm.HBD.score.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, variance) {
+glm.HBD.score.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, variance, pval=TRUE) {
   # in case there are some missing phenotypes, deal with it by 
   # extracting the corresponding lines
   w <- which(is.na(Y))
@@ -51,11 +51,13 @@ glm.HBD.score.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, variance)
     R <- as.data.frame(logitModelScore(Y1, W, A, H, 0, ncol(H) - 1L))
   }
   R$z.value <- R$score / sqrt(R$variance)
-   
-  R$p.left <- pnorm(R$z.value, lower.tail = TRUE)
-  R$p.bilateral <- pchisq(R$z.value**2, df = 1, lower.tail = FALSE) 
-  R$p.right <- pnorm(R$z.value, lower.tail = FALSE) 
-
+  
+  if(pval) { 
+    R$p.left <- pnorm(R$z.value, lower.tail = TRUE)
+    R$p.bilateral <- pchisq(R$z.value**2, df = 1, lower.tail = FALSE) 
+    R$p.right <- pnorm(R$z.value, lower.tail = FALSE) 
+  }
+  
   R
 }
 

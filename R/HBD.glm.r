@@ -11,10 +11,13 @@
 #'        - 'plink' : 1:control ; 2:case ; 0/-9/NA:unknown
 #' if 'plink' the function automatically convert it to 'R' to run logistic regression
 #' @param threshold if missing, no thresholding. If set, the explanatory variable will be dichotomized accordingly. Suggested values: 0 for FLOD, 0.5 for pHBD.
+#' @param score if TRUE, the test used is the score, else it is khi2
+#' @param variance the vector of scores variances if already computed
+#' @param pval if TRUE (default), computes the p-value od the test, else only computes the z-value
 #' 
 #' @export
 
-HBD.glm <- function(x, expl_var = c("FLOD", "pHBD"), phen, covar_df, covar, phen.code = c("R", "plink"), threshold) {
+HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df, covar, phen.code = c("R", "plink"), threshold, score, variance, pval=TRUE) {
  
   expl_var <- match.arg(expl_var)
   phen.code <- match.arg(phen.code)
@@ -55,7 +58,11 @@ HBD.glm <- function(x, expl_var = c("FLOD", "pHBD"), phen, covar_df, covar, phen
     # unadjusted 
     message("No covariates given for the analysis = unadjusted data. To use covariates import a dataframe.")
     message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i])"))
-    res <- cbind(final, glm.HBD.0(pheno, matrix(1, length(pheno)), expl.var))
+    if(score) {
+      res <- cbind(final, glm.HBD.score.0(pheno, matrix(1, length(pheno)), expl.var, variance, pval))
+   	} else {
+    	res <- cbind(final, glm.HBD.0(pheno, matrix(1, length(pheno)), expl.var, pval))
+    }
     message("-----------> GLM on UNADJUSTED data Done \n")
   } else { 
     # adjusted 
@@ -74,7 +81,11 @@ HBD.glm <- function(x, expl_var = c("FLOD", "pHBD"), phen, covar_df, covar, phen
       message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i] + ", gsub(",", " +", toString(covar)) ,")"))
       df <- na.omit(covar_df[ id , covar]) #rownames covar_df  = individual id 	
     }
-    res <- cbind(final, glm.HBD.0(pheno, cbind(1,df), expl.var)) 
+    if(score) {
+      res <- cbind(final, glm.HBD.score.0(pheno, cbind(1,df), expl.var, variance, pval))
+    } else {
+    	res <- cbind(final, glm.HBD.0(pheno, cbind(1,df), expl.var, pval))
+    } 
     message("-----------> GLM on ADJUSTED data Done \n")
   }
   res
