@@ -2,12 +2,13 @@
 #This is the class used to create an object which will contains every dataframe and list created when creating submaps#
 #######################################################################################################################
 
-setClassUnion("listOrNULL",members=c("list", "NULL"))
-setClassUnion("dataframeOrNULL",members=c("data.frame", "NULL"))
-setClassUnion("matrixOrNULL",members=c("matrix", "NULL"))
-setClassUnion("characterOrNULL",members = c("character", "NULL"))
-setClassUnion("doubleOrNULL",members = c("numeric", "NULL"))
-setClassUnion("logicalOrNULL",members = c("numeric", "NULL"))
+setClassUnion("listOrNULL", members = c("list", "NULL"))
+setClassUnion("dataframeOrNULL", members = c("data.frame", "NULL"))
+setClassUnion("matrixOrNULL", members = c("matrix", "NULL"))
+setClassUnion("characterOrNULL", members = c("character", "NULL"))
+setClassUnion("doubleOrNULL", members = c("numeric", "NULL"))
+setClassUnion("logicalOrNULL", members = c("numeric", "NULL"))
+setClassUnion("mmatrixOrNULL", members = c("mmatrix", "NULL"))
 
 #' Class atlas
 #'
@@ -33,15 +34,14 @@ setClass("atlas", representation(
         seeds                = 'matrixOrNULL',
         epsilon              = 'numeric',
         segments_list        = 'listOrNULL',
-#       submaps_list         = 'listOrNULL', 
-#       likelihood_summary   = 'listOrNULL',
         estimations          = 'listOrNULL', 
         submap_summary       = 'dataframeOrNULL',
         recap                = "characterOrNULL", 
         q                    = "doubleOrNULL",
-        HBD_recap            = 'matrixOrNULL',
-        FLOD_recap           = 'matrixOrNULL',  
-        HBD_segments          = 'listOrNULL',
+        HBD_recap            = 'mmatrixOrNULL',
+        FLOD_recap           = 'mmatrixOrNULL',
+        SNP_ids              = 'characterOrNULL',
+        HBD_segments         = 'listOrNULL',
         unit                 = "characterOrNULL", 
         gap                  = "doubleOrNULL"
 ))

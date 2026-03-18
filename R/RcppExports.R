@@ -61,8 +61,8 @@ mt_runif <- function() {
     .Call(`_Fantasio2_mt_runif`)
 }
 
-probaHBD <- function(p_A, p, submap, deltaDist, whichInds, a, f, epsilon) {
-    .Call(`_Fantasio2_probaHBD`, p_A, p, submap, deltaDist, whichInds, a, f, epsilon)
+probaHBD <- function(p_A, p, submap, deltaDist, whichInds, a, f, epsilon, file) {
+    .Call(`_Fantasio2_probaHBD`, p_A, p, submap, deltaDist, whichInds, a, f, epsilon, file)
 }
 
 randomSnp <- function(L) {
@@ -91,10 +91,6 @@ testLogEmiss <- function(p_A, p_, map_, epsilon, i) {
 
 testOptimLikelihood <- function(p_A, p_, map_, deltaDist, epsilon, i) {
     .Call(`_Fantasio2_testOptimLikelihood`, p_A, p_, map_, deltaDist, epsilon, i)
-}
-
-testPHBDmatrix <- function(z, nbSNPs, i) {
-    .Call(`_Fantasio2_testPHBDmatrix`, z, nbSNPs, i)
 }
 
 testRVector <- function(x, y, z) {

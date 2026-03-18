@@ -13,7 +13,7 @@
 
 template<typename scalar_t>
 PHBDmatrix<scalar_t> probaHBD(XPtr<matrix4> p_A, NumericVector p_, IntegerVector submap_, NumericVector deltaDist, LogicalVector whichInds_, 
-                       NumericVector a, NumericVector f, double epsilon) {
+                       NumericVector a, NumericVector f, double epsilon, std::string file) {
   RVector<double> p(p_);
   RVector<int> submap(submap_);
   RVector<int> whichInds(whichInds_);
@@ -32,7 +32,7 @@ PHBDmatrix<scalar_t> probaHBD(XPtr<matrix4> p_A, NumericVector p_, IntegerVector
   clock_t beg = clock();
 
   // stockage des résultats
-  PHBDmatrix<scalar_t> PHBD(whichInds, submap.size());
+  PHBDmatrix<scalar_t> PHBD(whichInds, submap.size(), file);
 
 #pragma omp parallel for firstprivate(EM) num_threads(pars.n_threads)
   for(int i0 = 0; i0 < p_A->ncol; i0 += 4) {  // boucle sur les individus, de 4 en 4. 
