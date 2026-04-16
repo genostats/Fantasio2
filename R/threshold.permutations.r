@@ -32,8 +32,8 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
 
   # now the coding is 0:control / 1:case / NA
 
-  nb.cases <- sum(pheno == 1)
-  nb.controls <- sum(pheno == 0)
+  nb.cases <- sum(pheno == 1, na.rm=TRUE)
+  nb.controls <- sum(pheno == 0, na.rm=TRUE)
 
   z.max <- list()
   
