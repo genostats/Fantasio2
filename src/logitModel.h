@@ -17,7 +17,7 @@ template<typename scalar_t>
 List logitModel(NumericVector Y, NumericMatrix X, NumericMatrix H, unsigned int beg, unsigned int end) {
   int n = Y.size();
   int r = X.ncol();
- 
+
   // paramètres
   userParam<scalar_t> pars = getUserParam<scalar_t>();
  
@@ -43,10 +43,15 @@ List logitModel(NumericVector Y, NumericMatrix X, NumericMatrix H, unsigned int 
 
   // les copies de beta et varbeta sont nécessaires pour qu'ils soient bien dimensionnés
   // il faut évidemment une copie privée de x pour chaque thread !
+  bool printed = true;
   omp_set_dynamic(0); 
   omp_set_num_threads(pars.n_threads);
-  // #pragma omp parallel for firstprivate(beta) firstprivate(varbeta) firstprivate(x)
+  #pragma omp parallel for firstprivate(beta) firstprivate(varbeta) firstprivate(x) firstprivate(printed)
   for(unsigned int i = beg; i <= end; i++) {
+     if(!printed) {
+       std::cout << "thread " << omp_get_thread_num() << "\n";
+       printed = true;
+     }
     // copie de la colonne i de H dans la dernière colonne de X
     for(unsigned int k = 0; k < n; k++) 
       x(k, r-1) = H(k, i);

@@ -22,6 +22,9 @@ List logitModelScore<float>(NumericVector Y1, NumericVector W, NumericMatrix A, 
   int p = A.nrow();
   if(n != A.ncol() | n != W.size() | n != H.nrow()) stop("Dimensions mismatch");
 
+  // paramètres
+  userParam<float> pars = getUserParam<float>();
+  
   // recopiage des matrices... nécessaire en float 
   VECTOR<float> y1(n);
   VECTOR<float> w(n);
@@ -38,8 +41,13 @@ List logitModelScore<float>(NumericVector Y1, NumericVector W, NumericMatrix A, 
   VECTOR<double> SCORE(end-beg+1);
   VECTOR<double> VARIANCE(end-beg+1);
 
-#pragma omp parallel for 
+  bool printed = true;
+#pragma omp parallel for firstprivate(printed) num_threads(pars.n_threads)
   for(unsigned int i = beg; i <= end; i++) {
+    if(!printed) {
+      std::cout << "thread " << omp_get_thread_num() << "\n";
+      printed = true;
+    }
     float score, variance;
 
     // et encore une copie
@@ -65,6 +73,9 @@ List logitModelScore<double>(NumericVector Y1, NumericVector W, NumericMatrix A,
   int p = A.nrow();
   if(n != A.ncol() | n != W.size() | n != H.nrow()) stop("Dimensions mismatch");
 
+  // paramètres
+  userParam<double> pars = getUserParam<double>();
+  
   // pas de recopiage, on peut faire des map
   Eigen::Map<VECTOR<double>> y1(&Y1[0], n);
   Eigen::Map<VECTOR<double>> w(&W[0], n);
@@ -74,8 +85,13 @@ List logitModelScore<double>(NumericVector Y1, NumericVector W, NumericMatrix A,
   VECTOR<double> SCORE(end-beg+1);
   VECTOR<double> VARIANCE(end-beg+1);
 
-#pragma omp parallel for 
+  bool printed = true;
+#pragma omp parallel for firstprivate(printed) num_threads(pars.n_threads)
   for(unsigned int i = beg; i <= end; i++) {
+    if(!printed) {
+       std::cout << "thread " << omp_get_thread_num() << "\n";
+       printed = true;
+    }
     double score, variance;
     Eigen::Map<VECTOR<double>> G(&H(0,i), n);
     logistic_model_score<double>(y1, G, w, a, score, variance);
@@ -105,6 +121,9 @@ List logitModelScore_nocovar<float>(NumericVector Y1, float w, NumericMatrix H, 
   int n = Y1.size();
   if(n != H.nrow()) stop("Dimensions mismatch");
 
+  // paramètres
+  userParam<float> pars = getUserParam<float>();
+  
   // recopiage des matrices... nécessaire en float 
   VECTOR<float> y1(n);
   for(int i = 0; i < n; i++) y1(i) = (float) Y1[i];
@@ -114,8 +133,13 @@ List logitModelScore_nocovar<float>(NumericVector Y1, float w, NumericMatrix H, 
   VECTOR<double> SCORE(end-beg+1);
   VECTOR<double> VARIANCE(end-beg+1);
 
-#pragma omp parallel for 
+  bool printed = true;
+#pragma omp parallel for firstprivate(printed) num_threads(pars.n_threads) 
   for(unsigned int i = beg; i <= end; i++) {
+    if(!printed) {
+       std::cout << "thread " << omp_get_thread_num() << "\n";
+       printed = true;
+    }
     float score, variance = 0;
 
     // et encore une copie
@@ -140,6 +164,9 @@ List logitModelScore_nocovar<double>(NumericVector Y1, double w, NumericMatrix H
   int n = Y1.size();
   if(n != H.nrow()) stop("Dimensions mismatch");
 
+  // paramètres
+  userParam<double> pars = getUserParam<double>();
+  
   // pas de recopiage, on peut faire des map
   Eigen::Map<VECTOR<double>> y1(&Y1[0], n);
 
@@ -147,8 +174,13 @@ List logitModelScore_nocovar<double>(NumericVector Y1, double w, NumericMatrix H
   VECTOR<double> SCORE(end-beg+1);
   VECTOR<double> VARIANCE(end-beg+1);
 
-#pragma omp parallel for 
+  bool printed = true;
+#pragma omp parallel for firstprivate(printed) num_threads(pars.n_threads)  
   for(unsigned int i = beg; i <= end; i++) {
+     if(!printed) {
+       std::cout << "thread " << omp_get_thread_num() << "\n";
+       printed = true;
+    }
     double score, variance = 0;
     Eigen::Map<VECTOR<double>> G(&H(0,i), n);
     logistic_model_score_nocovar<double>(y1, G, w, score, variance, compute_variance);

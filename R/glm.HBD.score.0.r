@@ -14,7 +14,7 @@ glm.HBD.score.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, variance,
     H <- H[-w,]
   }
 
-  X <- covar.matrix
+  X <- as.matrix(covar.matrix)
 
   # if there's only one intercept, we use the dedicated function
   if(ncol(X) == 1 && all(X == 1)) {

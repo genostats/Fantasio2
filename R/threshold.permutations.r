@@ -54,6 +54,9 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
     force(atlas)
   }
   
+  fp <- Fantasio.parameters()
+  fp$n_threads <- 1
+  
   get.z.max.unit <- function(iteration) {
     cases <- sample(which(pheno == 0 | pheno == 1), nb.cases, replace = FALSE) #only on non-NA phenotypes
     controls <- sample(which(pheno == 0 | pheno == 1)[-cases], nb.controls, replace = FALSE) #only on non-NA phenotypes
@@ -74,10 +77,17 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
     
   
     library(parallel)
+    cat("cores =", cores, "\n")
     cl <- makeCluster(cores) # créer le cluster
+    on.exit(stopCluster(cl), add=TRUE)
     clusterSetRNGStream(cl) # L ecuyer
+    
+    
+    #clusterExport(cl, "fp")
+    parLapply(cl, 1:cores, function(i) do.call(Fantasio.parameters, fp) )
+    
     results.all.z.max <- parLapply(cl, deb:fin, get.z.max.unit) # boucle for inclue dans parLapply
-    on.exit(stopCluster(cl))
+    
   
     return(results.all.z.max)
     #z.max <- c(z.max, results.all.z.max)  
