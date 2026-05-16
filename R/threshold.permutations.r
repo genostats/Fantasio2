@@ -37,6 +37,8 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
 
   z.max.min <- list()
   
+  #run HBD.glm on real phenotype
+  as <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, phen.code = "R", score = score, pval = FALSE)
   
   if(score) {
     #first get the variance for all permutations
@@ -103,11 +105,12 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
   p.left <- -log10(pnorm(z.min.95))
   p.bil <- -log10(pchisq(max(abs(z.min.95), abs(z.max.95))**2, df = 1, lower.tail = FALSE))
   p.right <- -log10(1-pnorm(z.max.95))
+  true.max <- max(as$z.value)
 
   res <- list(z.max = z.max, threshold.z.max = z.max.95,
               z.min = z.min, threshold.z.min = z.min.95,
               p.left = p.left, p.bilateral = p.bil, p.right = p.right,
-              signif = (z.max > z.max.95))
+              signif = (true.max > z.max.95))
 
   res
 
