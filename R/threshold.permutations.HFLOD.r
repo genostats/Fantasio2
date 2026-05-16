@@ -64,7 +64,7 @@ threshold.permutations.HFLOD <- function(atlas, nb.perm = 1000, phen, phen.code 
 
     hg <- HBD.gwas(atlas = atlas, phen = pheno, phen.code = "R")
 
-    return(hflodmax = max(hg$HFLOD)))
+    return(hflodmax = max(hg$HFLOD))
     #z.max[iteration] <- max(reg$z.value)
   }
 
