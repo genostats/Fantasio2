@@ -8,7 +8,7 @@
 
 
 
-threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "pHBD"), phen, phen.code = c("R", "plink"), covar_df, covar, score, cores){
+threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "pHBD"), phen, phen.code = c("R", "plink"), covar_df = NULL, covar = NULL, score, cores){
 
   # phenotype coding
 

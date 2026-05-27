@@ -17,7 +17,7 @@
 #' 
 #' @export
 
-HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df, covar, phen.code = c("R", "plink"), threshold, score, variance, pval=TRUE) {
+HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df = NULL, covar = NULL, phen.code = c("R", "plink"), threshold, score, variance, pval=TRUE) {
  
   expl_var <- match.arg(expl_var)
   phen.code <- match.arg(phen.code)
@@ -54,7 +54,7 @@ HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df, covar, phe
   # Recovery chr, snps, pos_cM and pos_Bp 
   final <- get.positions(x)	
 
-  if (missing(covar_df)) {
+  if (is.null(covar_df)) {
     # unadjusted 
     message("No covariates given for the analysis = unadjusted data. To use covariates import a dataframe.")
     message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i])"))
@@ -72,7 +72,7 @@ HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df, covar, phe
     if (class(covar_df)[1] == "data.frame")
       covar_df <- as.matrix(covar_df)
     
-    if(missing(covar)) {
+    if(is.null(covar)) {
       message(paste0("No covariates specified - All covariates of the dataframe will be used : " , gsub(",", " +", toString(colnames(covar_df)))))
       message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i] + ", gsub(",", " +", toString(colnames(covar_df))) ,")" ))
       df <- na.omit(covar_df[id,])				 # take all covar given in the dataframe
