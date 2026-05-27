@@ -8,7 +8,7 @@
 
 
 
-threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "pHBD"), phen, phen.code = c("R", "plink"), score, cores){
+threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "pHBD"), phen, phen.code = c("R", "plink"), covar_df, covar, score, cores){
 
   # phenotype coding
 
@@ -38,7 +38,7 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
   z.max.min <- list()
   
   #run HBD.glm on real phenotype
-  as <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, phen.code = "R", score = score, pval = FALSE)
+  as <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, covar_df = covar_df, covar = covar, phen.code = "R", score = score, pval = FALSE)
   
   if(score) {
     #first get the variance for all permutations
@@ -47,7 +47,7 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
     pheno[cases] <- 1
     pheno[controls] <- 0
     
-    reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, phen.code = "R", score = TRUE, pval = FALSE)
+    reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, covar_df = covar_df, covar = covar, phen.code = "R", score = TRUE, pval = FALSE)
     z.max.min[[1]] <- c(zmax = max(reg$z.value), zmin = min(reg$z.value))
     sigma2 <- reg$variance
     
@@ -67,7 +67,7 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
     
     variance <- if (score) sigma2 else NULL
 
-    reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, phen.code = "R", score = score, variance = variance, pval = FALSE)
+    reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, covar_df = covar_df, covar = covar, phen.code = "R", score = score, variance = variance, pval = FALSE)
 
     return(c(zmax = max(reg$z.value), zmin = min(reg$z.value)))
     #z.max[iteration] <- max(reg$z.value)
