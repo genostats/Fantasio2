@@ -27,51 +27,47 @@ threshold.permutations.HFLOD <- function(atlas, nb.perm = 1000, phen, phen.code 
     pheno <- ifelse(pheno == 1, 0, ifelse(pheno == 2, 1, NA))# Translate phenotype
   }
 
-  # now the coding is 0:control / 1:case / NA
+  NAs <- is.na(pheno)
+  if(any(NAs)) {
+    keep <- which(!NAs)
 
-  nb.cases <- sum(pheno == 1, na.rm=TRUE)
-  nb.controls <- sum(pheno == 0, na.rm=TRUE)
+    atlas@bedmatrix@ped <- atlas@bedmatrix@ped[keep, ]
+    atlas@submap_summary <- atlas@submap_summary[keep, ]
 
-  HFLOD.max <- list()
+    # remove them also from FLOD matrix
+    id.k <- paste0(atlas@submap_summary$famid, ":", atlas@submap_summary$id)
+    HBD.k <- which(rownames(atlas@FLOD_recap) %in% id.k)
+
+    # we just need to perform the extraction on the FLOD matrix
+
+    atlas@FLOD_recap <- atlas@FLOD_recap[HBD.k, ]
+
+    pheno <- pheno[keep] 
+  }
+
+  # to ease the subsequent steps we keep only the inbred individuals in the atlas / covar / pheno
+  keep <- which(atlas@submap_summary$inbred)
+  atlas@bedmatrix@ped <- atlas@bedmatrix@ped[keep, ]
+  atlas@submap_summary <- atlas@submap_summary[keep, ]
+  pheno <- pheno[keep] 
+
   
   #run HBD.gwas on real phenotype
   hflod <- HBD.gwas(atlas = atlas, phen = pheno, phen.code = "R")
   
-#  if(score) {
-#    #first get the variance for all permutations
-#    cases <- sample(which(pheno == 0 | pheno == 1), nb.cases, replace = FALSE) #only on non-NA phenotypes
-#    controls <- sample(which(pheno == 0 | pheno == 1)[-cases], nb.controls, replace = FALSE) #only on non-NA phenotypes
-#    pheno[cases] <- 1
-#    pheno[controls] <- 0
-    
-#    reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, phen.code = "R", score = TRUE, pval = FALSE)
-#    z.max.min[[1]] <- c(zmax = max(reg$z.value), zmin = min(reg$z.value))
-#    sigma2 <- reg$variance
-    
-    #then compute for the rest of the permutations    
-#  } else {
-#    force(atlas)
-#  }
-  
+  # prepare a set of parameters with n_threads = 1 (no multithreading in the cluster nodes !)
   fp <- Fantasio.parameters()
   fp$n_threads <- 1
-  
-  get.HFLOD.max.unit <- function(iteration) {
-    cases <- sample(which(pheno == 0 | pheno == 1), nb.cases, replace = FALSE) #only on non-NA phenotypes
-    controls <- sample(which(pheno == 0 | pheno == 1)[-cases], nb.controls, replace = FALSE) #only on non-NA phenotypes
-    pheno[cases] <- 1
-    pheno[controls] <- 0
-
+ 
+  # the function which computes one (permutated) value of z.min and z.max
+  get.hflod <- function(iteration) {
+    pheno <- sample(pheno)
     hg <- HBD.gwas(atlas = atlas, phen = pheno, phen.code = "R")
-
     return(hflodmax = max(hg$HFLOD))
-    #z.max[iteration] <- max(reg$z.value)
   }
 
-
-  calc.HFLOD.max <- function(fin){
+  calc.hflod <- function(fin){
     deb <- 1
-    
   
     library(parallel)
     cat("cores =", cores, "\n")
@@ -79,20 +75,17 @@ threshold.permutations.HFLOD <- function(atlas, nb.perm = 1000, phen, phen.code 
     on.exit(stopCluster(cl), add=TRUE)
     clusterSetRNGStream(cl) # L ecuyer
     
-    
-    #clusterExport(cl, "fp")
+    # no multithreading in the nodes
     parLapply(cl, 1:cores, function(i) do.call(Fantasio.parameters, fp) )
     
-    results.all.HFLOD.max <- parLapply(cl, deb:fin, get.HFLOD.max.unit) # boucle for inclue dans parLapply
-    
+    results.all.hflod <- parLapply(cl, deb:fin, get.hflod) # boucle for inclue dans parLapply
   
-    return(results.all.HFLOD.max)
-    #z.max <- c(z.max, results.all.z.max)  
+    return(results.all.hflod)
   }
   
-  all.HFLOD.max <- calc.HFLOD.max(nb.perm)
-
-  HFLOD.max <- unlist(all.HFLOD.max)
+  all.hflod <- calc.hflod(nb.perm)
+  
+  HFLOD.max <- unlist(all.hflod)
   HFLOD.max.95 <- quantile(HFLOD.max, 0.95)
   
   true.max <- max(hflod$HFLOD)
