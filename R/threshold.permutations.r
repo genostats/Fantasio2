@@ -11,15 +11,12 @@
 threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "pHBD"), phen, phen.code = c("R", "plink"), covar_df = NULL, covar = NULL, score, cores){
 
   # phenotype coding
-
   phen_code <- match.arg(phen.code)
   
   # explanatory variable
-  
   expl_var <- match.arg(expl.var)
 
   # recover phenotype
-
   if(missing(phen)) {
     pheno <- atlas@bedmatrix@ped$pheno
   } else {
@@ -32,51 +29,59 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
 
   # now the coding is 0:control / 1:case / NA
 
-  nb.cases <- sum(pheno == 1, na.rm=TRUE)
-  nb.controls <- sum(pheno == 0, na.rm=TRUE)
+  # if there are any NA's, build a new atlas / covar / pheno without those individuals 
+  # this will avoid the repeated extraction of the relevant lines in glm.HBD.0
+  # and will also simplify the permutations in get.z.max.unit
 
-  z.max.min <- list()
-  
-  #run HBD.glm on real phenotype
-  as <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, covar_df = covar_df, covar = covar, phen.code = "R", score = score, pval = FALSE)
-  
-  if(score) {
-    #first get the variance for all permutations
-    cases <- sample(which(pheno == 0 | pheno == 1), nb.cases, replace = FALSE) #only on non-NA phenotypes
-    controls <- sample(which(pheno == 0 | pheno == 1)[-cases], nb.controls, replace = FALSE) #only on non-NA phenotypes
-    pheno[cases] <- 1
-    pheno[controls] <- 0
-    
-    reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, covar_df = covar_df, covar = covar, phen.code = "R", score = TRUE, pval = FALSE)
-    z.max.min[[1]] <- c(zmax = max(reg$z.value), zmin = min(reg$z.value))
-    sigma2 <- reg$variance
-    
-    #then compute for the rest of the permutations    
-  } else {
-    force(atlas)
+  NAs <- is.na(pheno)
+  if(any(NAs)) {
+    keep <- which(!NAs)
+
+    atlas@bedmatrix@ped <- atlas@bedmatrix@ped[keep, ]
+    atlas@submap_summary <- atlas@submap_summary[keep, ]
+
+    # remove them also from HBD/FLOD matrix
+    id.k <- paste0(atlas@submap_summary$famid, ":", atlas@submap_summary$id)
+    HBD.k <- which(rownames(atlas@FLOD_recap) %in% id.k)
+
+    # we just need to perform the extraction on the relevant matrix
+    if(expl_var == "FLOD") {
+      atlas@FLOD_recap <- atlas@FLOD_recap[HBD.k, ]
+    } else {
+      atlas@HBD_recap <- atlas@HBD_recap[HBD.k, ]
+    }
+
+    if(!is.null(covar)) covar <- covar[keep, ]
+    pheno <- pheno[keep] 
   }
-  
+
+  # to ease the subsequent steps we keep only the inbred individuals in the atlas / covar / pheno
+  keep <- which(atlas@submap_summary$inbred)
+  atlas@bedmatrix@ped <- atlas@bedmatrix@ped[keep, ]
+  atlas@submap_summary <- atlas@submap_summary[keep, ]
+  if(!is.null(covar)) covar <- covar[keep, ]
+  pheno <- pheno[keep] 
+
+  # run HBD.glm on real phenotype
+  as <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, covar_df = covar_df, covar = covar, phen.code = "R", score = score, pval = FALSE)
+
+  # keep the variance from 'as'
+  sigma2 <- as$variance
+
+  # prepare a set of parameters with n_threads = 1 (no multithreading in the cluster nodes !)
   fp <- Fantasio.parameters()
   fp$n_threads <- 1
-  
-  get.z.max.unit <- function(iteration) {
-    cases <- sample(which(pheno == 0 | pheno == 1), nb.cases, replace = FALSE) #only on non-NA phenotypes
-    controls <- sample(which(pheno == 0 | pheno == 1)[-cases], nb.controls, replace = FALSE) #only on non-NA phenotypes
-    pheno[cases] <- 1
-    pheno[controls] <- 0
-    
+ 
+  # the function which computes one (permutated) value of z.min and z.max
+  get.z <- function(iteration) {
+    pheno <- sample(pheno)
     variance <- if (score) sigma2 else NULL
-
     reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, covar_df = covar_df, covar = covar, phen.code = "R", score = score, variance = variance, pval = FALSE)
-
     return(c(zmax = max(reg$z.value), zmin = min(reg$z.value)))
-    #z.max[iteration] <- max(reg$z.value)
   }
 
-
-  calc.z.max <- function(fin, score){
-    deb <- ifelse(score, 2,1)
-    
+  calc.z <- function(fin, score){
+    deb <- 1
   
     library(parallel)
     cat("cores =", cores, "\n")
@@ -84,20 +89,16 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
     on.exit(stopCluster(cl), add=TRUE)
     clusterSetRNGStream(cl) # L ecuyer
     
-    
-    #clusterExport(cl, "fp")
+    # no multithreading in the nodes
     parLapply(cl, 1:cores, function(i) do.call(Fantasio.parameters, fp) )
     
-    results.all.z.max <- parLapply(cl, deb:fin, get.z.max.unit) # boucle for inclue dans parLapply
-    
+    results.all.z <- parLapply(cl, deb:fin, get.z) # boucle for inclue dans parLapply
   
-    return(results.all.z.max)
-    #z.max <- c(z.max, results.all.z.max)  
+    return(results.all.z)
   }
   
-  all.z.max.min <- calc.z.max(nb.perm, score)
+  z.max.min <- calc.z(nb.perm, score)
 
-  z.max.min <- c(z.max.min, all.z.max.min)
   z.max <- sapply(z.max.min, function(x) x['zmax'])
   z.min <- sapply(z.max.min, function(x) x['zmin'])
   z.max.95 <- quantile(z.max, 0.95)
@@ -113,6 +114,5 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
               signif = (true.max > z.max.95))
 
   res
-
 }
 
