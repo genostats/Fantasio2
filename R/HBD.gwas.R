@@ -23,7 +23,7 @@ HBD.gwas <- function(atlas, phen, phen.code = c("R", "plink"))
     atlas@submap_summary$pheno <- phen
   }
   
-  w.id <- which.inbreds(atlas@submap_summary, phen.code = phen.code)$HFLOD
+  w.id <- which.inbreds(atlas@submap_summary, phen.code = phen.code)$HFLOD # which.inbreds gives the id of inbred cases
   
   HFLOD <- get.positions(atlas)
   
