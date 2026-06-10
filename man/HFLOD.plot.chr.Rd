@@ -2,30 +2,30 @@
 % Please edit documentation in R/HFLOD.plot.chr.r
 \name{HFLOD.plot.chr}
 \alias{HFLOD.plot.chr}
-\title{Plot of the HFLOD}
+\title{Plot of the HFLOD for a given chromosome}
 \usage{
 HFLOD.plot.chr(
   HFLOD,
-  unit = c("cM", "bases"),
+  unit = c("cM", "Bases"),
   chr,
   regions,
   color2 = "green4",
-  MA = TRUE,
+  MA = FALSE,
   nbSNP_MA = 50
 )
 }
 \arguments{
-\item{HFLOD}{the HBD.gwas results}
+\item{HFLOD}{the output of the HBD.gwas function}
 
-\item{unit}{the unit used to plot, two options are allowed "bases", "cM" (default is "cM")}
+\item{unit}{the unit used to plot, two options are allowed "Bases", "cM" (default is "cM")}
 
 \item{chr}{the chromosome number from which to plot HFLOD score}
 
-\item{regions}{a matrix containing the value to ve highlighted in the plot}
+\item{regions}{a matrix containing the value to be highlighted in the plot}
 
 \item{color2}{the color of the regions highlighted (default is "green4")}
 
-\item{MA}{a boolean indicating whether a red line has to be drawn for the moving average}
+\item{MA}{a boolean indicating whether a red line has to be drawn for the moving average (default is FALSE)}
 
 \item{nbSNP_MA}{number of SNP for the moving average (default is 50)}
 }

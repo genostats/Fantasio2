@@ -12,5 +12,5 @@ threshold(as, n.sims = 10000)
 \item{n.sims}{the number of simulations (default is 1e4)}
 }
 \description{
-This function calculate the threshold of the association analysis
+This function calculate the threshold of the association analysis using a Ornstein-Uhlenbeck process
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/glm.HBD.plot.r
 \name{glm.HBD.plot}
 \alias{glm.HBD.plot}
-\title{Manhattan Plot for glm on HBD prob or FLOD}
+\title{Manhattan Plot for glm on HBD probabilities or FLOD}
 \usage{
 glm.HBD.plot(
   x,
@@ -21,7 +21,7 @@ glm.HBD.plot(
 \item{...}{extra arguments for the plot}
 }
 \description{
-Manhattan Plot for glm on HBD prob or FLOD
+Manhattan Plot for glm on HBD probabilities or FLOD
 }
 \seealso{
 \code{\link{HBD.glm}}

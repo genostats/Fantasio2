@@ -2,10 +2,10 @@
 % Please edit documentation in R/HBD.plot.chr.r
 \name{HBD.plot.chr}
 \alias{HBD.plot.chr}
-\title{plot of HBD segment}
+\title{Plot the HBD segments on a given chromosome}
 \usage{
 HBD.plot.chr(
-  Submaps,
+  atlas,
   ROH,
   unit = "cM",
   chr,
@@ -17,11 +17,11 @@ HBD.plot.chr(
 )
 }
 \arguments{
-\item{Submaps}{a list.submap object}
+\item{atlas}{an atlas object}
 
 \item{ROH}{a data frame from which the segments will be plotted (optional)}
 
-\item{unit}{the unit used to plot, two options are allowed "Bases", "cM" (default is "CM")}
+\item{unit}{the unit used to plot, two options are allowed "Bases", "cM" (default is "cM")}
 
 \item{chr}{the chromosome number from which to plot HBD segment}
 
@@ -36,10 +36,10 @@ HBD.plot.chr(
 \item{build}{the value of the build to use to plot chromosome in the plot value accepted are 35, 36, 37, 38 (default is 37)}
 }
 \value{
-return a plot of the chromosome HBD segments for all the individual
+return a plot of the chromosome HBD segments for all individuals
 }
 \description{
-This function plots the HBD segments for a given chromosome and all the individuals
+This function plots all the HBD segments for a given chromosome and all the individuals
 }
 \details{
 If you use the regions options make sure to pass a matrix containing one line per region to be highlighted with in each line :
@@ -59,5 +59,5 @@ If you use the regions options make sure to pass a matrix containing one line pe
 \seealso{
 Fantasio
 
-setHFLOD
+set.HFLOD
 }

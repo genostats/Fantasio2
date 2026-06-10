@@ -35,6 +35,8 @@ Fantasio(
 
 \item{epsilon}{genotype error rate (default is 0.001)}
 
+\item{epsilon2}{shift in border allele frequency p (p = 1 will be changed to 1-epsilon2 ; p = 0 will be changed to epsilon2)}
+
 \item{median}{define the f and a parameters used to compute pHBD and FLOD
 - if FALSE : f and a estimated on each submap
 - if TRUE : median value of estimations on all submaps of f and a (default)}
@@ -42,8 +44,6 @@ Fantasio(
 \item{dense.recap}{define how pHBD and FLOD are combined over the submaps
 - if FALSE : pHBD and FLOD are combined SNP by SNP with a mean on the number of submaps that includes this SNP
 - if TRUE : mean of pHBD and FLOD on all submaps (default)}
-
-\item{list.id}{a list of individuals of interest ('famid:id') (default = no list id)}
 }
 \description{
 This function is used as a wrapper for the package Fantasio to create segments list and submaps
@@ -53,10 +53,9 @@ This function is a wrapper to make the usage of the package easier. The function
 
 The first function, `segments.list.by.hotspots` is used to create a list of segments.
 
-The second function, `atlas` is used to create submaps based on recombination hotspots (for the moment).
+The second function, `atlas` is used to create submaps based on recombination hotspots.
 
 The arguments that can be included in `segment.options` are described in `segments.list.by.hotspots`.
 
-If `recap = 'SNP'`, the quantities such as HBD probabilities, FLOD, HFLOD, 
-  are recapitulated SNP by SNP (default).
+If `recap = 'SNP'`, the quantities such as HBD probabilities, FLOD, HFLOD are recapitulated SNP by SNP (default).
 }

@@ -14,11 +14,11 @@ segments.list.by.hotspots(
 \arguments{
 \item{bedmatrix}{a bed.matrix object}
 
-\item{intensity}{hotspots intensity threshold in cM/Mb}
+\item{intensity}{hotspots intensity threshold in cM/Mb (default is 10)}
 
-\item{hotspots}{a data frame of recombination rates}
+\item{hotspots}{a data frame of recombination rates (default is hg19)}
 
-\item{minMarkers}{minimum number of markers in a segment}
+\item{minMarkers}{minimum number of markers in a segment (default is 0)}
 }
 \value{
 an hotspots.segments object

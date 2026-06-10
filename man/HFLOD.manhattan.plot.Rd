@@ -7,21 +7,21 @@
 HFLOD.manhattan.plot(HFLOD, regions, unit = "cM", MA = FALSE, nbSNP_MA = 50)
 }
 \arguments{
+\item{HFLOD}{the output of the HBD.gwas function}
+
 \item{regions}{a matrix containing the value to be highlighted in the plot}
 
-\item{unit}{the unit used to plot, two options are allowed "Bases", "cM" (default is "CM")}
+\item{unit}{the unit used to plot, two options are allowed "Bases", "cM" (default is "cM")}
 
 \item{MA}{a boolean indicating whether a red line has to be drawn for the moving average}
 
 \item{nbSNP_MA}{number of SNP for the moving average (default is 50)}
-
-\item{submaps}{a atlas object}
 }
 \value{
 This function returns a manhattan plot of all the HFLOD score over all the chromosome
 }
 \description{
-This fonction to plot a manhanttan plot of the HFLOD score
+This fonction plot a manhanttan plot of the HFLOD score
 }
 \details{
 If you use the regions options make sure to pass a matrix containing one line per region to be highlighted with in each line :

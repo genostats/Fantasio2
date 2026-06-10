@@ -2,16 +2,19 @@
 % Please edit documentation in R/HBD.glm.r
 \name{HBD.glm}
 \alias{HBD.glm}
-\title{Logistic regression on HBD probability or FLOD score}
+\title{Logistic regression on HBD probabilities or FLOD score}
 \usage{
 HBD.glm(
   x,
   expl_var = c("FLOD", "pHBD"),
   phen,
-  covar_df,
-  covar,
+  covar_df = NULL,
+  covar = NULL,
   phen.code = c("R", "plink"),
-  threshold
+  threshold,
+  score,
+  variance,
+  pval = TRUE
 )
 }
 \arguments{
@@ -33,8 +36,12 @@ if 'plink' the function automatically convert it to 'R' to run logistic regressi
 
 \item{threshold}{if missing, no thresholding. If set, the explanatory variable will be dichotomized accordingly. Suggested values: 0 for FLOD, 0.5 for pHBD.}
 
-\item{n.cores}{number of cores for parallelization calculation (default = 1)}
+\item{score}{if TRUE, the test used is the score, else it is khi2}
+
+\item{variance}{the vector of scores variances if already computed}
+
+\item{pval}{if TRUE (default), computes the p-value od the test, else only computes the z-value}
 }
 \description{
-Logistic regression on HBD probability or FLOD score
+Logistic regression on HBD probabilities or FLOD score
 }

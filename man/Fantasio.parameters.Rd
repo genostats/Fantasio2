@@ -16,23 +16,17 @@ A list, or `NULL`.
 Controlling Fantasio behaviour
 }
 \details{
-If no arguments are given, the list of current parameters
-values is returned.
+If no arguments are given, the list of current parameters values is returned.
 
-When some arguments are given, they are used to update 
-the current values (cf example).
+When some arguments are given, they are used to update the current values (cf example).
 
-The parameters `m`, `epsilon`, `past`, `delta`, `max_iterations`, `max_submin`,
-`max_linesearch`, `min_step`, `max_step`, `ftol` and `wolfe` are for L-BFGS-B optimization
-algorithm control, and are described at 
-\url{https://lbfgspp.statr.me/doc/classLBFGSpp_1_1LBFGSBParam.html}.
+The parameters `m`, `epsilon`, `past`, `delta`, `max_iterations`, `max_submin`, `max_linesearch`, `min_step`, `max_step`, `ftol` and `wolfe` are for L-BFGS-B optimization algorithm control, 
+and are described at \url{https://lbfgspp.statr.me/doc/classLBFGSpp_1_1LBFGSBParam.html}.
 
-The parameter `max_retries` gives the number of times the algorithm can be
-re-run after a runtimer error. The vectors of length 2 `lower` and `upper` give the 
-lower and upper bounds for \eqn{a} and \eqn{f}.
+The parameter `max_retries` gives the number of times the algorithm can be re-run after a runtimer error. The vectors of length 2 `lower` and `upper` give the lower and upper bounds for 
+\eqn{a} and \eqn{f}.
 
-The parameter `n_threads` controls the number of threads; and `debug` to a positive value
-will turn on the displaying of various amounts of information.
+The parameter `n_threads` controls the number of threads; and `debug` to a positive value will turn on the displaying of various amounts of information.
 }
 \examples{
 Fantasio.parameters()
