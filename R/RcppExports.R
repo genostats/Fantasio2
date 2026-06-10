@@ -17,6 +17,10 @@ forward_backward <- function(logEmiss, Dist, a, f) {
     .Call(`_Fantasio2_forward_backward`, logEmiss, Dist, a, f)
 }
 
+hflod <- function(flod, eps = 0.01) {
+    .Call(`_Fantasio2_hflod`, flod, eps)
+}
+
 logLikelihood_gradient <- function(logEmiss, Dist, a, f) {
     .Call(`_Fantasio2_logLikelihood_gradient`, logEmiss, Dist, a, f)
 }

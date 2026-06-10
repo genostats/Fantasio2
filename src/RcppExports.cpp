@@ -67,6 +67,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// hflod
+NumericVector hflod(NumericVector flod, double eps);
+RcppExport SEXP _Fantasio2_hflod(SEXP flodSEXP, SEXP epsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type flod(flodSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    rcpp_result_gen = Rcpp::wrap(hflod(flod, eps));
+    return rcpp_result_gen;
+END_RCPP
+}
 // logLikelihood_gradient
 NumericVector logLikelihood_gradient(NumericMatrix logEmiss, NumericVector Dist, double a, double f);
 RcppExport SEXP _Fantasio2_logLikelihood_gradient(SEXP logEmissSEXP, SEXP DistSEXP, SEXP aSEXP, SEXP fSEXP) {
@@ -389,6 +401,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_checkOpenMP", (DL_FUNC) &_Fantasio2_checkOpenMP, 0},
     {"_Fantasio2_festim", (DL_FUNC) &_Fantasio2_festim, 7},
     {"_Fantasio2_forward_backward", (DL_FUNC) &_Fantasio2_forward_backward, 4},
+    {"_Fantasio2_hflod", (DL_FUNC) &_Fantasio2_hflod, 2},
     {"_Fantasio2_logLikelihood_gradient", (DL_FUNC) &_Fantasio2_logLikelihood_gradient, 4},
     {"_Fantasio2_likelihoods_", (DL_FUNC) &_Fantasio2_likelihoods_, 7},
     {"_Fantasio2_logEmiss", (DL_FUNC) &_Fantasio2_logEmiss, 4},
