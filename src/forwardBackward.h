@@ -2,7 +2,7 @@
 #include <Rcpp.h>
 #include <iostream>
 #include <ctime>
-#include <math.h>
+#include <cmath>
 #include "LSE.h"
 #include "RVector.h"
 
@@ -20,11 +20,11 @@ inline void logTrans4(scalar_t d, scalar_t a, scalar_t f, scalar_t lf, scalar_t 
   // attention à la façon de calculer log(1 - exp(-a*d))
   // quand a petit, log1p(-exp(-a*d)) marche moins bien que log(-expm1(-a*d))
   // [enfin ça change pas grand chose]
-  scalar_t ex = expm1(-a*d);
-  lt00 = log1p(f*ex);
-  lt01 = lf + log(-ex);
-  lt10 = lumf + log(-ex);
-  lt11 = log1p((1-f)*ex);
+  scalar_t ex = std::expm1(-a*d);
+  lt00 = std::log1p(f*ex);
+  lt01 = lf + std::log(-ex);
+  lt10 = lumf + std::log(-ex);
+  lt11 = std::log1p((1-f)*ex);
 }
 
 /**** algorithme forward - backward pour le calcul des probas a posteriori ****/
@@ -43,8 +43,8 @@ void forwardBackward(const std::vector<scalar_t> & logEmiss, const std::vector<s
     return;
   }
 
-  scalar_t logf   = log(f);
-  scalar_t logumf = log(1-f);
+  scalar_t logf   = std::log(f);
+  scalar_t logumf = std::log(1-f);
   scalar_t lt00, lt01, lt10, lt11; // log proba transition
   // stocker les alpha
   std::vector<scalar_t> Alpha(2*N);
@@ -70,7 +70,7 @@ void forwardBackward(const std::vector<scalar_t> & logEmiss, const std::vector<s
   //   dans la boucle pour éviter des pbs d'arrondis en float (on a des probas < 0 et > 1).
   //   Après expérience, il suffit de calculer beta0 en remettant à 0 (à 1) les valeurs
   //   calculées < 0 (resp > 1). [lignes "caping"]
-  scalar_t beta0 = 1/(1 + exp( alpha1 + logEmiss[2*N-1] - alpha0 - logEmiss[2*N-2]));
+  scalar_t beta0 = 1/(1 + std::exp( alpha1 + logEmiss[2*N-1] - alpha0 - logEmiss[2*N-2]));
   if(beta0 < 0) beta0 = 0;  // caping
   if(beta0 > 1) beta0 = 1;  // caping
   // scalar_t beta1 = 1/(1 + exp( alpha0 + logEmiss[2*N-2] - alpha1 - logEmiss[2*N-1]));
@@ -79,13 +79,14 @@ void forwardBackward(const std::vector<scalar_t> & logEmiss, const std::vector<s
   PHBD[N-1] = (scalar_t) beta1;
   for(int n = N-2; n >=0; n--) {
     logTrans4(deltaDist[n], a, f, logf, logumf, lt00, lt01, lt10, lt11);
-    beta0_ = exp(logEmiss[2*n])   * ( beta0 * exp(lt00 + Alpha[2*n]   - Alpha[2*n+2]) + beta1 * exp(lt01 + Alpha[2*n]   - Alpha[2*n+3]) );
+    beta0_ = std::exp(logEmiss[2*n])   * ( beta0 * std::exp(lt00 + Alpha[2*n] - Alpha[2*n+2]) + 
+             beta1 * std::exp(lt01 + Alpha[2*n]   - Alpha[2*n+3]) );
     if(beta0_ < 0) beta0_ = 0;  // caping
     if(beta0_ > 1) beta0_ = 1;  // caping
     // beta1  = exp(logEmiss[2*n+1]) * ( beta0 * exp(lt10 + Alpha[2*n+1] - Alpha[2*n+2]) + beta1 * exp(lt11 + Alpha[2*n+1] - Alpha[2*n+3]) );
     beta1 = (scalar_t) 1 - beta0_;
     beta0 = beta0_;
-    PHBD[n] = (scalar_t) beta1;
+    PHBD[n] = std::isfinite(beta1)?beta1:((scalar_t) 0.0);
   }
 }
 

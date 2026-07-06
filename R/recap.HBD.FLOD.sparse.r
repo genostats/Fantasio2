@@ -9,9 +9,10 @@
 #' @param median define the f and a parameters used to compute pHBD and FLOD
 #'	   - if FALSE : f and a estimated on each submap
 #'	   - if TRUE : median value of estimations on all submaps of f and a (default)
+#' @param basename if missing, the HBD and FLOD matrices will be R native matrices, else they will be houba matrices
 #'
 #' @export
-recap.HBD.FLOD.sparse <- function(atlas, keep.inds, q, recap, median) {
+recap.HBD.FLOD.sparse <- function(atlas, keep.inds, q, recap, median, basename) {
   if(recap != "SNP") stop("Not yet implemented")
 
   # shotcuts for atlas slots
@@ -29,20 +30,20 @@ recap.HBD.FLOD.sparse <- function(atlas, keep.inds, q, recap, median) {
   
   #tester s'il y a des inds consanguins
   #si oui, remplir les matrices de FLOD et pHBD par NULL
-  if(length(wi)==0){
+  if(length(wi) == 0) {
     atlas@HBD_recap <- NULL     
     atlas@FLOD_recap <- NULL  
     atlas@recap <- recap
     atlas@q <- q
     atlas
-  }else{  
-
+  } else {  
     if(median) {
       a <- summary$a_median
       f <- summary$f_median
     }
 
     verbose <- Fantasio.parameters("verbose")
+    HBD <- matrix(0, nrow = length(submap), ncol = sum(keep.inds))
 
     for(i in 1:n) { # boucle sur les cartes
       if(verbose) cat("Computing HBD and FLOD on submap", i, "\r")
@@ -57,9 +58,8 @@ recap.HBD.FLOD.sparse <- function(atlas, keep.inds, q, recap, median) {
         f <- F[, i]
       }
 
-      # matrice des pHBD [une colonne par individu, une ligne par SNP]
-      HBD <- probaHBD(bedmatrix@bed, bedmatrix@p, submap, d.dist, keep.inds, a = a, f = f, epsilon)
-      HBD[!is.finite(HBD)] <- 0
+      # on calcule les pHBD avec les snps sur les lignes et les inds sur les colonnes
+      probaHBD_matrix(bedmatrix@bed, HBD, bedmatrix@p, submap, d.dist, keep.inds, a = a, f = f, epsilon) 
 
       # les f et a pour les individus de keep inds
       ff <- f[wi]

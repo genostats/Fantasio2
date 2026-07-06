@@ -9,7 +9,7 @@ Author: Isuru Haupe, Margot Derouin, Hervé Perdry, Anne-Louise Leutenegger, Sid
 Description: etc
 License: GPL-3
 LinkingTo: gaston (>= 1.6.1), Rcpp, RcppParallel, RcppEigen, milorGWAS (>= 0.6)
-Depends: methods, parallel, gaston
+Depends: methods, parallel, gaston, houba
 Imports: zoo
 NeedsCompilation: yes
 LazyLoad: yes

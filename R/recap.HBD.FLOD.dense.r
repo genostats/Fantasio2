@@ -9,9 +9,10 @@
 #' @param median define the f and a parameters used to compute pHBD and FLOD
 #'	   - if FALSE : f and a estimated on each submap
 #'	   - if TRUE : median value of estimations on all submaps of f and a (default)
+#' @param basename if missing, the HBD and FLOD matrices will be R native matrices, else they will be houba matrices
 #'
 #' @export
-recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
+recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median, basename) {
   if(recap != "SNP") stop("Not yet implemented")
 
   # shotcuts for atlas slots
@@ -26,18 +27,15 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
 
   wi <- which(keep.inds)
   
-  #tester s'il y a des inds consanguins
-  #si oui, remplir les matrices de FLOD et pHBD par NULL
-  if(length(wi)==0){
+  # tester s'il y a des inds consanguins
+  # si oui, remplir les matrices de FLOD et pHBD par NULL
+  if(length(wi) == 0) {
     atlas@HBD_recap <- NULL     
     atlas@FLOD_recap <- NULL  
     atlas@recap <- recap
     atlas@q <- q
     atlas
-  }else{  
-  
-    x <- list() #créer liste pour les 2 grandes matrices phbd et FLOD
-
+  } else {  
     if(median) {
       a <- summary$a_median
       f <- summary$f_median
@@ -46,7 +44,7 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
     verbose <- Fantasio.parameters("verbose")
     if(verbose) cat("Merging submaps for dense HBD computation\n")
 
-    #première boucle pour créer la grande sous-carte = union des snps tirés dans les n sous-cartes
+    # première boucle pour créer la grande sous-carte = union des snps tirés dans les n sous-cartes
     big.submap <- as.integer(vector())
     for(i in 1:n){
       setSeed(seeds[,i])
@@ -55,9 +53,15 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
     }
     big.submap <- sort(big.submap) 
   
-    big.HBD <- matrix(0, ncol = length(wi), nrow = length(big.submap)) #matrice des phbd avec 1 colonne par individu consanguin et 1 ligne par snp tiré
-    big.FLOD <- matrix(0, ncol = length(wi), nrow = length(big.submap)) #matrice des flod avec 1 colonne par individu consanguin et 1 ligne par snp tiré
-  
+    # matrice des phbd /des flod, avec 1 colonne par individu consanguin et 1 ligne par snp tiré
+    if(missing(basename)) {
+      big.HBD <- matrix(0, ncol = length(wi), nrow = length(big.submap)) 
+      big.FLOD <- matrix(0, ncol = length(wi), nrow = length(big.submap)) 
+      # la matrice pour chacune des sous carte
+      HBD <- matrix(0, nrow = length(big.submap), ncol = sum(keep.inds))
+    } else {
+      stop("# houba bla")
+    }
   
     for(i in 1:n) { # boucle sur les cartes
       if(verbose) cat("Computing HBD and FLOD using SNPs from submap", i, "\r")
@@ -79,8 +83,9 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
       freq.submap[submap] <- bedmatrix@p[submap]
       # va calculer les pHBD aux positions de big.submap avec les fréqs à NA sauf aux points de la carte courante
       # (freq à NA : proba d'émission mise à 1, équivalent à "tous les génotypes manquants à cette position")
-      HBD <- probaHBD(bedmatrix@bed, p = freq.submap, submap = big.submap, d.dist, keep.inds, a = a, f = f, epsilon) #renvoie les snps sur les lignes et les inds sur les colonnes
-      HBD[!is.finite(HBD)] <- 0
+
+      # on calcule les pHBD avec les snps sur les lignes et les inds sur les colonnes
+      probaHBD_matrix(bedmatrix@bed, HBD, p = freq.submap, submap = big.submap, d.dist, keep.inds, a = a, f = f, epsilon) 
    
       # extraction du f pour les individus conservés
       ff <- f[wi]
@@ -99,14 +104,14 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q, recap, median) {
   
     # calcule les matrices moyennes des HBD / FLOD snp par snp
     # ces matrices doivent avoir une ligne par individu / une colonne par SNP
-    x$HBD <- t(big.HBD)/n #on transpose pour la suite
-    x$FLOD <- t(big.FLOD)/n #on transpose pour la suite
-    rownames(x$HBD) <- rownames(x$FLOD) <- uniqueIds(summary$famid[wi], summary$id[wi])
-    colnames(x$HBD) <- colnames(x$FLOD) <- bedmatrix@snps$id[big.submap] #snps vus dans grande sous carte
+    HBD <- t(big.HBD)/n #on transpose pour la suite
+    FLOD <- t(big.FLOD)/n #on transpose pour la suite
+    rownames(HBD) <- rownames(FLOD) <- uniqueIds(summary$famid[wi], summary$id[wi])
+    colnames(HBD) <- colnames(FLOD) <- bedmatrix@snps$id[big.submap] #snps vus dans grande sous carte
 
     # c'est fini.
-    atlas@HBD_recap <- x$HBD     
-    atlas@FLOD_recap <- x$FLOD   
+    atlas@HBD_recap <- HBD     
+    atlas@FLOD_recap <- FLOD   
     atlas@recap <- recap
     atlas@q <- q
     atlas
