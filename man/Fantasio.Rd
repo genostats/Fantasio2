@@ -10,12 +10,12 @@ Fantasio(
   n = 100,
   min.quality = 95,
   allele.freq,
-  recap = c("SNP", "segment"),
   q = 1e-04,
   epsilon = 0.001,
   epsilon2 = 0.001,
   median = TRUE,
-  dense.recap = TRUE
+  dense.recap = TRUE,
+  basename
 )
 }
 \arguments{
@@ -28,8 +28,6 @@ Fantasio(
 \item{min.quality}{minimal quality (in \%) to include an inbred individual into the analysis (default is 95)}
 
 \item{allele.freq}{a vector of allele frequencies (for allele A2), if \code{bedmatrix@p} isn't appropriate}
-
-\item{recap}{if you want the summary of probabilities by snps or by segments (only by SNPs for the moment)}
 
 \item{q}{assumed frequency of the mutation involved in the disease for each individual (default is 0.0001)}
 
@@ -56,6 +54,4 @@ The first function, `segments.list.by.hotspots` is used to create a list of segm
 The second function, `atlas` is used to create submaps based on recombination hotspots.
 
 The arguments that can be included in `segment.options` are described in `segments.list.by.hotspots`.
-
-If `recap = 'SNP'`, the quantities such as HBD probabilities, FLOD, HFLOD are recapitulated SNP by SNP (default).
 }

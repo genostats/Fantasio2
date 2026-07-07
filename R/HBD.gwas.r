@@ -12,8 +12,8 @@
 #' @return the atlas object with its slot HFLOD completed
 #' @export
 
-HBD.gwas1 <- function(atlas, phen, phen.code = c("R", "plink")) {
-  #phenotype
+HBD.gwas <- function(atlas, phen, phen.code = c("R", "plink")) {
+  # phenotype
   phen.code <- match.arg(phen.code)
   
   if(!missing(phen)){

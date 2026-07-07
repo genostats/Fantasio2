@@ -37,7 +37,7 @@ class RMatrix {
     // constructeur depuis n'importe quel autre type de datastruct qui supporte .begin(), .length(), .nrow(), .ncol()
     template <typename Source>
     inline explicit RMatrix(const Source & source) 
-      : beg_data( const_cast<T*>(source.begin()) ), end_data(beg_data + source.length()), nrow_(source.nrow()), ncol_(source.ncol()) { }
+      : beg_data( const_cast<T*>(source.begin()) ), end_data(beg_data + source.size()), nrow_(source.nrow()), ncol_(source.ncol()) { }
      
     inline RMatrix(const RMatrix & other) : beg_data(other.beg_data), end_data(other.end_data), nrow_(other.nrow()), ncol_(other.ncol()) { }
    

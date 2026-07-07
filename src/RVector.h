@@ -11,6 +11,10 @@ class RVector {
    T * beg_data;
    T * end_data; 
 public:   
+   using value_type = T;
+
+   // ------------- constructors
+ 
    template <typename Source>
    inline explicit RVector(const Source & source) 
       : beg_data( const_cast<T*>(source.begin()) ), end_data(beg_data + source.length()) { }
@@ -18,6 +22,8 @@ public:
    inline RVector(T * begin, T * end_) : beg_data(begin), end_data(end_) { }
    
    inline RVector(const RVector & other) : beg_data(other.beg_data), end_data(other.end_data) { }
+
+   // ----------------
    
    inline RVector & operator=(const RVector & rhs) {
       beg_data = rhs.beg_data;

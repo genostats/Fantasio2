@@ -12,6 +12,32 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// FLOD_update_matrix
+void FLOD_update_matrix(Rcpp::NumericMatrix HBD, Rcpp::NumericMatrix FLOD, Rcpp::NumericVector f, double q);
+RcppExport SEXP _Fantasio2_FLOD_update_matrix(SEXP HBDSEXP, SEXP FLODSEXP, SEXP fSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type HBD(HBDSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type FLOD(FLODSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type f(fSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    FLOD_update_matrix(HBD, FLOD, f, q);
+    return R_NilValue;
+END_RCPP
+}
+// FLOD_update_mmatrix
+void FLOD_update_mmatrix(Rcpp::S4 HBD, Rcpp::S4 FLOD, Rcpp::NumericVector f, double q);
+RcppExport SEXP _Fantasio2_FLOD_update_mmatrix(SEXP HBDSEXP, SEXP FLODSEXP, SEXP fSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::S4 >::type HBD(HBDSEXP);
+    Rcpp::traits::input_parameter< Rcpp::S4 >::type FLOD(FLODSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type f(fSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    FLOD_update_mmatrix(HBD, FLOD, f, q);
+    return R_NilValue;
+END_RCPP
+}
 // acfd
 double acfd(double d, NumericVector z, IntegerVector Chr, NumericVector Dist);
 RcppExport SEXP _Fantasio2_acfd(SEXP dSEXP, SEXP zSEXP, SEXP ChrSEXP, SEXP DistSEXP) {
@@ -250,6 +276,24 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// probaHBD_mmatrix
+void probaHBD_mmatrix(XPtr<matrix4> p_A, S4 PHBD, NumericVector p, IntegerVector submap, NumericVector deltaDist, LogicalVector whichInds, NumericVector a, NumericVector f, double epsilon);
+RcppExport SEXP _Fantasio2_probaHBD_mmatrix(SEXP p_ASEXP, SEXP PHBDSEXP, SEXP pSEXP, SEXP submapSEXP, SEXP deltaDistSEXP, SEXP whichIndsSEXP, SEXP aSEXP, SEXP fSEXP, SEXP epsilonSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<matrix4> >::type p_A(p_ASEXP);
+    Rcpp::traits::input_parameter< S4 >::type PHBD(PHBDSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type p(pSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type submap(submapSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type deltaDist(deltaDistSEXP);
+    Rcpp::traits::input_parameter< LogicalVector >::type whichInds(whichIndsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type f(fSEXP);
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    probaHBD_mmatrix(p_A, PHBD, p, submap, deltaDist, whichInds, a, f, epsilon);
+    return R_NilValue;
+END_RCPP
+}
 // randomSnp
 IntegerVector randomSnp(List L);
 RcppExport SEXP _Fantasio2_randomSnp(SEXP LSEXP) {
@@ -384,6 +428,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_Fantasio2_FLOD_update_matrix", (DL_FUNC) &_Fantasio2_FLOD_update_matrix, 4},
+    {"_Fantasio2_FLOD_update_mmatrix", (DL_FUNC) &_Fantasio2_FLOD_update_mmatrix, 4},
     {"_Fantasio2_acfd", (DL_FUNC) &_Fantasio2_acfd, 4},
     {"_Fantasio2_checkOpenMP", (DL_FUNC) &_Fantasio2_checkOpenMP, 0},
     {"_Fantasio2_festim", (DL_FUNC) &_Fantasio2_festim, 7},
@@ -401,6 +447,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_setSeed", (DL_FUNC) &_Fantasio2_setSeed, 1},
     {"_Fantasio2_mt_runif", (DL_FUNC) &_Fantasio2_mt_runif, 0},
     {"_Fantasio2_probaHBD_matrix", (DL_FUNC) &_Fantasio2_probaHBD_matrix, 9},
+    {"_Fantasio2_probaHBD_mmatrix", (DL_FUNC) &_Fantasio2_probaHBD_mmatrix, 9},
     {"_Fantasio2_randomSnp", (DL_FUNC) &_Fantasio2_randomSnp, 1},
     {"_Fantasio2_setUserParam", (DL_FUNC) &_Fantasio2_setUserParam, 23},
     {"_Fantasio2_getUserParam", (DL_FUNC) &_Fantasio2_getUserParam, 0},

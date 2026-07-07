@@ -6,23 +6,24 @@ fxp <- read.bed.matrix("~/COURS/SDS/logiciels/TP-Fantasio/DataXP/afxp")
 fxp <- set.stats(fxp)
 fxp
 
-# 12 individuals : 3 trios & 3 singletons 
-#2.1# Allele frequencies estimated on the sample
-set.seed(123)
-F1.fxp <- Fantasio(bedmatrix=fxp, n=10)
-str(F1.fxp@HBD_recap)
-
-F1.fxp@submap_summary
-
-#2.2# Change allele frequencies using the panel HGDP-CEPH Middle East (pre-calculated)
-#In freqs.txt: freq A2 -> fxp@p
-freqs <- read.table("DataXP/freqs.txt", header=T)
+freqs <- read.table("~/COURS/SDS/logiciels/TP-Fantasio/DataXP/freqs.txt", header=T)
 summary(freqs)
 
 #Run Fantasio
 set.seed(123)
 F1.fxp.me <- Fantasio(bedmatrix=fxp, allele.freq = freqs$freq.A2.me, n=100)
+F1.fxp.me@FLOD_recap[1:5, 1:5]
+F1.fxp.me@HBD_recap[1:5, 1:5]
 F1.fxp.me@submap_summary
+
+if(file.exists("/tmp/coin.hbd")) file.remove("/tmp/coin.hbd")
+if(file.exists("/tmp/coin.flod")) file.remove("/tmp/coin.flod")
+set.seed(123)
+F1.fxp.me2 <- Fantasio(bedmatrix=fxp, allele.freq = freqs$freq.A2.me, n=100, basename = "/tmp/coin")
+F1.fxp.me2@FLOD_recap
+F1.fxp.me2@HBD_recap
+F1.fxp.me2@submap_summary
+
 
 #HFLOD genome-wide
 HFLOD.fxp.me <- HBD.gwas(F1.fxp.me, phen.code = "plink")

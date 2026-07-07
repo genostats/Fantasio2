@@ -4,10 +4,10 @@
 \alias{HBD.segments}
 \title{Find HBD segments}
 \usage{
-HBD.segments(submaps, n.consecutive.markers = 5, threshold = 0.5)
+HBD.segments(x, n.consecutive.markers = 5, threshold = 0.5)
 }
 \arguments{
-\item{submaps}{a atlas object}
+\item{x}{a atlas object}
 
 \item{n.consecutive.markers}{the number of consecutive markers with a probabilitie equal or greater to the value of the threshold, to be use to fing HBD segments (default is 5)}
 

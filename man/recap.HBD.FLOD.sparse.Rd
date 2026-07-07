@@ -4,7 +4,7 @@
 \alias{recap.HBD.FLOD.sparse}
 \title{Sparse summary of pHBD and FLOD}
 \usage{
-recap.HBD.FLOD.sparse(atlas, keep.inds, q, recap, median)
+recap.HBD.FLOD.sparse(atlas, keep.inds, q, median)
 }
 \arguments{
 \item{atlas}{an atlas object}
@@ -12,8 +12,6 @@ recap.HBD.FLOD.sparse(atlas, keep.inds, q, recap, median)
 \item{keep.inds}{the vector of index of consanguineous individuals}
 
 \item{q}{assumed frequency of the mutation involved in the disease for each individual (default is 0.0001)}
-
-\item{recap}{if you want the summary of probabilities by snps or by segments (only by SNPs for the moment)}
 
 \item{median}{define the f and a parameters used to compute pHBD and FLOD
 - if FALSE : f and a estimated on each submap

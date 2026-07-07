@@ -7,7 +7,6 @@
 #' @param n the number of submaps (default is 100)
 #' @param min.quality minimal quality (in \%) to include an inbred individual into the analysis (default is 95)
 #' @param allele.freq a vector of allele frequencies (for allele A2), if \code{bedmatrix@p} isn't appropriate
-#' @param recap if you want the summary of probabilities by snps or by segments (only by SNPs for the moment)
 #' @param q assumed frequency of the mutation involved in the disease for each individual (default is 0.0001)
 #' @param epsilon genotype error rate (default is 0.001)
 #' @param epsilon2 shift in border allele frequency p (p = 1 will be changed to 1-epsilon2 ; p = 0 will be changed to epsilon2)
@@ -24,19 +23,22 @@
 #' @details The first function, `segments.list.by.hotspots` is used to create a list of segments. 
 #' @details The second function, `atlas` is used to create submaps based on recombination hotspots.
 #' @details The arguments that can be included in `segment.options` are described in `segments.list.by.hotspots`.
-#' @details If `recap = 'SNP'`, the quantities such as HBD probabilities, FLOD, HFLOD are recapitulated SNP by SNP (default).
 
 
 #' @export Fantasio
 
 
 # pour l'instant, que "by hotspots" avec un summary "by SNPs"
-Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, allele.freq, 
-                     recap = c("SNP", "segment"), q = 1e-4, 
-                     epsilon = 1e-3, epsilon2 = 1e-3, median = TRUE, dense.recap = TRUE) {
+Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, allele.freq, q = 1e-4, 
+                     epsilon = 1e-3, epsilon2 = 1e-3, median = TRUE, dense.recap = TRUE, basename) {
 
-  recap <- match.arg(recap)
-  if(recap != "SNP") stop("Not yet implemented")
+  # check if file exist before anything
+  if(!missing(basename)) {
+    if(!dense.recap) 
+      warning("With dense.recap = FALSE, you can't use memory mapped matrices")
+    else
+      check_file_exist(basename)
+  }
 
   if (!missing(allele.freq)) {
     if(length(allele.freq) != ncol(bedmatrix)) {
@@ -79,9 +81,9 @@ Fantasio <- function(bedmatrix, segment.options, n = 100, min.quality = 95, alle
 
   if(verbose) cat("\n* Computing HBD and FLOD matrices\n")
   if(dense.recap)
-    x <- recap.HBD.FLOD.dense(x, keep.inds, q, recap, median)
+    x <- recap.HBD.FLOD.dense(x, keep.inds, q, median, basename)
   else
-    x <- recap.HBD.FLOD.sparse(x, keep.inds, q, recap, median)
+    x <- recap.HBD.FLOD.sparse(x, keep.inds, q, median)
 
   if(verbose) cat("\n* Construction of HBD segments (5 consecutive markers with threshold > 0.5)\n")
   x@HBD_segments <- HBD.segments(x, n.consecutive.markers = 5, threshold = 0.5)

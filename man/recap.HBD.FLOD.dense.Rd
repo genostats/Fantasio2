@@ -4,7 +4,7 @@
 \alias{recap.HBD.FLOD.dense}
 \title{Dense summary of pHBD and FLOD}
 \usage{
-recap.HBD.FLOD.dense(atlas, keep.inds, q, recap, median)
+recap.HBD.FLOD.dense(atlas, keep.inds, q = 1e-04, median = TRUE, basename)
 }
 \arguments{
 \item{atlas}{an atlas object}
@@ -13,11 +13,11 @@ recap.HBD.FLOD.dense(atlas, keep.inds, q, recap, median)
 
 \item{q}{assumed frequency of the mutation involved in the disease for each individual (default is 0.0001)}
 
-\item{recap}{if you want the summary of probabilities by snps or by segments (only by SNPs for the moment)}
-
 \item{median}{define the f and a parameters used to compute pHBD and FLOD
 - if FALSE : f and a estimated on each submap
 - if TRUE : median value of estimations on all submaps of f and a (default)}
+
+\item{basename}{if missing, the HBD and FLOD matrices will be R native matrices, else they will be houba matrices}
 }
 \description{
 pHBD and FLOD are combined over the submaps with a mean of pHBD and FLOD on all submaps

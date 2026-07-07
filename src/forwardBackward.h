@@ -77,6 +77,7 @@ void forwardBackward(const std::vector<scalar_t> & logEmiss, const std::vector<s
   scalar_t beta1 = (scalar_t) 1 - beta0;
   scalar_t beta0_;
   PHBD[N-1] = (scalar_t) beta1;
+
   for(int n = N-2; n >=0; n--) {
     logTrans4(deltaDist[n], a, f, logf, logumf, lt00, lt01, lt10, lt11);
     beta0_ = std::exp(logEmiss[2*n])   * ( beta0 * std::exp(lt00 + Alpha[2*n] - Alpha[2*n+2]) + 

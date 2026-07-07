@@ -39,7 +39,6 @@ setClass("atlas", representation(
 #       likelihood_summary   = 'listOrNULL',
         estimations          = 'listOrNULL', 
         submap_summary       = 'dataframeOrNULL',
-        recap                = "characterOrNULL", 
         q                    = "doubleOrNULL",
         HBD_recap            = 'matrixOrMmatrixOrNULL',
         FLOD_recap           = 'matrixOrMmatrixOrNULL',  

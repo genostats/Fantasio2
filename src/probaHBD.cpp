@@ -7,6 +7,8 @@
 #include "probaHBD.h"
 #include "PHBDmatrix.h"
 #include "RMatrix.h"
+#include "houba/MMatrix.h"
+
 //[[Rcpp::export]]
 void probaHBD_matrix(XPtr<matrix4> p_A, NumericMatrix PHBD_, NumericVector p, IntegerVector submap, NumericVector deltaDist, 
                      LogicalVector whichInds, NumericVector a, NumericVector f, double epsilon) {
@@ -27,22 +29,20 @@ void probaHBD_matrix(XPtr<matrix4> p_A, NumericMatrix PHBD_, NumericVector p, In
 }
 */
 
-/*
 //[[Rcpp::export]]
-void probaHBD_matrix(XPtr<matrix4> p_A, S4 PHBD, NumericVector p, IntegerVector submap, NumericVector deltaDist, 
+void probaHBD_mmatrix(XPtr<matrix4> p_A, S4 PHBD, NumericVector p, IntegerVector submap, NumericVector deltaDist, 
                      LogicalVector whichInds, NumericVector a, NumericVector f, double epsilon) {
-  std::string datatype(PHBD.slot("datatype"));
-  
+
+  std::string datatype = Rcpp::as<std::string>(PHBD.slot("datatype"));
   if(datatype == "float") {
     Rcpp::XPtr<houba::MMatrix<float>> mmPHBD(PHBD.slot("ptr"));
-    PHBDmatrix<float> R = probaHBD<float>(p_A, mmPHBD, p, submap, deltaDist, whichInds, a, f, epsilon);
-    return( wrap(R.getMatrix()) );
-  } else if(datatype = "double") {
+    PHBDmatrix<houba::MMatrix<float>> M(*mmPHBD, whichInds, submap.size());
+    probaHBD(p_A, M, p, submap, deltaDist, whichInds, a, f, epsilon);
+  } else if(datatype == "double") {
     Rcpp::XPtr<houba::MMatrix<double>> mmPHBD(PHBD.slot("ptr"));
-    PHBDmatrix<double> R = probaHBD<double>(p_A, mmPHBD, p, submap, deltaDist, whichInds, a, f, epsilon);
-    return wrap(R.getMatrix());
+    PHBDmatrix<houba::MMatrix<double>> M(*mmPHBD, whichInds, submap.size());
+    probaHBD(p_A, M, p, submap, deltaDist, whichInds, a, f, epsilon);
   } else {
-    stop("datatype must be double of float")
+    stop("datatype must be double of float");
   }
 }
-*/

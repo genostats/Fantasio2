@@ -8,7 +8,7 @@ Maintainer: Hervé Perdry <herve.perdry@universite-paris-saclay.fr>
 Author: Isuru Haupe, Margot Derouin, Hervé Perdry, Anne-Louise Leutenegger, Sidonie Foulon, Steven Gazal, Amaury Vaysse
 Description: etc
 License: GPL-3
-LinkingTo: gaston (>= 1.6.1), Rcpp, RcppParallel, RcppEigen, milorGWAS (>= 0.6)
+LinkingTo: gaston (>= 1.6.1), Rcpp, RcppParallel, RcppEigen, milorGWAS (>= 0.6), houba (>= 0.1.3)
 Depends: methods, parallel, gaston, houba
 Imports: zoo
 NeedsCompilation: yes
