@@ -41,5 +41,11 @@ void FLOD_update_mmatrix(Rcpp::S4 HBD, Rcpp::S4 FLOD, Rcpp::NumericVector f, dou
     Rcpp::XPtr<houba::MMatrix<float>> mmHBD(HBD.slot("ptr"));
     Rcpp::XPtr<houba::MMatrix<float>> mmFLOD(FLOD.slot("ptr"));
     FLOD_update_matrix(*mmHBD, *mmFLOD, f_, q);
+  } else if(datatype == "double") {
+    Rcpp::XPtr<houba::MMatrix<double>> mmHBD(HBD.slot("ptr"));
+    Rcpp::XPtr<houba::MMatrix<double>> mmFLOD(FLOD.slot("ptr"));
+    FLOD_update_matrix(*mmHBD, *mmFLOD, f_, q);
+  } else {
+    Rcpp::stop("datatype must be double of float");
   }
 }

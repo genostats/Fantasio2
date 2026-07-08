@@ -24,10 +24,14 @@ F1.fxp.me2@FLOD_recap
 F1.fxp.me2@HBD_recap
 F1.fxp.me2@submap_summary
 
+# set.seed(1); FF <- Fantasio(bedmatrix=fxp, allele.freq = freqs$freq.A2.me, n=100, dense = FALSE)
 
 #HFLOD genome-wide
 HFLOD.fxp.me <- HBD.gwas(F1.fxp.me, phen.code = "plink")
 HFLOD.manhattan.plot(HFLOD.fxp.me)
+
+HFLOD.fxp.me2 <- HBD.gwas(F1.fxp.me2, phen.code = "plink")
+HFLOD.manhattan.plot(HFLOD.fxp.me2)
 
 #HFLOD Chr3
 HFLOD.plot.chr(HFLOD.fxp.me, chr=3, MA = FALSE)

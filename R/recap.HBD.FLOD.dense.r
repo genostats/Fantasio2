@@ -86,17 +86,18 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q = 0.0001, median = TRUE, ba
     if(!median){
       a <- A[, i]
       f <- F[, i]
+      # et ff aussi doit être mis à jour
+      ff <- f[wi]
     }
   
-    # matrice des pHBD [une colonne par individu, une ligne par SNP]
   
     # créer vecteur freq.submap de NA de longueur ncol(bedmatrix) puis remplacer par les freq aux positions de la carte 
     freq.submap <- rep(NA, times = length(bedmatrix@p))
     freq.submap[submap] <- bedmatrix@p[submap]
-    # va calculer les pHBD aux positions de big.submap avec les fréqs à NA sauf aux points de la carte courante
+
+    # on va calculer les pHBD aux positions de big.submap avec les fréqs à NA sauf aux points de la carte courante
     # (freq à NA : proba d'émission mise à 1, équivalent à "tous les génotypes manquants à cette position")
 
-    # on calcule les pHBD avec les snps sur les lignes et les inds sur les colonnes
     if(use.houba) {
       probaHBD_mmatrix(bedmatrix@bed, HBD, p = freq.submap, submap = big.submap, d.dist, keep.inds, a = a, f = f, epsilon) 
       FLOD_update_mmatrix(HBD, big.FLOD, ff, q);
