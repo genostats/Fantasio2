@@ -46,3 +46,5 @@ void probaHBD_mmatrix(XPtr<matrix4> p_A, S4 PHBD, NumericVector p, IntegerVector
     stop("datatype must be double of float");
   }
 }
+
+

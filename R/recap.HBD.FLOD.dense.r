@@ -90,7 +90,6 @@ recap.HBD.FLOD.dense <- function(atlas, keep.inds, q = 0.0001, median = TRUE, ba
       ff <- f[wi]
     }
   
-  
     # créer vecteur freq.submap de NA de longueur ncol(bedmatrix) puis remplacer par les freq aux positions de la carte 
     freq.submap <- rep(NA, times = length(bedmatrix@p))
     freq.submap[submap] <- bedmatrix@p[submap]

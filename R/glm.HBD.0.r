@@ -3,6 +3,9 @@
 # H = matrice des pHBD ou des FLOD...
  
 glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, pval=TRUE) {
+
+  use.houba <- is(H, "mmatrix")
+
   # in case there are some missing phenotypes, deal with it by 
   # extracting the corresponding lines
   w <- which(is.na(Y))
@@ -29,7 +32,12 @@ glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, pval=TRUE) {
 
   # ajout d'une colonne vide !
   X <- cbind(X, 0)
-  R <- as.data.frame(logitModel(Y, X, H, 0, ncol(H) - 1L))
+  if(use.houba) {
+    R <- as.data.frame(logitModel_mmatrix(Y, X, H, 0, ncol(H) - 1L))
+  } else {
+    R <- as.data.frame(logitModel_matrix(Y, X, H, 0, ncol(H) - 1L))
+  }
+
   R$z.value <- R$beta/R$sd.beta
   
   if(pval) { 

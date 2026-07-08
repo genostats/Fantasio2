@@ -32,22 +32,23 @@ HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df = NULL, cov
     # Recovery FLOD
     expl.var <- x@FLOD_recap
   }
-   
+  use.houba <- is(expl.var, "mmatrix")
+
   if(!missing(threshold)) {
+    if(use.houba) stop("experimental thresholding option not available with memory mapped objects")
     expl.var <- 0 + (expl.var > threshold)
   } 
 
   # Recovery phenotype
   id <- sub(".*:", "" , row.names(expl.var))
-  id.index <- match ( id, x@bedmatrix@ped$id )
-  if(missing(phen)){
-    pheno <- x@bedmatrix@ped$pheno [id.index]
-  }
-  else{
+  id.index <- match( id, x@bedmatrix@ped$id )
+  if(missing(phen)) {
+    pheno <- x@bedmatrix@ped$pheno[id.index]
+  } else {
     pheno <- phen[id.index]
   }
   
-  if (phen.code == 'plink') {
+  if(phen.code == 'plink') {
     pheno <- ifelse(pheno == 1, 0, ifelse(pheno == 2, 1, NA))# Translate phenotype
   }
     
@@ -60,8 +61,8 @@ HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df = NULL, cov
     message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i])"))
     if(score) {
       res <- cbind(final, glm.HBD.score.0(pheno, matrix(1, length(pheno)), expl.var, variance, pval))
-   	} else {
-    	res <- cbind(final, glm.HBD.0(pheno, matrix(1, length(pheno)), expl.var, pval))
+    } else {
+      res <- cbind(final, glm.HBD.0(pheno, matrix(1, length(pheno)), expl.var, pval))
     }
     message("-----------> GLM on UNADJUSTED data Done \n")
   } else { 
@@ -84,9 +85,10 @@ HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df = NULL, cov
     if(score) {
       res <- cbind(final, glm.HBD.score.0(pheno, cbind(1,df), expl.var, variance, pval))
     } else {
-    	res <- cbind(final, glm.HBD.0(pheno, cbind(1,df), expl.var, pval))
+      res <- cbind(final, glm.HBD.0(pheno, cbind(1,df), expl.var, pval))
     } 
     message("-----------> GLM on ADJUSTED data Done \n")
   }
+
   res
 } 

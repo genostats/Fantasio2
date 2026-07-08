@@ -150,9 +150,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// logitModel
-List logitModel(NumericVector Y, NumericMatrix X, NumericMatrix H, unsigned int beg, unsigned int end);
-RcppExport SEXP _Fantasio2_logitModel(SEXP YSEXP, SEXP XSEXP, SEXP HSEXP, SEXP begSEXP, SEXP endSEXP) {
+// logitModel_matrix
+List logitModel_matrix(NumericVector Y, NumericMatrix X, NumericMatrix H, unsigned int beg, unsigned int end);
+RcppExport SEXP _Fantasio2_logitModel_matrix(SEXP YSEXP, SEXP XSEXP, SEXP HSEXP, SEXP begSEXP, SEXP endSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -161,13 +161,28 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericMatrix >::type H(HSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type beg(begSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type end(endSEXP);
-    rcpp_result_gen = Rcpp::wrap(logitModel(Y, X, H, beg, end));
+    rcpp_result_gen = Rcpp::wrap(logitModel_matrix(Y, X, H, beg, end));
     return rcpp_result_gen;
 END_RCPP
 }
-// logitModelScore
-List logitModelScore(NumericVector Y1, NumericVector W, NumericMatrix A, NumericMatrix H, unsigned int beg, unsigned int end);
-RcppExport SEXP _Fantasio2_logitModelScore(SEXP Y1SEXP, SEXP WSEXP, SEXP ASEXP, SEXP HSEXP, SEXP begSEXP, SEXP endSEXP) {
+// logitModel_mmatrix
+List logitModel_mmatrix(NumericVector Y, NumericMatrix X, S4 H, unsigned int beg, unsigned int end);
+RcppExport SEXP _Fantasio2_logitModel_mmatrix(SEXP YSEXP, SEXP XSEXP, SEXP HSEXP, SEXP begSEXP, SEXP endSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< S4 >::type H(HSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type beg(begSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type end(endSEXP);
+    rcpp_result_gen = Rcpp::wrap(logitModel_mmatrix(Y, X, H, beg, end));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logitModelScore_matrix
+List logitModelScore_matrix(NumericVector Y1, NumericVector W, NumericMatrix A, NumericMatrix H, unsigned int beg, unsigned int end);
+RcppExport SEXP _Fantasio2_logitModelScore_matrix(SEXP Y1SEXP, SEXP WSEXP, SEXP ASEXP, SEXP HSEXP, SEXP begSEXP, SEXP endSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -177,13 +192,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericMatrix >::type H(HSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type beg(begSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type end(endSEXP);
-    rcpp_result_gen = Rcpp::wrap(logitModelScore(Y1, W, A, H, beg, end));
+    rcpp_result_gen = Rcpp::wrap(logitModelScore_matrix(Y1, W, A, H, beg, end));
     return rcpp_result_gen;
 END_RCPP
 }
-// logitModelScore_nocovar
-List logitModelScore_nocovar(NumericVector Y1, double w, NumericMatrix H, unsigned int beg, unsigned int end, bool compute_variance);
-RcppExport SEXP _Fantasio2_logitModelScore_nocovar(SEXP Y1SEXP, SEXP wSEXP, SEXP HSEXP, SEXP begSEXP, SEXP endSEXP, SEXP compute_varianceSEXP) {
+// logitModelScore_nocovar_matrix
+List logitModelScore_nocovar_matrix(NumericVector Y1, double w, NumericMatrix H, unsigned int beg, unsigned int end, bool compute_variance);
+RcppExport SEXP _Fantasio2_logitModelScore_nocovar_matrix(SEXP Y1SEXP, SEXP wSEXP, SEXP HSEXP, SEXP begSEXP, SEXP endSEXP, SEXP compute_varianceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -193,7 +208,39 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< unsigned int >::type beg(begSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type end(endSEXP);
     Rcpp::traits::input_parameter< bool >::type compute_variance(compute_varianceSEXP);
-    rcpp_result_gen = Rcpp::wrap(logitModelScore_nocovar(Y1, w, H, beg, end, compute_variance));
+    rcpp_result_gen = Rcpp::wrap(logitModelScore_nocovar_matrix(Y1, w, H, beg, end, compute_variance));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logitModelScore_mmatrix
+List logitModelScore_mmatrix(NumericVector Y1, NumericVector W, NumericMatrix A, S4 H, unsigned int beg, unsigned int end);
+RcppExport SEXP _Fantasio2_logitModelScore_mmatrix(SEXP Y1SEXP, SEXP WSEXP, SEXP ASEXP, SEXP HSEXP, SEXP begSEXP, SEXP endSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type Y1(Y1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type W(WSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type A(ASEXP);
+    Rcpp::traits::input_parameter< S4 >::type H(HSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type beg(begSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type end(endSEXP);
+    rcpp_result_gen = Rcpp::wrap(logitModelScore_mmatrix(Y1, W, A, H, beg, end));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logitModelScore_nocovar_mmatrix
+List logitModelScore_nocovar_mmatrix(NumericVector Y1, double w, S4 H, unsigned int beg, unsigned int end, bool compute_variance);
+RcppExport SEXP _Fantasio2_logitModelScore_nocovar_mmatrix(SEXP Y1SEXP, SEXP wSEXP, SEXP HSEXP, SEXP begSEXP, SEXP endSEXP, SEXP compute_varianceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type Y1(Y1SEXP);
+    Rcpp::traits::input_parameter< double >::type w(wSEXP);
+    Rcpp::traits::input_parameter< S4 >::type H(HSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type beg(begSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type end(endSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_variance(compute_varianceSEXP);
+    rcpp_result_gen = Rcpp::wrap(logitModelScore_nocovar_mmatrix(Y1, w, H, beg, end, compute_variance));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -438,9 +485,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Fantasio2_logLikelihood_gradient", (DL_FUNC) &_Fantasio2_logLikelihood_gradient, 4},
     {"_Fantasio2_likelihoods_", (DL_FUNC) &_Fantasio2_likelihoods_, 7},
     {"_Fantasio2_logEmiss", (DL_FUNC) &_Fantasio2_logEmiss, 4},
-    {"_Fantasio2_logitModel", (DL_FUNC) &_Fantasio2_logitModel, 5},
-    {"_Fantasio2_logitModelScore", (DL_FUNC) &_Fantasio2_logitModelScore, 6},
-    {"_Fantasio2_logitModelScore_nocovar", (DL_FUNC) &_Fantasio2_logitModelScore_nocovar, 6},
+    {"_Fantasio2_logitModel_matrix", (DL_FUNC) &_Fantasio2_logitModel_matrix, 5},
+    {"_Fantasio2_logitModel_mmatrix", (DL_FUNC) &_Fantasio2_logitModel_mmatrix, 5},
+    {"_Fantasio2_logitModelScore_matrix", (DL_FUNC) &_Fantasio2_logitModelScore_matrix, 6},
+    {"_Fantasio2_logitModelScore_nocovar_matrix", (DL_FUNC) &_Fantasio2_logitModelScore_nocovar_matrix, 6},
+    {"_Fantasio2_logitModelScore_mmatrix", (DL_FUNC) &_Fantasio2_logitModelScore_mmatrix, 6},
+    {"_Fantasio2_logitModelScore_nocovar_mmatrix", (DL_FUNC) &_Fantasio2_logitModelScore_nocovar_mmatrix, 6},
     {"_Fantasio2_m4_logEmiss", (DL_FUNC) &_Fantasio2_m4_logEmiss, 4},
     {"_Fantasio2_maxGaussianGenome", (DL_FUNC) &_Fantasio2_maxGaussianGenome, 7},
     {"_Fantasio2_getSeed", (DL_FUNC) &_Fantasio2_getSeed, 0},
