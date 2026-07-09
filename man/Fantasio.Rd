@@ -42,6 +42,8 @@ Fantasio(
 \item{dense.recap}{define how pHBD and FLOD are combined over the submaps
 - if FALSE : pHBD and FLOD are combined SNP by SNP with a mean on the number of submaps that includes this SNP
 - if TRUE : mean of pHBD and FLOD on all submaps (default)}
+
+\item{basename}{a basename for creating memory mapped objects (houba matrices)}
 }
 \description{
 This function is used as a wrapper for the package Fantasio to create segments list and submaps

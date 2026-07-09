@@ -16,9 +16,9 @@
 #' @param dense.recap define how pHBD and FLOD are combined over the submaps
 #'	   - if FALSE : pHBD and FLOD are combined SNP by SNP with a mean on the number of submaps that includes this SNP
 #'	   - if TRUE : mean of pHBD and FLOD on all submaps (default)
-
-
-
+#' @param basename a basename for creating memory mapped objects (houba matrices)
+#'
+#'
 #' @details This function is a wrapper to make the usage of the package easier. The function calls different functions: 
 #' @details The first function, `segments.list.by.hotspots` is used to create a list of segments. 
 #' @details The second function, `atlas` is used to create submaps based on recombination hotspots.

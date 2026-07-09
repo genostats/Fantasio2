@@ -13,6 +13,7 @@ threshold.permutations(
   covar_df = NULL,
   covar = NULL,
   score,
+  centered = TRUE,
   cores
 )
 }

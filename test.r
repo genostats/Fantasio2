@@ -65,7 +65,7 @@ HBD.plot.id(F1.fxp.me2, id = "P2", famid = "FXP2")
 library(Fantasio2)
 simu <- read.bed.matrix("~/COURS/SDS/logiciels/TP-Fantasio/Data1006/simu_H1_haplo_chr5-10.bed")
 
-Fantasio.parameters(use_float = TRUE)
+# Fantasio.parameters(use_float = TRUE)
 
 set.seed(123)
 F.1006 <- Fantasio(simu, n = 10)

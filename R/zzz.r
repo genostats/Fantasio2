@@ -1,6 +1,12 @@
 #' @useDynLib Fantasio2, .registration=TRUE
 #' @importFrom Rcpp evalCpp
-#' @importFrom houba rowMeans
+#' @importFrom houba rowMeans restore
+#' @importFrom grDevices gray
+#' @importFrom graphics abline axis lines par points polygon rect text
+#' @importFrom methods is new
+#' @importFrom stats binomial constrOptim glm lm median na.omit pchisq pnorm quantile runif
+#' @importFrom utils tail
+
 NULL
 
 # setting two parameters of the optimization algorithm.

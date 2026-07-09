@@ -6,7 +6,8 @@
 
 #' @export threshold.permutations
 
-threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "pHBD"), phen, phen.code = c("R", "plink"), covar_df = NULL, covar = NULL, score, cores){
+threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "pHBD"), phen, phen.code = c("R", "plink"), covar_df = NULL, covar = NULL, score, 
+                                   centered = TRUE, cores){
 
   # phenotype coding
   phen_code <- match.arg(phen.code)
@@ -53,6 +54,16 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
     pheno <- pheno[keep] 
   }
 
+  if(centered) {
+    if(expl_var == "FLOD") {
+      rowMeansVar <- as.vector(rowMeans(atlas@FLOD_recap))
+    } else {
+      rowMeansVar <- as.vector(rowMeans(atlas@HBD_recap))
+    }
+  } else {
+    rowMeansVar <- numeric(0) 
+  }
+
   # to ease the subsequent steps we keep only the inbred individuals in the atlas / covar / pheno
   keep <- which(atlas@submap_summary$inbred)
   atlas@bedmatrix@ped <- atlas@bedmatrix@ped[keep, ]
@@ -61,7 +72,8 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
   pheno <- pheno[keep] 
 
   # run HBD.glm on real phenotype
-  as <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, covar_df = covar_df, covar = covar, phen.code = "R", score = score, pval = FALSE)
+  as <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, covar_df = covar_df, covar = covar, phen.code = "R", score = score, pval = FALSE, 
+                centered = centered, rowMeansVar = rowMeansVar)
 
   # keep the variance from 'as'
   sigma2 <- as$variance
@@ -74,7 +86,8 @@ threshold.permutations <- function(atlas, nb.perm = 1000, expl.var = c("FLOD", "
   get.z <- function(iteration) {
     pheno <- sample(pheno)
     variance <- if (score) sigma2 else NULL
-    reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, covar_df = covar_df, covar = covar, phen.code = "R", score = score, variance = variance, pval = FALSE)
+    reg <- HBD.glm(x = atlas, expl_var = expl_var, phen = pheno, covar_df = covar_df, covar = covar, phen.code = "R", score = score, 
+                   variance = variance, pval = FALSE, centered = centered, rowMeansVar = rowMeansVar)
     return(c(zmax = max(reg$z.value), zmin = min(reg$z.value)))
   }
 
