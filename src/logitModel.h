@@ -2,14 +2,7 @@
 #include <Rcpp.h>
 #include <RcppEigen.h>
 #include "getUserParam.h"
-using namespace Rcpp;
-
-template<typename scalar_t>
-using MATRIX = Eigen::Matrix<scalar_t, Eigen::Dynamic, Eigen::Dynamic>;
-
-template<typename scalar_t>
-using VECTOR = Eigen::Matrix<scalar_t, Eigen::Dynamic, 1>;
-
+#include "matrix_types.h"
 
 // la dernière colonne de X doit être 'vide' (elle va servir à copier 
 // les colonnes de H une à une)
@@ -21,16 +14,9 @@ List logitModel(NumericVector Y, NumericMatrix X, matrixType & H, unsigned int b
   // paramètres
   userParam<scalar_t> pars = getUserParam<scalar_t>();
  
-  // recopiage des matrices... nécessaire en scalar_t [spécialiser template ?]
-  MATRIX<scalar_t> y(n,1);
-  MATRIX<scalar_t> x(n,r);
-  for(int i = 0; i < n; i++) y(i,0) = (scalar_t) Y[i];
+  auto y = get_vector<scalar_t>(Y);
+  auto x = get_matrix<scalar_t>(X);
 
-  for(int i = 0; i < n; i++)
-    for(int j = 0; j < r; j++)
-      x(i,j) = (scalar_t) X(i,j);
-
- 
   // pour les résultats [thread safe vectors!]
   // on met des double parce que ça finit par un wrap()
   VECTOR<double> BETA(end-beg+1);
@@ -45,7 +31,7 @@ List logitModel(NumericVector Y, NumericMatrix X, matrixType & H, unsigned int b
   // il faut évidemment une copie privée de x pour chaque thread !
   // omp_set_dynamic(0); 
   omp_set_num_threads(pars.n_threads);
-  #pragma omp parallel for firstprivate(beta) firstprivate(varbeta) firstprivate(x) 
+#pragma omp parallel for firstprivate(beta) firstprivate(varbeta) firstprivate(x) 
   for(unsigned int i = beg; i <= end; i++) {
     // copie de la colonne i de H dans la dernière colonne de X
     for(unsigned int k = 0; k < n; k++) 

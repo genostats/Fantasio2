@@ -62,18 +62,40 @@ HBD.plot.id(F1.fxp.me2, id = "P2", famid = "FXP2")
 
 ######################################
 
+library(Fantasio2)
 
 simu <- read.bed.matrix("~/COURS/SDS/logiciels/TP-Fantasio/Data1006/simu_H1_haplo_chr5-10.bed")
 
 set.seed(123)
 F.1006 <- Fantasio(simu, n = 10)
+F.1006@HBD_recap[1:5,1:5]
 
 if(file.exists("/tmp/coin.hbd")) file.remove("/tmp/coin.hbd")
 if(file.exists("/tmp/coin.flod")) file.remove("/tmp/coin.flod")
 set.seed(123)
 F.1006.2 <- Fantasio(simu, n = 10, basename = "/tmp/coin")
-
+F.1006.2@HBD_recap
 
 glm.1006 <- HBD.glm(F.1006, expl_var = "FLOD", phen.code = "plink", score = FALSE)
+glm.1006.2 <- HBD.glm(F.1006.2, expl_var = "FLOD", phen.code = "plink", score = FALSE)
+
+par(mfrow = c(1,2))
 glm.HBD.plot(glm.1006)
+glm.HBD.plot(glm.1006.2)
+
+glm.1006.sc <- HBD.glm(F.1006, expl_var = "FLOD", phen.code = "plink", score = TRUE)
+glm.1006.sc.2 <- HBD.glm(F.1006.2, expl_var = "FLOD", phen.code = "plink", score = TRUE)
+
+par(mfrow = c(1,2))
+glm.HBD.plot(glm.1006.sc)
+glm.HBD.plot(glm.1006.sc.2)
+
+set.sed(1); covar <- runif(nrow(simu))
+
+glm.1006.sc.cov <- HBD.glm(F.1006, expl_var = "FLOD", phen.code = "plink", score = TRUE, covar = covar)
+glm.1006.sc.cov.2 <- HBD.glm(F.1006.2, expl_var = "FLOD", phen.code = "plink", score = TRUE, covar = covar)
+
+par(mfrow = c(1,2))
+glm.HBD.plot(glm.1006.sc.cov)
+glm.HBD.plot(glm.1006.sc.cov.2)
 
