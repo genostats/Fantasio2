@@ -11,13 +11,16 @@
 #'        - 'plink' : 1:control ; 2:case ; 0/-9/NA:unknown
 #' if 'plink' the function automatically convert it to 'R' to run logistic regression
 #' @param threshold if missing, no thresholding. If set, the explanatory variable will be dichotomized accordingly. Suggested values: 0 for FLOD, 0.5 for pHBD.
-#' @param score if TRUE, the test used is the score, else it is khi2
+#' @param score if TRUE, the test used is the score test, else it is wald test (slower)
 #' @param variance the vector of scores variances if already computed
-#' @param pval if TRUE (default), computes the p-value od the test, else only computes the z-value
+#' @param pval if TRUE (default), computes the p-value of the test, else only computes the z-value
+#' @param centered if TRUE (default), FLOD or pHBD values will be centered (for each individual)
+#' @param rowMeansVar vector for centering FLOD or pHBD. If missing, will be computed as rowMeans of the corresponding matrix
 #' 
 #' @export
 
-HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df = NULL, covar = NULL, phen.code = c("R", "plink"), threshold, score, variance, pval=TRUE) {
+HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df = NULL, covar = NULL, phen.code = c("R", "plink"), threshold, score = TRUE, 
+                    variance, pval = TRUE, centered = TRUE, rowMeansVar) {
  
   expl_var <- match.arg(expl_var)
   phen.code <- match.arg(phen.code)
@@ -32,6 +35,14 @@ HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df = NULL, cov
     # Recovery FLOD
     expl.var <- x@FLOD_recap
   }
+
+  if(centered) {
+    if(missing(rowMeansVar)) rowMeansVar <- as.vector(rowMeans(expl.var))
+    if(length(rowMeansVar) != nrow(expl.var)) stop("rowMeansVar length doesn't match")
+  } else {
+    rowMeansVar <- numeric(0)
+  }
+
   use.houba <- is(expl.var, "mmatrix")
 
   if(!missing(threshold)) {
@@ -49,7 +60,7 @@ HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df = NULL, cov
   }
   
   if(phen.code == 'plink') {
-    pheno <- ifelse(pheno == 1, 0, ifelse(pheno == 2, 1, NA))# Translate phenotype
+    pheno <- ifelse(pheno == 1, 0, ifelse(pheno == 2, 1, NA)) # Translate phenotype
   }
     
   # Recovery chr, snps, pos_cM and pos_Bp 
@@ -60,9 +71,9 @@ HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df = NULL, cov
     message("No covariates given for the analysis = unadjusted data. To use covariates import a dataframe.")
     message(paste0("Call : glm(formula = pheno ~ ",expl_var,"[,i])"))
     if(score) {
-      res <- cbind(final, glm.HBD.score.0(pheno, matrix(1, length(pheno)), expl.var, variance, pval))
+      res <- cbind(final, glm.HBD.score.0(pheno, matrix(1, length(pheno)), expl.var, variance, pval, centered, rowMeansVar))
     } else {
-      res <- cbind(final, glm.HBD.0(pheno, matrix(1, length(pheno)), expl.var, pval))
+      res <- cbind(final, glm.HBD.0(pheno, matrix(1, length(pheno)), expl.var, pval, centered, rowMeansVar))
     }
     message("-----------> GLM on UNADJUSTED data Done \n")
   } else { 
@@ -83,9 +94,9 @@ HBD.glm <- function( x, expl_var = c("FLOD", "pHBD"), phen, covar_df = NULL, cov
       df <- na.omit(covar_df[ id , covar]) #rownames covar_df  = individual id 	
     }
     if(score) {
-      res <- cbind(final, glm.HBD.score.0(pheno, cbind(1,df), expl.var, variance, pval))
+      res <- cbind(final, glm.HBD.score.0(pheno, cbind(1,df), expl.var, variance, pval, centered, rowMeansVar))
     } else {
-      res <- cbind(final, glm.HBD.0(pheno, cbind(1,df), expl.var, pval))
+      res <- cbind(final, glm.HBD.0(pheno, cbind(1,df), expl.var, pval, centered, rowMeansVar))
     } 
     message("-----------> GLM on ADJUSTED data Done \n")
   }

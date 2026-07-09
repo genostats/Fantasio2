@@ -41,28 +41,28 @@ logEmiss <- function(Y1, Y2, logFreq, epsilon) {
     .Call(`_Fantasio2_logEmiss`, Y1, Y2, logFreq, epsilon)
 }
 
-logitModel_matrix <- function(Y, X, H, beg, end) {
-    .Call(`_Fantasio2_logitModel_matrix`, Y, X, H, beg, end)
+logitModel_matrix <- function(Y, X, H, beg, end, centered, rowMeansH) {
+    .Call(`_Fantasio2_logitModel_matrix`, Y, X, H, beg, end, centered, rowMeansH)
 }
 
-logitModel_mmatrix <- function(Y, X, H, beg, end) {
-    .Call(`_Fantasio2_logitModel_mmatrix`, Y, X, H, beg, end)
+logitModel_mmatrix <- function(Y, X, H, beg, end, centered, rowMeansH) {
+    .Call(`_Fantasio2_logitModel_mmatrix`, Y, X, H, beg, end, centered, rowMeansH)
 }
 
-logitModelScore_matrix <- function(Y1, W, A, H, beg, end) {
-    .Call(`_Fantasio2_logitModelScore_matrix`, Y1, W, A, H, beg, end)
+logitModelScore_matrix <- function(Y1, W, A, H, beg, end, centered, rowMeansH) {
+    .Call(`_Fantasio2_logitModelScore_matrix`, Y1, W, A, H, beg, end, centered, rowMeansH)
 }
 
-logitModelScore_nocovar_matrix <- function(Y1, w, H, beg, end, compute_variance = TRUE) {
-    .Call(`_Fantasio2_logitModelScore_nocovar_matrix`, Y1, w, H, beg, end, compute_variance)
+logitModelScore_nocovar_matrix <- function(Y1, w, H, beg, end, compute_variance, centered, rowMeansH) {
+    .Call(`_Fantasio2_logitModelScore_nocovar_matrix`, Y1, w, H, beg, end, compute_variance, centered, rowMeansH)
 }
 
-logitModelScore_mmatrix <- function(Y1, W, A, H, beg, end) {
-    .Call(`_Fantasio2_logitModelScore_mmatrix`, Y1, W, A, H, beg, end)
+logitModelScore_mmatrix <- function(Y1, W, A, H, beg, end, centered, rowMeansH) {
+    .Call(`_Fantasio2_logitModelScore_mmatrix`, Y1, W, A, H, beg, end, centered, rowMeansH)
 }
 
-logitModelScore_nocovar_mmatrix <- function(Y1, w, H, beg, end, compute_variance = TRUE) {
-    .Call(`_Fantasio2_logitModelScore_nocovar_mmatrix`, Y1, w, H, beg, end, compute_variance)
+logitModelScore_nocovar_mmatrix <- function(Y1, w, H, beg, end, compute_variance, centered, rowMeansH) {
+    .Call(`_Fantasio2_logitModelScore_nocovar_mmatrix`, Y1, w, H, beg, end, compute_variance, centered, rowMeansH)
 }
 
 m4_logEmiss <- function(p_A, p, map, epsilon) {

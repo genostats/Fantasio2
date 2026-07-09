@@ -4,7 +4,7 @@
 # variance = ne sera pris en compte que si covar.matrix est réduit à un intercept
 #            c'est le vecteur des variances des scores si elles ont déjà été calculées
 #            -> utile pour des permutations car la variance est toujours la même
-glm.HBD.score.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, variance, pval=TRUE) {
+glm.HBD.score.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, variance, pval = TRUE, centered, rowMeansH) {
 
   use.houba <- is(H, "mmatrix")
 
@@ -30,9 +30,9 @@ glm.HBD.score.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, variance,
         stop("length(variance) should be equal to ncol(H)")
     }
     if(use.houba) {
-      R <- as.data.frame(logitModelScore_nocovar_mmatrix(Y1, w, H, 0, ncol(H) - 1L, compute.var))
+      R <- as.data.frame(logitModelScore_nocovar_mmatrix(Y1, w, H, 0, ncol(H) - 1L, compute.var, centered, rowMeansH))
     } else {
-      R <- as.data.frame(logitModelScore_nocovar_matrix(Y1, w, H, 0, ncol(H) - 1L, compute.var))
+      R <- as.data.frame(logitModelScore_nocovar_matrix(Y1, w, H, 0, ncol(H) - 1L, compute.var, centered, rowMeansH))
     }
 
     if(!compute.var) R$variance <- as.vector(variance)
@@ -57,9 +57,9 @@ glm.HBD.score.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, variance,
   
     # final step
     if(use.houba) {
-      R <- as.data.frame(logitModelScore_mmatrix(Y1, W, A, H, 0, ncol(H) - 1L))
+      R <- as.data.frame(logitModelScore_mmatrix(Y1, W, A, H, 0, ncol(H) - 1L, centered, rowMeansH))
     } else {
-      R <- as.data.frame(logitModelScore_matrix(Y1, W, A, H, 0, ncol(H) - 1L))
+      R <- as.data.frame(logitModelScore_matrix(Y1, W, A, H, 0, ncol(H) - 1L, centered, rowMeansH))
     }
   }
   R$z.value <- R$score / sqrt(R$variance)

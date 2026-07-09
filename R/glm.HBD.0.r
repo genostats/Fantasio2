@@ -2,7 +2,7 @@
 # covar.matrix = matrice de covariables [doit contenir un intercept]
 # H = matrice des pHBD ou des FLOD...
  
-glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, pval=TRUE) {
+glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, pval=TRUE, centered, rowMeansH) {
 
   use.houba <- is(H, "mmatrix")
 
@@ -33,9 +33,9 @@ glm.HBD.0 <- function(Y, covar.matrix = matrix(1, length(Y)), H, pval=TRUE) {
   # ajout d'une colonne vide !
   X <- cbind(X, 0)
   if(use.houba) {
-    R <- as.data.frame(logitModel_mmatrix(Y, X, H, 0, ncol(H) - 1L))
+    R <- as.data.frame(logitModel_mmatrix(Y, X, H, 0, ncol(H) - 1L, centered, rowMeansH))
   } else {
-    R <- as.data.frame(logitModel_matrix(Y, X, H, 0, ncol(H) - 1L))
+    R <- as.data.frame(logitModel_matrix(Y, X, H, 0, ncol(H) - 1L, centered, rowMeansH))
   }
 
   R$z.value <- R$beta/R$sd.beta

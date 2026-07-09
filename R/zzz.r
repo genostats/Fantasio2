@@ -1,5 +1,6 @@
 #' @useDynLib Fantasio2, .registration=TRUE
 #' @importFrom Rcpp evalCpp
+#' @importFrom houba rowMeans
 NULL
 
 # setting two parameters of the optimization algorithm.

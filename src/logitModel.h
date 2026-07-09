@@ -7,7 +7,7 @@
 // la dernière colonne de X doit être 'vide' (elle va servir à copier 
 // les colonnes de H une à une)
 template<typename scalar_t, typename matrixType>
-List logitModel(NumericVector Y, NumericMatrix X, matrixType & H, unsigned int beg, unsigned int end) {
+List logitModel(NumericVector Y, NumericMatrix X, matrixType & H, unsigned int beg, unsigned int end, bool centered, NumericVector rowMeansH) {
   int n = Y.size();
   int r = X.ncol();
 
@@ -16,6 +16,7 @@ List logitModel(NumericVector Y, NumericMatrix X, matrixType & H, unsigned int b
  
   auto y = get_vector<scalar_t>(Y);
   auto x = get_matrix<scalar_t>(X);
+  auto rmh = get_vector<scalar_t>(rowMeansH);
 
   // pour les résultats [thread safe vectors!]
   // on met des double parce que ça finit par un wrap()
@@ -34,8 +35,13 @@ List logitModel(NumericVector Y, NumericMatrix X, matrixType & H, unsigned int b
 #pragma omp parallel for firstprivate(beta) firstprivate(varbeta) firstprivate(x) 
   for(unsigned int i = beg; i <= end; i++) {
     // copie de la colonne i de H dans la dernière colonne de X
-    for(unsigned int k = 0; k < n; k++) 
-      x(k, r-1) = H(k, i);
+    if(centered) {
+      for(unsigned int k = 0; k < n; k++) 
+        x(k, r-1) = H(k, i) - rmh[k];
+    } else {
+      for(unsigned int k = 0; k < n; k++) 
+        x(k, r-1) = H(k, i);
+    }
 
     logistic_model2<scalar_t>(y, x, beta, varbeta);
     BETA(i-beg) = beta(r-1);

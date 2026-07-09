@@ -12,9 +12,11 @@ HBD.glm(
   covar = NULL,
   phen.code = c("R", "plink"),
   threshold,
-  score,
+  score = TRUE,
   variance,
-  pval = TRUE
+  pval = TRUE,
+  centered = TRUE,
+  rowMeansVar
 )
 }
 \arguments{
@@ -36,11 +38,15 @@ if 'plink' the function automatically convert it to 'R' to run logistic regressi
 
 \item{threshold}{if missing, no thresholding. If set, the explanatory variable will be dichotomized accordingly. Suggested values: 0 for FLOD, 0.5 for pHBD.}
 
-\item{score}{if TRUE, the test used is the score, else it is khi2}
+\item{score}{if TRUE, the test used is the score test, else it is wald test (slower)}
 
 \item{variance}{the vector of scores variances if already computed}
 
-\item{pval}{if TRUE (default), computes the p-value od the test, else only computes the z-value}
+\item{pval}{if TRUE (default), computes the p-value of the test, else only computes the z-value}
+
+\item{centered}{if TRUE (default), FLOD or pHBD values will be centered (for each individual)}
+
+\item{rowMeansVar}{vector for centering FLOD or pHBD. If missing, will be computed as rowMeans of the corresponding matrix}
 }
 \description{
 Logistic regression on HBD probabilities or FLOD score

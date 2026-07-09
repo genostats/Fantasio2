@@ -9,7 +9,7 @@ using namespace Rcpp;
 // Y1, W, A : cf logit_model_score.h
 // H la matrice dont on va tester les colonnes (de beg à end) une à une
 template<typename scalar_t, typename matrixType>
-List logitModelScore(NumericVector Y1, NumericVector W, NumericMatrix A, matrixType & H, unsigned int beg, unsigned int end) {
+List logitModelScore(NumericVector Y1, NumericVector W, NumericMatrix A, matrixType & H, unsigned int beg, unsigned int end, bool centered, NumericVector rowMeansH) {
   int n = Y1.size();
   if(n != A.ncol() | n != W.size() | n != H.nrow()) stop("Dimensions mismatch");
 
@@ -19,6 +19,7 @@ List logitModelScore(NumericVector Y1, NumericVector W, NumericMatrix A, matrixT
   auto y1 = get_vector<scalar_t>(Y1);
   auto w  = get_vector<scalar_t>(W);
   auto a  = get_matrix<scalar_t>(A);
+  auto rmh = get_vector<scalar_t>(rowMeansH);
 
   // pour les résultats [thread safe vectors!]
   // on met des double parce que ça finit par un wrap()
@@ -36,7 +37,11 @@ List logitModelScore(NumericVector Y1, NumericVector W, NumericMatrix A, matrixT
 
     // et encore une copie
     VECTOR<scalar_t> G(n);
-    for(unsigned int k = 0; k < n; k++) G[k] = (scalar_t) H(k, i);
+    if(centered) {
+      for(unsigned int k = 0; k < n; k++) G[k] = (scalar_t) H(k, i) - rmh[k];
+    } else {
+      for(unsigned int k = 0; k < n; k++) G[k] = (scalar_t) H(k, i);
+    }
 
     logistic_model_score<scalar_t>(y1, G, w, a, score, variance);
     SCORE(i-beg) = (double) score;
@@ -57,7 +62,7 @@ List logitModelScore(NumericVector Y1, NumericVector W, NumericMatrix A, matrixT
  *********************************************************************************/
 
 template<typename scalar_t, typename matrixType>
-List logitModelScore_nocovar(NumericVector Y1, scalar_t w, matrixType & H, unsigned int beg, unsigned int end, bool compute_variance) {
+List logitModelScore_nocovar(NumericVector Y1, scalar_t w, matrixType & H, unsigned int beg, unsigned int end, bool compute_variance, bool centered, NumericVector rowMeansH) {
   int n = Y1.size();
   if(n != H.nrow()) stop("Dimensions mismatch");
 
@@ -65,6 +70,7 @@ List logitModelScore_nocovar(NumericVector Y1, scalar_t w, matrixType & H, unsig
   userParam<scalar_t> pars = getUserParam<scalar_t>();
 
   auto y1 = get_vector<scalar_t>(Y1);
+  auto rmh = get_vector<scalar_t>(rowMeansH);
 
   // pour les résultats [thread safe vectors!]
   // on met des double parce que ça finit par un wrap()
@@ -82,7 +88,11 @@ List logitModelScore_nocovar(NumericVector Y1, scalar_t w, matrixType & H, unsig
 
     // et encore une copie
     VECTOR<scalar_t> G(n);
-    for(unsigned int k = 0; k < n; k++) G[k] = (scalar_t) H(k, i);
+    if(centered) {
+      for(unsigned int k = 0; k < n; k++) G[k] = (scalar_t) H(k, i) - rmh[k];
+    } else {
+      for(unsigned int k = 0; k < n; k++) G[k] = (scalar_t) H(k, i);
+    }
 
     logistic_model_score_nocovar<scalar_t>(y1, G, w, score, variance, compute_variance);
     SCORE(i-beg) = (double) score;
