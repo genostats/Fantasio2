@@ -49,26 +49,30 @@ HBD.segments <- function(x, n.consecutive.markers = 5, threshold = 0.5) {
   for(i in seq_len(nrow(HBD_recap))) {
     data <- as.vector(HBD_recap[i,])       #save the line 
     test <- (data >= threshold) #test
-  
+    # to avoid segments overlapping two chr, put FALSE at the .... of each chr
+    # (technically we could lose a 5 SNPs length segment at the end of a chr...)
+    test[ cumsum(rle(chr)$le) ] <- FALSE
+
     # get the segments
     all_segments <- rle(test)
-    good_segments <- as.numeric(which( all_segments$length >= min_segment_size & all_segments$value )-1) #first marker
+    deb_seg <- c(1L, 1L + cumsum(all_segments$length))
+    fin_seg <- cumsum(all_segments$length)
+
+    good_segments <- as.numeric(which( all_segments$length >= min_segment_size & all_segments$value ))
   
     if(length(good_segments) == 0) next
-  
-    if(good_segments[1] == 0) good_segments[1] <- 1
-    
-    good_segments_length <- as.numeric(all_segments$length[ good_segments+1 ]) 
-    good_segments_start <- as.numeric(cumsum(all_segments$lengths)[ good_segments ]+1)#segment start
-    good_segments_end <- as.numeric(good_segments_start+good_segments_length-1)
+ 
+    good_segments_start  <- deb_seg[ good_segments ]
+    good_segments_end    <- fin_seg[ good_segments ]
+    good_segments_length <- good_segments_end - good_segments_start + 1L
   
     # finding distance and position 
   
-    start_pos <- x@bedmatrix@snps$pos[correspondance[as.numeric(good_segments_start)]]
-    end_pos <- x@bedmatrix@snps$pos[correspondance[as.numeric(good_segments_end)]]
+    start_pos <- x@bedmatrix@snps$pos[correspondance[good_segments_start]]
+    end_pos <- x@bedmatrix@snps$pos[correspondance[good_segments_end]]
   
-    start_dist <- x@bedmatrix@snps$dist[correspondance[as.numeric(good_segments_start)]]
-    end_dist <- x@bedmatrix@snps$dist[correspondance[as.numeric(good_segments_end)]]
+    start_dist <- x@bedmatrix@snps$dist[correspondance[good_segments_start]]
+    end_dist <- x@bedmatrix@snps$dist[correspondance[good_segments_end]]
   
     # dataframe
   
@@ -78,18 +82,11 @@ HBD.segments <- function(x, n.consecutive.markers = 5, threshold = 0.5) {
                                     start      = good_segments_start, 
                                     end        = good_segments_end ,
                                     size       = good_segments_length,
-                                    chromosome = chr[as.numeric(good_segments_start)],
+                                    chromosome = chr[good_segments_start],
                                     start_pos  = start_pos,
                                     end_pos    = end_pos,
                                     start_dist = start_dist,
                                     end_dist   = end_dist)
-  
-    # treating the case when segments overlaps two different chromosomes
-    overlap <- which(segment_dataframe$start_dist > segment_dataframe$end_dist)
-  
-    if(length(overlap) != 0) {
-      segment_dataframe <- segment_dataframe[-overlap,,drop=F]
-    }
   
     L[[i]] <- segment_dataframe
   }
